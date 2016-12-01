@@ -10,22 +10,22 @@
     <div class="field_row clearfix">	
         {{ form_label(line('employees_username') ~ ':', 'username', {'class' : 'required'}) }}
         <div class='form_field'>
-            {{form_input({'name' : 'username','id' : 'username','value' : person_info.username})}}
+            {{form_input({'name' : 'username','id' : 'username','value' : person_info.username, 'class':'form-control'})}}
         </div>
     </div>
 
     {% set password_label_attributes = person_info.person_id == "" ? "'class' : 'required'" : ""%}
 
     <div class="field_row clearfix">	
-            {{ form_label(line('employees_password') ~ ':', 'password', password_label_attributes) }}
+            {{ form_label(line('employees_password') ~ ':', 'password', password_label_attributes, {'class':'form-control'}) }}
         <div class='form_field'>
-            {{form_password({'name' : 'password','id' : 'password'})}}
+            {{form_password({'name' : 'password','id' : 'password','class':'form-control'})}}
         </div>
     </div>
 
     <div class="field_row clearfix">	
             {{ form_label(line('employees_repeat_password') ~ ':', 'repeat_password', password_label_attributes) }}
-        <div class='form_field'>{{ form_password({'name' : 'repeat_password','id' : 'repeat_password'} ) }}</div>
+        <div class='form_field'>{{ form_password({'name' : 'repeat_password','id' : 'repeat_password','class':'form-control'} ) }}</div>
     </div>
 </fieldset>
 
