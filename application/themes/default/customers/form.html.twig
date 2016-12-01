@@ -5,18 +5,24 @@
     <legend>{{line("customers_basic_information")}}</legend>
     {%include 'people/form_basic_info.html.twig'%}
     <div class="field_row clearfix">	
+        {{form_label(line('customers_tipo_cuenta')~':', 'account_number')}}
+        <div class='form_field'>
+            {{ form_dropdown('tipo_consumo',tipo_consumo,person_info.tipo_consumo,{'class':'form-control'})}}
+        </div>
+    </div>
+    <div class="field_row clearfix">	
         {{form_label(line('customers_account_number')~':', 'account_number')}}
         <div class='form_field'>
-            {{ form_input({'name':'account_number', 'id':'account_number', 'value':person_info.account_number})}}
+            {{ form_input({'name':'account_number', 'id':'account_number', 'value':person_info.account_number,'class':'form-control'})}}
         </div>
     </div>
 
-    <div class="field_row clearfix">	
+    {#<div class="field_row clearfix">	
         {{ form_label(line('customers_taxable')~':', 'taxable')}}
         <div class='form_field'>
             {{form_checkbox('taxable', '1', person_info.taxable == '' ? 'true' : person_info.taxable)}}
         </div>
-    </div>
+    </div>#}
 
     {{ form_submit({'name':'submit', 'id':'submit', 'value':line('common_submit'), 'class':'submit_button float_right'})}}
 </fieldset>

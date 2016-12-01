@@ -1,26 +1,26 @@
 <div class="field_row clearfix">	
 {{form_label(line('common_zip')~':', 'zip')}}
 	<div class='form_field'>
-	{{form_input({'name':'zip', 'id':'zip', 'value':person_info.zip})}}
+	{{form_input({'name':'zip', 'id':'zip', 'value':person_info.zip,'class':'form-control'})}}
 	</div>
 </div>
 <div class="field_row clearfix">	
 {{form_label(line('common_first_name')~':', 'first_name',{'class':'required'})}}
 	<div class='form_field'>
-	{{form_input({'name':'first_name','id':'first_name','value':person_info.first_name})}}
+	{{form_input({'name':'first_name','id':'first_name','value':person_info.first_name,'class':'form-control'})}}
 	</div>
 </div>
 <div class="field_row clearfix">	
 {{form_label(line('common_last_name')~':', 'last_name',{'class':'required'})}}
 	<div class='form_field'>
-	{{form_input({'name':'last_name', 'id':'last_name', 'value':person_info.last_name})}}
+	{{form_input({'name':'last_name', 'id':'last_name', 'value':person_info.last_name,'class':'form-control'})}}
 	</div>
 </div>
 
 <div class="field_row clearfix">	
 {{form_label(line('common_email')~':', 'email')}}
 	<div class='form_field'>
-{{form_input({'name':'email','id':'email','value':person_info.email})}}
+{{form_input({'name':'email','id':'email','value':person_info.email,'class':'form-control'})}}
 	</div>
 </div>
 
@@ -30,7 +30,7 @@
 	{{form_input({
 		'name':'phone_number',
 		'id':'phone_number',
-		'value':person_info.phone_number})}}
+		'value':person_info.phone_number,'class':'form-control'})}}
 	</div>
 </div>
 
@@ -40,7 +40,7 @@
 	{{form_input({
 		'name':'address_1',
 		'id':'address_1',
-		'value':person_info.address_1})}}
+		'value':person_info.address_1,'class':'form-control'})}}
 	</div>
 </div>
 
@@ -50,7 +50,7 @@
 	{{form_input({
 		'name':'address_2',
 		'id':'address_2',
-		'value':person_info.address_2})}}
+		'value':person_info.address_2,'class':'form-control'})}}
 	</div>
 </div>
 
@@ -60,7 +60,7 @@
 	{{form_input({
 		'name':'city',
 		'id':'city',
-		'value':person_info.city})}}
+		'value':person_info.city,'class':'form-control'})}}
 	</div>
 </div>
 
@@ -70,7 +70,7 @@
 	{{form_input({
 		'name':'state',
 		'id':'state',
-		'value':person_info.state})}}
+		'value':person_info.state,'class':'form-control'})}}
 	</div>
 </div>
 
@@ -80,7 +80,7 @@
 	{{form_input({
 		'name':'country',
 		'id':'country',
-		'value':person_info.country})}}
+		'value':person_info.country,'class':'form-control'})}}
 	</div>
 </div>
 
@@ -92,7 +92,7 @@
 		'id':'comments',
 		'value':person_info.comments,
 		'rows':'5',
-		'cols':'17'}		
+		'cols':'17','class':'form-control'}		
 	)}}
 	</div>
 </div>

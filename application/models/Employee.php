@@ -117,7 +117,7 @@ class Employee extends Person {
       Inserts or updates an employee
      */
 
-    function save(&$person_data, &$employee_data, &$permission_data, $employee_id = false) {
+    function save_employee(&$person_data, &$employee_data, &$permission_data, $employee_id = false) {
         $success = false;
 
         //Run these queries as a transaction, we want to make sure we do all or nothing

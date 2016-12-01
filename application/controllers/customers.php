@@ -71,6 +71,9 @@ class Customers extends Person_controller {
 
     function view($customer_id = -1) {
         $data['person_info'] = $this->Customer->get_info($customer_id);
+        $tipo_consumo = $this->tipo_consumo->get_all(10,0,"","","id,nombre");
+        
+        $data['tipo_consumo'] = array_to_htmlcombo($tipo_consumo, array('blank_text' => 'Escoja una opción', 'id' => 'id', 'name' => 'nombre'));
 //        $this->load->view("customers/form", $data);
         
          $this->twiggy->set($data);
@@ -99,7 +102,7 @@ class Customers extends Person_controller {
             'account_number' => $this->input->post('account_number') == '' ? null : $this->input->post('account_number'),
             'taxable' => $this->input->post('taxable') == '' ? 0 : 1,
         );
-        if ($this->Customer->save($person_data, $customer_data, $customer_id)) {
+        if ($this->Customer->save_customer($person_data, $customer_data, $customer_id)) {
             //New customer
             if ($customer_id == -1) {
                 echo json_encode(array('success' => true, 'message' => $this->lang->line('customers_successful_adding') . ' ' .
@@ -179,7 +182,7 @@ class Customers extends Person_controller {
                             'country' => $this->spreadsheetexcelreader->val($i, 'L'),
                             'comments' => $this->spreadsheetexcelreader->val($i, 'M')
                         );
-                        if ($this->Customer->save($person_data, $customer_data, $customer_id)) {
+                        if ($this->Customer->save_customer($person_data, $customer_data, $customer_id)) {
                             
                         } else {//insert or update item failure
                             $failCodes[] = $this->spreadsheetexcelreader->val($i, 'A');

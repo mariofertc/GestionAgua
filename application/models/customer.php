@@ -113,16 +113,20 @@ class Customer extends Person {
         return false;
     }
 
-    /*
-      Inserts or updates a customer
+    /**
+     * Inserts or updates a customer.
+     * @param type $person_data
+     * @param type $customer_data
+     * @param type $customer_id
+     * @return type
      */
-
-    function save(&$person_data, &$customer_data, $customer_id = false) {
+    function save_customer(&$person_data, &$customer_data, $customer_id = false) {
         $success = false;
         //Run these queries as a transaction, we want to make sure we do all or nothing
         $this->db->trans_start();
 
-        if (parent::save($person_data, $customer_id)) {
+        if ($this->save($person_data, $customer_id)) {
+        //if (parent::save($person_data, $customer_id)) {
             if (!$customer_id or ! $this->exists($customer_id)) {
                 $customer_data['person_id'] = $person_data['person_id'];
                 $success = $this->db->insert('customers', $customer_data);
@@ -263,5 +267,3 @@ class Customer extends Person {
     }
 
 }
-
-?>
