@@ -52,3 +52,5 @@ $lang['common_images']='Imagenes';
 $lang['common_images_save_first']='Favor primero guarde el Artículo, para poder ingresar las imágenes';
 $lang['common_error']='Error';
 $lang['common_warning']='Advertencia';
+$lang['common_fecha_desde']='Fecha desde';
+$lang['common_fecha_hasta']='Fecha hasta';
