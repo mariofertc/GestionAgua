@@ -56,17 +56,15 @@ class Consumo extends Secure_area {
         echo implode("\n", $suggestions);
     }
 
-    /*
-      Loads the customer edit form
+    /**
+     * Insert consumption
+     * @param type $customer_id
      */
-
     function view($customer_id = -1) {
         $data['person_info'] = $this->Customer->get_info($customer_id);
-        $tipo_consumo = $this->tipo_consumo->get_all(10,0,"","","id,nombre");
-        
-        $data['tipo_consumo'] = array_to_htmlcombo($tipo_consumo, array('blank_text' => 'Escoja una opción', 'id' => 'id', 'name' => 'nombre'));
-//        $this->load->view("customers/form", $data);
-        
+        $tipo_consumo = $this->tipo_consumo->get_all(10,0,"","","id,nombre");        
+        $data['registro_anterior'] = NULL;
+        $data['tipo_consumo'] = array_to_htmlcombo($tipo_consumo, array('blank_text' => 'Escoja una opción', 'id' => 'id', 'name' => 'nombre'));        
          $this->twiggy->set($data);
         $this->twiggy->display('consumo/form');
     }

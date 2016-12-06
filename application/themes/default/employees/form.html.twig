@@ -1,11 +1,11 @@
 {{ form_open('employees/save/' ~ person_info.person_id, {'id' : 'employee_form'}) }}
 <ul id="error_message_box"></ul>
-<fieldset id="employee_basic_info">
+<fieldset id="employee_basic_info" class="col-md-6">
     <legend>{{ line("employees_basic_information") }}</legend>
     {%include 'people/form_basic_info.html.twig'%}
 </fieldset>
 
-<fieldset id="employee_login_info">
+<fieldset id="employee_login_info" class="col-md-6">
     <legend>{{ line("employees_login_info") }}</legend>
     <div class="field_row clearfix">	
         {{ form_label(line('employees_username') ~ ':', 'username', {'class' : 'required'}) }}

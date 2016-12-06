@@ -15,11 +15,10 @@ class Customers extends Person_controller {
 //        $data['manage_table'] = get_people_manage_table($this->Customer->get_all(), $this);
 //        $this->load->view('people/manage', $data);
 //        $data['manage_table'] = get_people_manage_table($this->Customer->get_all(), $this);
-        
 //        $data['admin_table']=get_beneficios_admin_table();
 //        $this->twiggy->template('beneficiarios/manage')->display();
-        
-        
+
+
         $data['controller_name'] = $this->controller_name;
         $data['form_width'] = $this->get_form_width();
         $data['manage_table'] = get_people_manage_table();
@@ -27,24 +26,23 @@ class Customers extends Person_controller {
         $this->twiggy->set($data);
         $this->twiggy->display('people/manage');
     }
-    
-    function mis_datos() {
-		$data['controller_name'] = $this->controller_name;
-		$data['form_width'] = $this->get_form_width();
-		$data['form_height'] = 150;
-		$aColumns = array('person_id', 'first_name', 'last_name', 'email','phone_number');
-		//Eventos Tabla
-		$cllAccion = array(
-				'1' => array(
-						'function' => "view",
-						'common_language' => "common_edit",
-						'language' => "_update",
-						'width' => $this->get_form_width(),
-						'height' => $this->get_form_height()),
-				);
-		echo getData($this->Customer, $aColumns, $cllAccion);
-	}
 
+    function mis_datos() {
+        $data['controller_name'] = $this->controller_name;
+        $data['form_width'] = $this->get_form_width();
+        $data['form_height'] = 150;
+        $aColumns = array('person_id', 'first_name', 'last_name', 'email', 'phone_number');
+        //Eventos Tabla
+        $cllAccion = array(
+            '1' => array(
+                'function' => "view",
+                'common_language' => "common_edit",
+                'language' => "_update",
+                'width' => $this->get_form_width(),
+                'height' => $this->get_form_height()),
+        );
+        echo getData($this->Customer, $aColumns, $cllAccion);
+    }
 
     /*
       Returns customer table data rows. This will be called with AJAX.
@@ -71,12 +69,11 @@ class Customers extends Person_controller {
 
     function view($customer_id = -1) {
         $data['person_info'] = $this->Customer->get_info($customer_id);
-        $tipo_consumo = $this->tipo_consumo->get_all(10,0,"","","id,nombre");
-        
+        $tipo_consumo = $this->tipo_consumo->get_all(10, 0, "", "", "id,nombre");
         $data['tipo_consumo'] = array_to_htmlcombo($tipo_consumo, array('blank_text' => 'Escoja una opción', 'id' => 'id', 'name' => 'nombre'));
 //        $this->load->view("customers/form", $data);
-        
-         $this->twiggy->set($data);
+
+        $this->twiggy->set($data);
         $this->twiggy->display('customers/form');
     }
 
@@ -101,7 +98,10 @@ class Customers extends Person_controller {
         $customer_data = array(
             'account_number' => $this->input->post('account_number') == '' ? null : $this->input->post('account_number'),
             'taxable' => $this->input->post('taxable') == '' ? 0 : 1,
+            'registro_inicial' => $this->input->post('registro_inicial'),
+            'fecha_ingreso' => DateTime::createFromFormat('Y-m-d',$this->input->post('fecha_ingreso'))->format('Y-m-d')
         );
+//            'fecha_ingreso' => DateTime::createFromFormat('Y-m-d',$this->input->post('fecha_ingreso'))->format('Y-m-d')
         if ($this->Customer->save_customer($person_data, $customer_data, $customer_id)) {
             //New customer
             if ($customer_id == -1) {
@@ -218,8 +218,9 @@ class Customers extends Person_controller {
      */
 
     function get_form_width() {
-        return 350;
+        return 750;
     }
+
     function get_form_height() {
         return 550;
     }

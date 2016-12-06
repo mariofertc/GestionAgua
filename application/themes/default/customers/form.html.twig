@@ -1,9 +1,12 @@
 {{form_open('customers/save/'~person_info.person_id,{'id':'customer_form'})}}
 <div id="required_fields_message">{{line('common_fields_required_message')}}</div>
 <ul id="error_message_box"></ul>
-<fieldset id="customer_basic_info">
+<fieldset id="customer_basic_info" class="col-md-6">
     <legend>{{line("customers_basic_information")}}</legend>
     {%include 'people/form_basic_info.html.twig'%}
+</fieldset>
+
+<fieldset id="consumo_info" class="col-md-6">
     <div class="field_row clearfix">	
         {{form_label(line('customers_tipo_cuenta')~':', 'account_number')}}
         <div class='form_field'>
@@ -14,6 +17,18 @@
         {{form_label(line('customers_account_number')~':', 'account_number')}}
         <div class='form_field'>
             {{ form_input({'name':'account_number', 'id':'account_number', 'value':person_info.account_number,'class':'form-control'})}}
+        </div>
+    </div>
+    <div class="field_row clearfix">	
+        {{form_label(line('customers_registro_inicial')~':', 'registro_inicial')}}
+        <div class='form_field'>
+            {{ form_input({'name':'registro_inicial', 'id':'registro_inicial', 'value':person_info.registro_inicial,'class':'form-control'})}}
+        </div>
+    </div>
+    <div class="field_row clearfix">	
+        {{form_label(line('customers_fecha_ingreso')~':', 'fecha_ingreso')}}
+        <div class='form_field'>
+            {{ form_input({'name':'fecha_ingreso', 'id':'fecha_ingreso', 'value':person_info.fecha_ingreso,'class':'form-control date-picker'})}}
         </div>
     </div>
 
@@ -33,6 +48,12 @@
         //validation and submit handling
         $(document).ready(function ()
         {
+            $('.date-picker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                dateFormat: 'yy-mm-dd'
+            });
             $('#customer_form').validate({
                 submitHandler: function (form)
                 {

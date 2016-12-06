@@ -1,0 +1,35 @@
+body
+{
+    background-color: #171717;
+}
+#page-wrapper {
+    background-color: transparent !important;
+    min-height: 516px;
+}
+
+.navbar-default {
+    background-color: transparent;
+}
+.panel {
+    background-color: transparent;
+}
+
+table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
+    background-color: lightgray !important;
+}
+table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.even {
+    background-color: #808080
+}
+table.dataTable.display tbody tr.odd > .sorting_1, table.dataTable.order-column.stripe tbody tr.odd > .sorting_1 {
+    background-color: #9faab7 !important;
+}
+
+table.dataTable.display tbody tr.even > .sorting_1, table.dataTable.order-column.stripe tbody tr.even > .sorting_1 {
+    background-color: #8c8c88 !important;
+}
+.panel-default > .panel-heading {
+    background-color: black;
+}
+.ui-widget-overlay {
+    opacity: 0.32;
+}

@@ -344,7 +344,7 @@ class Pagar extends Secure_area {
         }
 //        $this->load->view("sales/register", $data);
         $this->twiggy->set($data);
-        $this->twiggy->display("sales/register");
+        $this->twiggy->display("pagos/register");
     }
 
     function cancel_sale() {
