@@ -99,7 +99,8 @@ class Customers extends Person_controller {
             'account_number' => $this->input->post('account_number') == '' ? null : $this->input->post('account_number'),
             'taxable' => $this->input->post('taxable') == '' ? 0 : 1,
             'registro_inicial' => $this->input->post('registro_inicial'),
-            'fecha_ingreso' => DateTime::createFromFormat('Y-m-d',$this->input->post('fecha_ingreso'))->format('Y-m-d')
+            'fecha_ingreso' => DateTime::createFromFormat('Y-m-d',$this->input->post('fecha_ingreso'))->format('Y-m-d'),
+            'id_tipo_consumo' => $this->input->post('tipo_consumo')==0?null:$this->input->post('tipo_consumo')
         );
 //            'fecha_ingreso' => DateTime::createFromFormat('Y-m-d',$this->input->post('fecha_ingreso'))->format('Y-m-d')
         if ($this->Customer->save_customer($person_data, $customer_data, $customer_id)) {

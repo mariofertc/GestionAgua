@@ -9,22 +9,25 @@
     <div class="field_row clearfix">	
         {{form_label(line('consumo_fecha')~':', 'fecha_consumo')}}
         <div class='form_field'>
-            {{ form_input({'name':'fecha_consumo', 'id':'fecha_consumo', 'value':person_info.fecha_consumo,'class':'form-control date-picker'})}}
+            {{ form_input({'name':'fecha_consumo', 'id':'fecha_consumo', 'value':fecha_consumo,'class':'form-control', 'readonly':true})}}
         </div>
     </div>
     <div class="field_row clearfix">	
-        {{form_label(line('consumo_registro_medidor')~':', 'registro_medidor')}}
+        {{form_label(line('consumo_registro_medidor')~' (ant ' ~ registro_anterior ~ '):', 'registro_medidor')}}
         <div class='form_field'>
-            {{ form_input({'name':'registro_medidor', 'id':'registro_medidor', 'value':person_info.registro_medidor,'class':'form-control'})}}
+            {{ form_input({'name':'registro_medidor', 'id':'registro_medidor','class':'form-control  text-right',
+'data-cell':'A1','data-format':"0,0[.]00",'data-formula':"", 'type':"text"})}}
         </div>
     </div>
+        
     <div class="field_row clearfix">	
         {{form_label(line('consumo_medidor')~':', 'consumo_medidor')}}
         <div class='form_field'>
-
-            {{ form_input({'name':'consumo_medidor', 'id':'consumo_medidor', 'value':person_info.consumo_medidor,'class':'form-control', 'readonly':true})}}
-
+            {{ form_input({'name':'consumo_medidor', 'id':'consumo_medidor', 'value':person_info.consumo_medidor,'class':'form-control', 'readonly':true,
+'data-formula':"if((A1-"~registro_anterior~")<0,0,A1-"~registro_anterior~")",'data-cell':"A2"})}}
+{#'data-formula':"if(registro_medidor-"~registro_anterior~"<0,0,"~registro_anterior~"+registro_medidor)",'data-cell':"Ac"})}}#}
         </div>
+
     </div>
     <div class="field_row clearfix">	
         {{form_label(line('consumo_valor_a_pagar')~':', 'valor_a_pagar')}}
@@ -32,93 +35,94 @@
             {{ form_input({'name':'valor_a_pagar', 'id':'valor_a_pagar', 'value':person_info.valor_a_pagar,'class':'form-control','readonly':true})}}
         </div>
     </div>
-            
+
     <div class="field_row clearfix">	
         {{form_label(line('consumo_es_cambio_medidor')~':', 'es_cambio_medidor')}}
-      {{ form_checkbox({'name':'es_cambio_medidor', 'id':'es_cambio_medidor', 'value':person_info.es_cambio_medidor,'class':'form-control'})}}
-        </div>
+        {{ form_checkbox({'name':'es_cambio_medidor', 'id':'es_cambio_medidor', 'value':person_info.es_cambio_medidor,'class':'form-control'})}}
     </div>
-    
-    <div class="field_row clearfix">	
-        {{form_label(line('consumo_valor_cambio_medidor')~':', 'valor_cambio_medidor')}}
-        <div class='form_field'>
-            {{ form_input({'name':'valor_cambio_medidor', 'id':'valor_cambio_medidor', 'value':person_info.valor_cambio_medidor,'class':'form-control','readonly':true})}}
-        </div>
-    </div>
+</div>
 
-    {#<div class="field_row clearfix">	
-        {{ form_label(line('customers_taxable')~':', 'taxable')}}
-        <div class='form_field'>
-            {{form_checkbox('taxable', '1', person_info.taxable == '' ? 'true' : person_info.taxable)}}
-        </div>
-    </div>#}
-    <br>
-    {{ form_submit({'name':'submit', 'id':'submit', 'value':line('common_submit'), 'class':'btn btn-success btn-block'})}}
+<div class="field_row clearfix">	
+    {{form_label(line('consumo_valor_cambio_medidor')~':', 'valor_cambio_medidor')}}
+    <div class='form_field'>
+        {{ form_input({'name':'valor_cambio_medidor', 'id':'valor_cambio_medidor', 'value':person_info.valor_cambio_medidor,'class':'form-control','readonly':true})}}
+    </div>
+</div>
+
+{#<div class="field_row clearfix">	
+    {{ form_label(line('customers_taxable')~':', 'taxable')}}
+    <div class='form_field'>
+        {{form_checkbox('taxable', '1', person_info.taxable == '' ? 'true' : person_info.taxable)}}
+    </div>
+</div>#}
+<br>
+{{ form_submit({'name':'submit', 'id':'submit', 'value':line('common_submit'), 'class':'btn btn-success btn-block'})}}
 </fieldset>
 {{form_close()}}
 {% block javascript %}
     <script type='text/javascript'>
 
+        if (typeof window.jQuery.fn.calx === 'function') {
+            //inicializa_form();
+            console.log("Carga cache");
+            calcula();
+        } else {
+            console.log("Primera Carga");
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "{{base_url()}}assets/bower_components/jquery-calx/jquery-calx-2.2.7.js";
+{#            $.getScript(script.src);#}
+        {#     $.getScript("{{base_url()}}assets/bower_components/tag-it/js/tag-it.min.js"); #}
+             $.getScript(script.src, function(){ calcula();});
+        }
+
         //validation and submit handling
         $(document).ready(function () {
-            $('.date-picker').datepicker({
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                dateFormat: 'MM yy',
-                onClose: function (dateText, inst) {
-                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-                }
-            });
-            $('#customer_form').validate({
-                submitHandler: function (form) {
-                    $.ajax({
-                        type: $(form).attr('method'),
-                        url: $(form).attr('action'),
-                        data: $(form).serialize(),
-                        success: function (response)
-                        {
-                            tb_remove();
-                            post_person_form_submit(response);
-                            console.log(response);
+{#            calcula();#}
+
+        {#$('.date-picker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            dateFormat: 'MM yy',
+            onClose: function (dateText, inst) {
+                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+            }
+        });#}
+                    $('#customer_form').validate({
+                        submitHandler: function (form) {
+                            $.ajax({
+                                type: $(form).attr('method'),
+                                url: $(form).attr('action'),
+                                data: $(form).serialize(),
+                                success: function (response)
+                                {
+                                    tb_remove();
+                                    post_person_form_submit(response);
+                                    console.log(response);
+                                },
+                                dataType: 'json'
+                            });
                         },
-                        dataType: 'json'
+                        errorLabelContainer: "#error_message_box",
+                        wrapper: "li",
+                        rules:
+                                {
+                                    first_name: "required",
+                                    last_name: "required",
+                                    email: "email"
+                                },
+                        messages:
+                                {
+                                    first_name: "{{line('common_first_name_required')}}",
+                                    last_name: "{{line('common_last_name_required')}}",
+                                    email: "{{line('common_email_invalid_format')}}"
+                                }
                     });
-
-
-
-                    /*$('#customer_form').submit(function (event) {
-                     $.ajax({
-                     type: 'POST',
-                     url:  $('#customer_form').attr( "action" ),
-                     data:  $( this ).serialize(), 
-                     dataType: 'json', 
-                     encode: true
-                     })
-                     .done(function (data) {
-                     tb_remove();
-                     post_person_form_submit(data);
-                     console.log(data);
-                     
-                     });
-                     });*/
-
-                },
-                errorLabelContainer: "#error_message_box",
-                wrapper: "li",
-                rules:
-                        {
-                            first_name: "required",
-                            last_name: "required",
-                            email: "email"
-                        },
-                messages:
-                        {
-                            first_name: "{{line('common_first_name_required')}}",
-                            last_name: "{{line('common_last_name_required')}}",
-                            email: "{{line('common_email_invalid_format')}}"
-                        }
-            });
-        });
+                });
+                function calcula() {
+        {#        $('subsistencia_total_').val(10);#}
+                    $('#consumo_form').calx();
+                }
     </script>
 {% endblock %}

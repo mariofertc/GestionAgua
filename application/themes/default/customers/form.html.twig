@@ -10,7 +10,7 @@
     <div class="field_row clearfix">	
         {{form_label(line('customers_tipo_cuenta')~':', 'account_number')}}
         <div class='form_field'>
-            {{ form_dropdown('tipo_consumo',tipo_consumo,person_info.tipo_consumo,{'class':'form-control'})}}
+            {{ form_dropdown('tipo_consumo',tipo_consumo,person_info.id_tipo_consumo,{'class':'form-control'})}}
         </div>
     </div>
     <div class="field_row clearfix">	
@@ -38,8 +38,8 @@
             {{form_checkbox('taxable', '1', person_info.taxable == '' ? 'true' : person_info.taxable)}}
         </div>
     </div>#}
-
-    {{ form_submit({'name':'submit', 'id':'submit', 'value':line('common_submit'), 'class':'submit_button float_right'})}}
+    <br>
+    {{ form_submit({'name':'submit', 'id':'submit', 'value':line('common_submit'), 'class':'btn btn-success btn-block'})}}
 </fieldset>
 {{form_close()}}
 {% block javascript %}

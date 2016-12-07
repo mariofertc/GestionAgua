@@ -2,12 +2,12 @@
 
 require_once ("secure_area.php");
 
-class Consumo extends Secure_area {
+class Consumos extends Secure_area {
 
     function __construct() {
-        parent::__construct('consumo');
+        parent::__construct('consumos');
         //$this->load->library('receiving_lib');
-        $this->controller_name = 'consumo';
+        $this->controller_name = 'consumos';
     }
 
     function index() {
@@ -61,9 +61,25 @@ class Consumo extends Secure_area {
      * @param type $customer_id
      */
     function view($customer_id = -1) {
-        $data['person_info'] = $this->Customer->get_info($customer_id);
+        $person_info = $this->Customer->get_info($customer_id);
+        $data['person_info'] = $person_info;
         $tipo_consumo = $this->tipo_consumo->get_all(10,0,"","","id,nombre");        
-        $data['registro_anterior'] = NULL;
+        $registro_anterior = $this->consumo->get_all(10,0,"","");
+        if(count($registro_anterior)==0){
+            $registro_anterior = $person_info->registro_inicial;
+            $fecha_anterior = $person_info->fecha_ingreso;
+        }else{
+            $registro_anterior = $registro_anterior[count($registro_anterior)-1]['registro_medidor'];
+            $fecha_anterior = $registro_anterior[count($registro_anterior)-1]['fecha_consumo'];
+        }
+        if(is_null($registro_anterior) || is_null($fecha_anterior)){
+            $data['error'] = "Sin registros anteriores. Revise información del cliente";
+        }
+        $data['registro_anterior'] = $registro_anterior;
+        //2016-12-26
+        $fecha_anterior = DateTime::createFromFormat('Y-m-d',$fecha_anterior)->add(new DateInterval("P1M"))->format('Y-m-d');
+        $data['fecha_consumo'] = $fecha_anterior;
+        
         $data['tipo_consumo'] = array_to_htmlcombo($tipo_consumo, array('blank_text' => 'Escoja una opción', 'id' => 'id', 'name' => 'nombre'));        
          $this->twiggy->set($data);
         $this->twiggy->display('consumo/form');

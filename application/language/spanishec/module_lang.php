@@ -37,8 +37,8 @@ $lang['module_abonos_desc']='Agregar, Actualizar y Buscar cuentas por cobrar';
 $lang['module_porpagar']='Por Pagar';
 $lang['module_porpagar_desc']='Agregar, Actualizar y Buscar cuentas por pagar';
 
-$lang['module_consumo']='Consumo';
-$lang['module_consumo_desc']='Agregar Consumos';
+$lang['module_consumos']='Consumo';
+$lang['module_consumos_desc']='Agregar Consumos';
 
 $lang['module_pagar']='Pagar';
 $lang['module_pagar_desc']='Realizar Pagos';
