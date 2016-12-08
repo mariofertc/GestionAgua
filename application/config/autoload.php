@@ -132,6 +132,6 @@ $autoload['language'] = array('common', 'config', 'customers', 'employees', 'err
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('Appconfig','Person','Customer','Employee','Module', 'Sale','Receiving', 'Payment', 'tipo_consumo','consumo');
+$autoload['model'] = array('Appconfig','Person','Customer','Employee','Module', 'Sale','Receiving', 'Payment', 'tipo_consumo','consumo','cuota');
 
 $autoload['sparks'] = array('Twiggy/0.8.5');

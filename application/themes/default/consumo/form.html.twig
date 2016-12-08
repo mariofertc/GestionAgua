@@ -19,34 +19,39 @@
 'data-cell':'A1','data-format':"0,0[.]00",'data-formula':"", 'type':"text"})}}
         </div>
     </div>
-        
+
+    <div class="field_row clearfix">	
+        {{form_label(line('consumo_es_cambio_medidor')~':', 'es_cambio_medidor')}}
+        <label>{{ form_checkbox({'name':'es_cambio_medidor', 'id':'es_cambio_medidor', 'value':valor_cambio_medidor,'data-cell':'A5'})}}
+            $  {{valor_cambio_medidor}}
+        </label>
+    </div>
+
     <div class="field_row clearfix">	
         {{form_label(line('consumo_medidor')~':', 'consumo_medidor')}}
         <div class='form_field'>
             {{ form_input({'name':'consumo_medidor', 'id':'consumo_medidor', 'value':person_info.consumo_medidor,'class':'form-control', 'readonly':true,
 'data-formula':"if((A1-"~registro_anterior~")<0,0,A1-"~registro_anterior~")",'data-cell':"A2"})}}
-{#'data-formula':"if(registro_medidor-"~registro_anterior~"<0,0,"~registro_anterior~"+registro_medidor)",'data-cell':"Ac"})}}#}
+            {#'data-formula':"if(registro_medidor-"~registro_anterior~"<0,0,"~registro_anterior~"+registro_medidor)",'data-cell':"Ac"})}}#}
         </div>
 
+    </div>
+    <div class="field_row clearfix">	
+        {{form_label(line('consumo_valor_cuota')~':', 'valor_cuota')}}
+        <div class='form_field'>
+            {{ form_input({'name':'valor_cuota', 'id':'valor_cuota','class':'form-control','readonly':true,
+'data-formula':formula_cuota,'data-cell':"A4"})}}
+        </div>
     </div>
     <div class="field_row clearfix">	
         {{form_label(line('consumo_valor_a_pagar')~':', 'valor_a_pagar')}}
         <div class='form_field'>
-            {{ form_input({'name':'valor_a_pagar', 'id':'valor_a_pagar', 'value':person_info.valor_a_pagar,'class':'form-control','readonly':true})}}
+            {{ form_input({'name':'valor_a_pagar', 'id':'valor_a_pagar', 'value':person_info.valor_a_pagar,'class':'form-control','readonly':true,
+'data-formula':"if((A1-"~registro_anterior~")<0,0,A4+A5)",'data-cell':"A3"})}}
         </div>
     </div>
 
-    <div class="field_row clearfix">	
-        {{form_label(line('consumo_es_cambio_medidor')~':', 'es_cambio_medidor')}}
-        {{ form_checkbox({'name':'es_cambio_medidor', 'id':'es_cambio_medidor', 'value':person_info.es_cambio_medidor,'class':'form-control'})}}
-    </div>
-</div>
 
-<div class="field_row clearfix">	
-    {{form_label(line('consumo_valor_cambio_medidor')~':', 'valor_cambio_medidor')}}
-    <div class='form_field'>
-        {{ form_input({'name':'valor_cambio_medidor', 'id':'valor_cambio_medidor', 'value':person_info.valor_cambio_medidor,'class':'form-control','readonly':true})}}
-    </div>
 </div>
 
 {#<div class="field_row clearfix">	
@@ -71,14 +76,16 @@
             var script = document.createElement("script");
             script.type = "text/javascript";
             script.src = "{{base_url()}}assets/bower_components/jquery-calx/jquery-calx-2.2.7.js";
-{#            $.getScript(script.src);#}
+        {#            $.getScript(script.src);#}
         {#     $.getScript("{{base_url()}}assets/bower_components/tag-it/js/tag-it.min.js"); #}
-             $.getScript(script.src, function(){ calcula();});
-        }
+                $.getScript(script.src, function () {
+                    calcula();
+                });
+            }
 
-        //validation and submit handling
-        $(document).ready(function () {
-{#            calcula();#}
+            //validation and submit handling
+            $(document).ready(function () {
+        {#            calcula();#}
 
         {#$('.date-picker').datepicker({
             changeMonth: true,
@@ -89,40 +96,40 @@
                 $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
             }
         });#}
-                    $('#customer_form').validate({
-                        submitHandler: function (form) {
-                            $.ajax({
-                                type: $(form).attr('method'),
-                                url: $(form).attr('action'),
-                                data: $(form).serialize(),
-                                success: function (response)
-                                {
-                                    tb_remove();
-                                    post_person_form_submit(response);
-                                    console.log(response);
-                                },
-                                dataType: 'json'
-                            });
-                        },
-                        errorLabelContainer: "#error_message_box",
-                        wrapper: "li",
-                        rules:
-                                {
-                                    first_name: "required",
-                                    last_name: "required",
-                                    email: "email"
-                                },
-                        messages:
-                                {
-                                    first_name: "{{line('common_first_name_required')}}",
-                                    last_name: "{{line('common_last_name_required')}}",
-                                    email: "{{line('common_email_invalid_format')}}"
-                                }
-                    });
+                $('#customer_form').validate({
+                    submitHandler: function (form) {
+                        $.ajax({
+                            type: $(form).attr('method'),
+                            url: $(form).attr('action'),
+                            data: $(form).serialize(),
+                            success: function (response)
+                            {
+                                tb_remove();
+                                post_person_form_submit(response);
+                                console.log(response);
+                            },
+                            dataType: 'json'
+                        });
+                    },
+                    errorLabelContainer: "#error_message_box",
+                    wrapper: "li",
+                    rules:
+                            {
+                                first_name: "required",
+                                last_name: "required",
+                                email: "email"
+                            },
+                    messages:
+                            {
+                                first_name: "{{line('common_first_name_required')}}",
+                                last_name: "{{line('common_last_name_required')}}",
+                                email: "{{line('common_email_invalid_format')}}"
+                            }
                 });
-                function calcula() {
+            });
+            function calcula() {
         {#        $('subsistencia_total_').val(10);#}
-                    $('#consumo_form').calx();
-                }
+                $('#consumo_form').calx();
+            }
     </script>
 {% endblock %}

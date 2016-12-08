@@ -74,7 +74,35 @@ class Consumos extends Secure_area {
         }
         if(is_null($registro_anterior) || is_null($fecha_anterior)){
             $data['error'] = "Sin registros anteriores. Revise información del cliente";
+            return null;
         }
+//        $tasas_aplicables = $this->cuota->get_all(0,100,array('id_tipo_consumo'=>$person_info->person_id));
+        $tasas_aplicables = $this->cuota->get_all(100,0,'id_tipo_consumo='.$person_info->id_tipo_consumo);
+        $formula = "";//if((A1-"~registro_anterior~")<0,0,
+        $cantidad_tasas = count($tasas_aplicables)-1;
+        $valor_cambio_medidor = 0;
+        foreach($tasas_aplicables as $tasa){
+            $rango =$tasa['rango'];
+            $valor =$tasa['valor'];
+            if($tasa['rango']!='medidor'){
+                if (strlen($formula) != 0) {
+                    $formula .= ",";
+                }
+                $formula.="if(A2<$rango,$valor";
+            }
+            else{
+                $valor_cambio_medidor = $valor;
+            }
+            if($tasas_aplicables[$cantidad_tasas]==$tasa){
+                $formula.=str_repeat(")", $cantidad_tasas);
+            }
+        }
+        //var_dump($formula);
+        
+        $data['formula_cuota'] = $formula;
+        $data['tasas_aplicables'] = $tasas_aplicables;
+        $data['valor_cambio_medidor'] = $valor_cambio_medidor;
+        //var_dump($tasas_aplicables);
         $data['registro_anterior'] = $registro_anterior;
         //2016-12-26
         $fecha_anterior = DateTime::createFromFormat('Y-m-d',$fecha_anterior)->add(new DateInterval("P1M"))->format('Y-m-d');
