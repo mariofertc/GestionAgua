@@ -8,8 +8,7 @@ $.urlParam = function (ref, name) {
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(ref);
     if (results == null) {
         return null;
-    }
-    else {
+    } else {
         return results[1] || 0;
     }
 }
@@ -86,9 +85,27 @@ function set_feedback(text, classname, keep_displayed)
             $('#feedback_bar').fadeTo(5000, 1);
             $('#feedback_bar').fadeTo("fast", 0);
         }
-    }
-    else
+    } else
     {
         $('#feedback_bar').css('opacity', '0');
     }
 }
+
+//validation and submit handling
+jQuery.validator.setDefaults({
+    highlight: function (element) {
+        jQuery(element).closest('.form-group').addClass('has-error');
+    },
+    unhighlight: function (element) {
+        jQuery(element).closest('.form-group').removeClass('has-error');
+    },
+    errorElement: 'span',
+    errorClass: 'label label-danger',
+    errorPlacement: function (error, element) {
+        if (element.parent('.input-group').length) {
+            error.insertAfter(element.parent());
+        } else {
+            error.insertAfter(element);
+        }
+    },ignore: []
+});

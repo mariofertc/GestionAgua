@@ -20,13 +20,12 @@ class Cuota extends CI_Model {
         return $this->db->get()->result_array();
     }
 
-    function get_total($where = '') {
-        $this->db->from('customers');
-        $this->db->join('people', 'customers.person_id=people.person_id');
-        if ($where != "")
-            $this->db->where($where);
+    function get_id_by_consumo($id_tipo_consumo, $valor) {
+        $this->db->from('cuotas');
+        $this->db->where('id_tipo_consumo',$id_tipo_consumo);
+        $this->db->where('valor',$valor);
         $this->db->where('deleted', 0);
-        return $this->db->count_all_results();
+        return $this->db->get()->first_row();
     }
 
     /*

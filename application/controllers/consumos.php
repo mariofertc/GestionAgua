@@ -60,17 +60,23 @@ class Consumos extends Secure_area {
      * Insert consumption
      * @param type $customer_id
      */
-    function view($customer_id = -1) {
+    function view($customer_id = -1,$consumo_id = -1) {
         $person_info = $this->Customer->get_info($customer_id);
         $data['person_info'] = $person_info;
+        
+        $consumo_info = $this->consumo->get_info($consumo_id);
+        $data['consumo_info'] = $consumo_info;
+        
         $tipo_consumo = $this->tipo_consumo->get_all(10,0,"","","id,nombre");        
         $registro_anterior = $this->consumo->get_all(10,0,"","");
+        
         if(count($registro_anterior)==0){
             $registro_anterior = $person_info->registro_inicial;
             $fecha_anterior = $person_info->fecha_ingreso;
         }else{
-            $registro_anterior = $registro_anterior[count($registro_anterior)-1]['registro_medidor'];
-            $fecha_anterior = $registro_anterior[count($registro_anterior)-1]['fecha_consumo'];
+            $registro_tmp = $registro_anterior[count($registro_anterior)-1];
+            $registro_anterior = $registro_tmp['registro_medidor'];
+            $fecha_anterior = substr($registro_tmp['fecha_consumo'],0,10);
         }
         if(is_null($registro_anterior) || is_null($fecha_anterior)){
             $data['error'] = "Sin registros anteriores. Revise información del cliente";
@@ -117,36 +123,39 @@ class Consumos extends Secure_area {
       Inserts/updates a customer
      */
 
-    function save($customer_id = -1) {
-        $person_data = array(
-            'first_name' => $this->input->post('first_name'),
-            'last_name' => $this->input->post('last_name'),
-            'email' => $this->input->post('email'),
-            'phone_number' => $this->input->post('phone_number'),
-            'address_1' => $this->input->post('address_1'),
-            'address_2' => $this->input->post('address_2'),
-            'city' => $this->input->post('city'),
-            'state' => $this->input->post('state'),
-            'zip' => $this->input->post('zip'),
-            'country' => $this->input->post('country'),
-            'comments' => $this->input->post('comments')
+    function save($consumo_id = -1) {
+        $fecha_hasta = DateTime::createFromFormat('Y-m-d',$this->input->post('fecha_consumo'))->add(new DateInterval("P1M"))->format('Y-m-d');
+        //Id Cuota
+        $id_tipo_consumo = $this->input->post('id_tipo_consumo');
+        $valor_cuota = $this->input->post('valor_cuota');
+        $cuota = $this->cuota->get_id_by_consumo($id_tipo_consumo,$valor_cuota);
+        $id_cuota = $cuota->id;
+        $consumo_data = array(
+            'id_cliente' => $this->input->post('id_cliente'),
+            'id_cuota' => $id_cuota,
+            'registro_medidor' => $this->input->post('registro_medidor'),
+            'consumo_medidor' => $this->input->post('consumo_medidor'),
+            'valor_a_pagar' => $this->input->post('valor_a_pagar'),
+            'fecha_consumo' => $this->input->post('fecha_consumo'),
+            'fecha_hasta' => $fecha_hasta,
+            'fecha_creación' => date('Y-m-d H:i:s'),
+            'fecha_actualizacion' => date('Y-m-d H:i:s'),
+            'estado' => 'generado',
+            'cargo' => $this->input->post('es_cambio_medidor'),
+            'detalle_cargo' => $this->input->post('es_cambio_medidor')?'Cambio de Medidor':null
         );
-        $customer_data = array(
-            'account_number' => $this->input->post('account_number') == '' ? null : $this->input->post('account_number'),
-            'taxable' => $this->input->post('taxable') == '' ? 0 : 1,
-        );
-        if ($this->Customer->save_customer($person_data, $customer_data, $customer_id)) {
+        if ($this->consumo->save($consumo_data, $consumo_id)) {
             //New customer
-            if ($customer_id == -1) {
-                echo json_encode(array('success' => true, 'message' => $this->lang->line('customers_successful_adding') . ' ' .
-                    $person_data['first_name'] . ' ' . $person_data['last_name'], 'person_id' => $customer_data['person_id']));
+            if ($consumo_id == -1) {
+                echo json_encode(array('success' => true, 'message' => $this->lang->line('consumo_successful_adding') . ' ' .
+                    $consumo_data['id'] . ' ' . $consumo_data['valor_a_pagar'], 'consumo_id' => $consumo_data['id']));
             } else { //previous customer
-                echo json_encode(array('success' => true, 'message' => $this->lang->line('customers_successful_updating') . ' ' .
-                    $person_data['first_name'] . ' ' . $person_data['last_name'], 'person_id' => $customer_id));
+                echo json_encode(array('success' => true, 'message' => $this->lang->line('consumo_successful_updating') . ' ' .
+                    $consumo_data['id'] . ' ' . $consumo_data['valor_a_pagar'], 'consumo_id' => $consumo_id));
             }
         } else {//failure
-            echo json_encode(array('success' => false, 'message' => $this->lang->line('customers_error_adding_updating') . ' ' .
-                $person_data['first_name'] . ' ' . $person_data['last_name'], 'person_id' => -1));
+            echo json_encode(array('success' => false, 'message' => $this->lang->line('consumo_error_adding_updating') . ' ' .
+                $consumo_data['id'] . ' ' . $consumo_data['valor_a_pagar'], 'consumo_id' => -1));
         }
     }
 
@@ -251,7 +260,7 @@ class Consumos extends Secure_area {
      */
 
     function get_form_width() {
-        return 350;
+        return 450;
     }
     function get_form_height() {
         return 550;

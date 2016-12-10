@@ -17,28 +17,6 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 {{line('sales_register') }}
-                                {{ anchor("items/view/-1?width=360",
-		"<div class='small_button'><span>"~line('sales_new_item')~"</span></div>",
-		{'class':'btn btn-success btn-sm thickbox','title':line('sales_new_item')})
-                                }}
-
-                                {{ anchor("sales/suspended?width=425", line('sales_suspended_sales'), {'class':'btn btn-success btn-sm thickbox','title':line('sales_suspended_sales')}) }}
-                            </div>
-                            <div class="col-lg-4 col-sm-4">
-                                {{ form_open("sales/change_almacen",{'id':'almacen_form', class:"form-inline"})}}
-                                <div class="form-group-sm">
-                                    {{ form_label(line('almacenes_almacen'),'almacen')}}
-                                    {{ form_dropdown('almacen',almacenes,almacen,'onchange="$(\'#almacen_form\').submit();" class="form-control"')}}
-                                </div>
-                                </form>
-                            </div>
-                            <div class="col-lg-4 col-sm-4">
-                                {{ form_open("sales/change_mode",{'id':'mode_form', class:"form-inline"})}}
-                                <div class="form-group-sm">
-                                    {{form_label( line('sales_mode'),'mode') }}
-                                    {{ form_dropdown('mode',modes,mode,'onchange="$(\'#mode_form\').submit();" class="form-control"')}}
-                                </div>
-                                </form>
                             </div>
                         </div>
                     </div>
@@ -298,7 +276,7 @@
 {% block javascript %}
     {{ parent() }}
     <script src="{{base_url()}}assets/bower_components/datatables/media/js/jquery.dataTables.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
-    
+
     <script type="text/javascript" language="javascript">
         $(document).ready(function ()
         {
@@ -318,17 +296,17 @@
              $("#add_item_form").submit();
              });*/
         {% if error is not empty %}
-            new PNotify({title: 'Oh No!',text: "{{error}}",type: 'error'});
+                new PNotify({title: 'Oh No!', text: "{{error}}", type: 'error'});
         {%endif%}
 
         {% if warning is not empty %}
-            new PNotify({title: 'Precaución!',text: "{{error}}"});
+                new PNotify({title: 'Precaución!', text: "{{error}}"});
         {%endif%}
 
         {% if success is not empty %}
-            new PNotify({title: 'Precaución!',text: "{{success}}", type:"success"});
+                new PNotify({title: 'Precaución!', text: "{{success}}", type: "success"});
         {%endif%}
-                        $("#item").autocomplete({source: function (request, response) {
+                $("#item").autocomplete({source: function (request, response) {
                         $.ajax({
                             url: "{{site_url('sales/item_search')}}",
                             dataType: "json",

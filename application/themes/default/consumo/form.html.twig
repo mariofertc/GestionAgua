@@ -1,7 +1,7 @@
 <style>
     .ui-datepicker-calendar {display: none;}
 </style>
-{{form_open('consumo/save/'~person_info.person_id,{'id':'consumo_form'})}}
+{{form_open('consumos/save/'~consumo_id,{'id':'consumo_form'})}}
 <div id="required_fields_message">{{line('common_fields_required_message')}}</div>
 <ul id="error_message_box"></ul>
 <fieldset id="customer_basic_info">
@@ -46,10 +46,13 @@
     <div class="field_row clearfix">	
         {{form_label(line('consumo_valor_a_pagar')~':', 'valor_a_pagar')}}
         <div class='form_field'>
-            {{ form_input({'name':'valor_a_pagar', 'id':'valor_a_pagar', 'value':person_info.valor_a_pagar,'class':'form-control','readonly':true,
+            {{ form_input({'name':'valor_a_pagar', 'id':'valor_a_pagar', 'value':person_info.valor_a_pagar,'class':'form-control',
+'readonly':true,
 'data-formula':"if((A1-"~registro_anterior~")<0,0,A4+A5)",'data-cell':"A3"})}}
         </div>
     </div>
+    {{ form_hidden('id_cliente', person_info.person_id)}}
+    {{ form_hidden('id_tipo_consumo', person_info.id_tipo_consumo)}}
 
 
 </div>
@@ -85,19 +88,11 @@
 
             //validation and submit handling
             $(document).ready(function () {
-        {#            calcula();#}
-
-        {#$('.date-picker').datepicker({
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'MM yy',
-            onClose: function (dateText, inst) {
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-            }
-        });#}
-                $('#customer_form').validate({
+                $('#consumo_form').validate({
+{#                    ignore: [":hidden"],#}
+{#                    ignore: [""],#}
                     submitHandler: function (form) {
+                        calcula();
                         $.ajax({
                             type: $(form).attr('method'),
                             url: $(form).attr('action'),
@@ -111,20 +106,24 @@
                             dataType: 'json'
                         });
                     },
-                    errorLabelContainer: "#error_message_box",
-                    wrapper: "li",
-                    rules:
-                            {
-                                first_name: "required",
-                                last_name: "required",
-                                email: "email"
-                            },
-                    messages:
-                            {
-                                first_name: "{{line('common_first_name_required')}}",
-                                last_name: "{{line('common_last_name_required')}}",
-                                email: "{{line('common_email_invalid_format')}}"
-                            }
+                    rules: {
+                        registro_medidor: {
+                            required:1,
+                            min: '{{registro_anterior}}'
+                        },
+                        valor_a_pagar: {
+                            min: 1
+                        }
+                    },
+                    messages: {
+                        registro_medidor: {
+                            required:"Favor ingrese el registro del medidor",
+                            min :"El registro debe ser mayor o igual al regisro del mes anterior",
+                        },
+                        valor_a_pagar: {
+                            min:"Ingreso incorrecto del registro del medidor"
+                        }
+                    }
                 });
             });
             function calcula() {
