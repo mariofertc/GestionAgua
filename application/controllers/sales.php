@@ -80,23 +80,16 @@ class Sales extends Secure_area {
 
     function add() {
         $data = array();
-        $mode = $this->sale_lib->get_mode();
-        // $almacen = $this->sale_lib->get_almacen();
-        $selected_almacen = $this->Almacen->get_first();
-        $almacen = $this->Almacen->get_info($this->sale_lib->get_almacen() != -1 ? $this->sale_lib->get_almacen() : $selected_almacen['almacen_id']);
-
-        $item_id_or_number_or_receipt = $this->input->post("item");
-        $quantity = $mode == "sale" ? 1 : -1;
-        //$stock = $data['stock'] = $this->sale_lib->get_stock($item_id_or_number_or_receipt);
-        if ($this->sale_lib->is_valid_receipt($item_id_or_number_or_receipt) && $mode == 'return') {
-            $this->sale_lib->return_entire_sale($item_id_or_number_or_receipt);
-        } elseif (!$this->sale_lib->add_item($item_id_or_number_or_receipt, $quantity, 0, null, null, null, null, $almacen)) {
+        $customer_id_or_account_number = $this->input->post("customer_search");
+        
+//        if (!$this->sale_lib->add_item($customer_id_or_account_number, $quantity, 0, null, null, null, null, $almacen)) {
+        if (!$this->sale_lib->add_item($customer_id_or_account_number)) {
             $data['error'] = $this->lang->line('sales_unable_to_add_item');
         }
 
-        if ($this->sale_lib->out_of_stock($item_id_or_number_or_receipt, $almacen)) {
-            $data['warning'] = $this->lang->line('sales_quantity_less_than_zero');
-        }
+//        if ($this->sale_lib->out_of_stock($item_id_or_number_or_receipt, $almacen)) {
+//            $data['warning'] = $this->lang->line('sales_quantity_less_than_zero');
+//        }
         //$data['almacen'] = (isset($this->Item->get_almacen($this->Item->get_item_id($item_id_or_number_or_receipt))->nombre))?$this->Item->get_almacen($this->Item->get_item_id($item_id_or_number_or_receipt))->nombre:"";
 
         $this->_reload($data);
@@ -104,6 +97,8 @@ class Sales extends Secure_area {
 
     function edit_item($line) {
         $data = array();
+        $this->_reload($data);
+        return;
 
         $this->form_validation->set_rules('price', 'lang:items_price', 'required|numeric');
         $this->form_validation->set_rules('quantity', 'lang:items_quantity', 'required|numeric');
@@ -120,14 +115,14 @@ class Sales extends Secure_area {
         } else {
             $data['error'] = $this->lang->line('sales_error_editing_item');
         }
-        $selected_almacen = $this->Almacen->get_first();
+/*        $selected_almacen = $this->Almacen->get_first();
         $almacen = $this->Almacen->get_info($this->sale_lib->get_almacen() != -1 ? $this->sale_lib->get_almacen() : $selected_almacen['almacen_id']);
         if ($this->sale_lib->out_of_stock($this->sale_lib->get_item_id($line), $almacen)) {
             $data['warning'] = $this->lang->line('sales_quantity_less_than_zero');
-        }
-
-
+        }*/
         $this->_reload($data);
+
+
     }
 
     function delete_item($item_number) {
@@ -145,13 +140,6 @@ class Sales extends Secure_area {
         $data['subtotal'] = $this->sale_lib->get_subtotal();
         $data['taxes'] = $this->sale_lib->get_taxes();
         $data['total'] = $this->sale_lib->get_total();
-
-        $selected_almacen = $this->Almacen->get_first();
-        //Almacen
-        $data['almacen_id'] = $this->sale_lib->get_almacen() != -1 ? $this->sale_lib->get_almacen() : $selected_almacen['almacen_id'];
-        // var_dump($data['almacen_id']);
-        // ECHO $data['almacen_id'];DIE;
-
         $data['receipt_title'] = $this->lang->line('sales_receipt');
         $data['transaction_time'] = date('m/d/Y h:i:s a');
         $customer_id = $this->sale_lib->get_customer();
@@ -311,14 +299,14 @@ class Sales extends Secure_area {
     function _reload($data = array()) {
         $person_info = $this->Employee->get_logged_in_employee_info();
         $data['cart'] = $this->sale_lib->get_cart();
-        $data['modes'] = array('sale' => $this->lang->line('sales_sale'), 'return' => $this->lang->line('sales_return'));
-        $data['mode'] = $this->sale_lib->get_mode();
+        //$data['modes'] = array('sale' => $this->lang->line('sales_sale'), 'return' => $this->lang->line('sales_return'));
+        //$data['mode'] = $this->sale_lib->get_mode();
         //$data['almacenes'] = $this->Almacen->get_all_id();
         //$data['almacen'] = $this->sale_lib->get_almacen();
         $data['subtotal'] = $this->sale_lib->get_subtotal();
-        $data['taxes'] = $this->sale_lib->get_taxes();
+        //$data['taxes'] = $this->sale_lib->get_taxes();
         $data['total'] = $this->sale_lib->get_total();
-        $data['items_module_allowed'] = $this->Employee->has_permission('items', $person_info->person_id);
+//        $data['items_module_allowed'] = $this->Employee->has_permission('items', $person_info->person_id);
         //Alain Multiple Payments
         $data['payments_total'] = $this->sale_lib->get_payments_total();
         $data['amount_due'] = $this->sale_lib->get_amount_due();
@@ -329,13 +317,6 @@ class Sales extends Secure_area {
             $payments_row[$row['payment_id']] = $row['payment_type'];
         }
         $data['payment_options'] = $payments_row;
-
-        /* $data['payment_options']=array(
-          $this->lang->line('sales_cash') => $this->lang->line('sales_cash'),
-          $this->lang->line('sales_check') => $this->lang->line('sales_check'),
-          $this->lang->line('sales_debit') => $this->lang->line('sales_debit'),
-          $this->lang->line('sales_credit') => $this->lang->line('sales_credit')
-          ); */
 
         $customer_id = $this->sale_lib->get_customer();
         if ($customer_id != -1) {

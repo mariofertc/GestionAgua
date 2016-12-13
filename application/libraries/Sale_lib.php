@@ -155,18 +155,14 @@ class Sale_lib
 	function add_item($item_id,$quantity=1,$discount=0,$price=null,$tax=null,$description=null,$serialnumber=null,$almacen = null)
 	{
 		//make sure item exists
-		if(!$this->CI->Item->exists($item_id))
+		if(!$this->CI->Customer->exists($item_id))
 		{
 			//try to get item id given an item_number
-			$test = $item_id = $this->CI->Item->get_item_id($item_id);
+			$test = $item_id = $this->CI->Customer->get_item_id($item_id);
 
 			if(!$item_id)
 				return false;
 		}
-
-		//$item_id = $this->CI->Item->get_item_id($item_id);
-		//Alain Serialization and Description
-
 		//Get all items in the cart so far...
 		$items = $this->get_cart();
 
@@ -179,6 +175,17 @@ class Sale_lib
         $itemalreadyinsale=FALSE;        //We did not find the item yet.
 		$insertkey=0;                    //Key to use for new entry.
 		$updatekey=0;                    //Key to use to update(quantity)
+                
+                $items = $this->CI->consumo->get_all(100,0,array('id_cliente'=>$item_id,'estado'=>'generado'));
+                if(count($items)>0)
+                    $this->set_customer($item_id);
+                $this->set_cart($items);
+		return true;
+                
+                /*$item = $this->CI->Customer->get_info($item_id);
+		$item = array(($insertkey)=>
+		array(
+			'item_id'=>$item_id,*/
 
 		foreach ($items as $item)
 		{
@@ -421,6 +428,7 @@ class Sale_lib
 
 	function get_taxes()
 	{
+            return 0;
 		$customer_id = $this->get_customer();
 		$customer = $this->CI->Customer->get_info($customer_id);
 
@@ -457,7 +465,8 @@ class Sale_lib
 		$subtotal = 0;
 		foreach($this->get_cart() as $item)
 		{
-		    $subtotal+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
+//		    $subtotal+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
+		    $subtotal+=($item['valor_a_pagar']);
 		}
 		return to_currency_no_money($subtotal);
 	}
@@ -467,13 +476,14 @@ class Sale_lib
 		$total = 0;
 		foreach($this->get_cart() as $item)
 		{
-            $total+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
+                    $total+=$item['valor_a_pagar'];
+//                    $total+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
 		}
 
-		foreach($this->get_taxes() as $tax)
+		/*foreach($this->get_taxes() as $tax)
 		{
 			$total+=$tax;
-		}
+		}*/
 
 		return to_currency_no_money($total);
 	}

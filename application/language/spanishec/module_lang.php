@@ -10,8 +10,8 @@ $lang['module_suppliers_desc']='Agregar, Actualizar, Borrar y Buscar proveedores
 $lang['module_employees']='Empleados';
 $lang['module_employees_desc']='Agregar, Actualizar, Borrar y Buscar empleados';
 
-$lang['module_sales']='Ventas';
-$lang['module_sales_desc']='Procesar ventas y devoluciones';
+$lang['module_sales']='Pagos';
+$lang['module_sales_desc']='Procesar pagos';
 
 $lang['module_reports']='Reportes';
 $lang['module_reports_desc']='Ver y generar reportes';

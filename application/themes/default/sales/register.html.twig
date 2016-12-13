@@ -28,14 +28,10 @@
                                         {{ form_open("sales/add",{'id':'add_item_form', class:"form-horizontal"})}}
                                         <div class="form-group">
                                             <label id="item_label" for="item" class="col-sm-3">
-                                                {% if(mode=='sale') %}
                                                     {{ line('sales_find_or_scan_item') }}
-                                                {% else %}
-                                                    {{ line('sales_find_or_scan_item_or_receipt') }}
-                                                {% endif %}
                                             </label>
                                             <div class="col-sm-9">
-                                                {{ form_input({'name':'item','id':'item','size':'40', 'class':'form-control'})}}
+                                                {{ form_input({'name':'customer_search','id':'customer_search','size':'40', 'class':'form-control'})}}
                                             </div>
                                         </div>
                                         </form>
@@ -51,13 +47,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th style="width:11%;">{{ line('common_delete')}}</th>
-                                                        <th style="width:30%;">{{ line('sales_item_number')}}</th>
-                                                        <th style="width:30%;">{{ line('sales_item_name')}}</th>
-                                                        <th style="width:11%;">{{ line('sales_price')}}</th>
-                                                        <th style="width:11%;">{{ line('sales_quantity')}}</th>
-                                                        <th style="width:11%;">{{ line('sales_discount')}}</th>
+                                                        <th style="width:11%;">{{ line('consumo_id')}}</th>
+                                                        <th style="width:30%;">{{ line('consumo_registro_medidor')}}</th>
+                                                        <th style="width:30%;">{{ line('sales_date')}}</th>
                                                         <th style="width:15%;">{{ line('sales_total')}}</th>
-                                                        <th style="width:11%;">{{ line('sales_edit')}}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="cart_contents">
@@ -68,24 +61,14 @@
                                                             <tr>
                                                                 <td>{{ anchor("sales/delete_item/"~ item_id,'['~line('common_delete')~']')}}</td>
 
-                                                                <td style="align:center;">{{ item['item_number']}}<br>
-                                                                <td style="align:center;">{{item['name']}}<br /> [{{ item['quantity']}} {{line('sales_stock')}}]</td>
-                                                                    {% if items_module_allowed %}
-                                                                    <td>{{ form_input({'name':'price','value':item['price'],'size':'6',class:"form-control input-sm"})}}</td>
-                                                                {% else %}
-                                                                    <td>{{ item['price']}}</td>
-                                                                    {{ form_hidden('price',item['price'])}}
-                                                                {% endif %}
-                                                                <td>
-                                                                    {% if item['is_serialized']==1 and false %}
-                                                                        {{ item['quantity'] }}
-                                                                        {{ form_hidden('quantity',item['quantity']) }}
-                                                                    {% else %}
-                                                                        {{ form_input({'name':'quantity','value':item['quantity'],'size':'2',class:"form-control input-sm"}) }}
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td>{{ form_input({'name':'discount','value':item['discount'],'size':'3',class:"form-control input-sm"})}}</td>        
-                                                                <td>{{ to_currency(item['price']*item['quantity']-item['price']*item['quantity']*item['discount']/100)}}</td> <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>
+                                                                <td style="align:center;">{{ item['id']}}<br>
+                                                                <td style="align:center;">{{item['consumo_medidor']}}<br /> [{{ item['registro_medidor']}} {{line('sales_stock')}}]</td>
+                                                                   
+                                                                    <td>{{ item['fecha_consumo']}}</td>
+                                                                    {{ form_hidden('price',item['fecha_consumo'])}}
+                                                                <td>{{ to_currency(item['valor_a_pagar'])}}</td>
+{#                                                                <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>#}
+{#                                                                <td>{{ to_currency(item['price']*item['quantity']-item['price']*item['quantity']*item['discount']/100)}}</td> <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>#}
                                                             </tr>
                                                             <tr>
                                                                 <td style="color:#2F4F4F";>{{ line('sales_description_abbrv')~':' }}</td>
@@ -306,9 +289,9 @@
         {% if success is not empty %}
                 new PNotify({title: 'Precaución!', text: "{{success}}", type: "success"});
         {%endif%}
-                $("#item").autocomplete({source: function (request, response) {
+                $("#customer_search").autocomplete({source: function (request, response) {
                         $.ajax({
-                            url: "{{site_url('sales/item_search')}}",
+                            url: "{{site_url('sales/customer_search')}}",
                             dataType: "json",
                             type: "POST",
                             data: {
@@ -327,14 +310,14 @@
                     }}
                 );
 
-                $('#item').focus();
+                $('#customer_search').focus();
 
-                $('#item').blur(function ()
+                $('#customer_search').blur(function ()
                 {
                     $(this).attr('value', "{{ line('sales_start_typing_item_name')}}");
                 });
 
-                $('#item,#customer').click(function ()
+                $('#customer_search').click(function ()
                 {
                     $(this).attr('value', '');
                 });

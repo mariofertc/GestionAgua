@@ -10,3 +10,4 @@ $lang['consumo_valor_cambio_medidor'] = "Valor Cambio de Medidor";
 $lang['consumo_estado']="Estado";
 $lang['consumo_fecha']="Fecha Consumo";
 $lang['consumo_valor_cuota']="Valor Cuota";
+$lang['consumo_id']="ID";

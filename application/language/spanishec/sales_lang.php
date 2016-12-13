@@ -1,5 +1,5 @@
 <?php
-$lang['sales_register']='Registrar Ventas';
+$lang['sales_register']='Registrar Pagos';
 $lang['sales_mode']='Modo de Venta';
 $lang['sales_new_item'] = 'Nuevo Artículo';
 $lang['sales_item_name'] = 'Nombre del Artículo';
@@ -15,10 +15,10 @@ $lang['sales_discount']='Desc %';
 $lang['sales_edit']='Editar';
 $lang['sales_payment']='Forma de Pago';
 $lang['sales_edit_item']='Editar Artículo';
-$lang['sales_find_or_scan_item']='Buscar/Escanear Artículo';
+$lang['sales_find_or_scan_item']='Buscar/Escanear Cliente';
 $lang['sales_find_or_scan_item_or_receipt']='Busca/Escanea Artículo/Recibo';
 $lang['sales_select_customer']='Seleccionar Cliente(Opcional)';
-$lang['sales_start_typing_item_name']='Digite el nombre del artículo o escanee el código de barras...';
+$lang['sales_start_typing_item_name']='Digite el nombre del cliente o escanee el código de barras...';
 $lang['sales_start_typing_customer_name']='Digite el nombre del cliente...';
 $lang['sales_sub_total']='Sub Total';
 $lang['sales_tax']='Impuesto';

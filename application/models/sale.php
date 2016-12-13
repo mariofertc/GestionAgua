@@ -46,7 +46,7 @@ class Sale extends CI_Model
 		//'payment_id'=>$payment['payment_id'],
 		'payment_type'=>$payment_types,
 		'comment'=>$comment,
-		'almacen_id'=>$data['almacen_id']
+		//'almacen_id'=>$data['almacen_id']
 		);
 		
 
@@ -69,66 +69,23 @@ class Sale extends CI_Model
 
 		foreach($items as $line=>$item)
 		{
-			$cur_item_info = $this->Item->get_info($item['item_id']);
+//			$cur_item_info = $this->Item->get_info($item['id']);
+			$cur_item_info = $this->consumo->get_info($item['id']);
 
 			$sales_items_data = array
 			(
 				'sale_id'=>$sale_id,
-				'item_id'=>$item['item_id'],
-				'line'=>$item['line'],
-				'description'=>$item['description'],
-				'serialnumber'=>$item['serialnumber'],
-				'quantity_purchased'=>to_currency_no_money($item['quantity']),
-				'discount_percent'=>to_currency_no_money($item['discount']),
-				'item_cost_price' => $cur_item_info->cost_price,
-				'item_unit_price'=>$item['price']
+				'consumo_id'=>$item['id'],
+				'description'=>$item['consumo_medidor'],
+				'fecha_consumo'=>$item['fecha_consumo'],
+				'item_cost_price'=>$item['valor_a_pagar']
 			);
 
 			$this->db->insert('sales_items',$sales_items_data);
 
 			//Update stock quantity
-			$item_data = array('quantity'=>to_currency_no_money($cur_item_info->quantity - $item['quantity']));
-			$this->Item->save($item_data,$item['item_id']);
-			
-			//Update stock quantity Almacen
-			// if($data['almacen_id']==-1)
-			// {
-			// }
-			$cur_almacen_stock = $this->Almacen_stock->get_informacion($item['item_id'],$data['almacen_id']);
-			$almacen_stock_data = array('cantidad'=>to_currency_no_money($cur_almacen_stock->cantidad - $item['quantity']),
-										'almacen_id'=>$data['almacen_id'],
-										'item_id'=>$item['item_id']);			
-			$this->Almacen_stock->save($almacen_stock_data,$item['item_id']);
-			
-			//Ramel Inventory Tracking
-			//Inventory Count Details
-			$qty_buy = to_currency_no_money(-$item['quantity']);
-			$sale_remarks ='Vent '.$sale_id;
-			$inv_data = array
-			(
-				'trans_date'=>date('Y-m-d H:i:s'),
-				'trans_items'=>$item['item_id'],
-				'trans_user'=>$employee_id,
-				'trans_comment'=>$sale_remarks,
-				'trans_inventory'=>$qty_buy
-			);
-			$this->Inventory->insert($inv_data);
-			//------------------------------------Ramel
-
-			$customer = $this->Customer->get_info($customer_id);
- 			if ($customer_id == -1 or $customer->taxable)
- 			{
-				foreach($this->Item_taxes->get_info($item['item_id']) as $row)
-				{
-					$this->db->insert('sales_items_taxes', array(
-						'sale_id' 	=>$sale_id,
-						'item_id' 	=>$item['item_id'],
-						'line'      =>$item['line'],
-						'name'		=>$row['name'],
-						'percent' 	=>$row['percent']
-					));
-				}
-			}
+			$item_data = array('estado'=>'pagado');
+			$this->consumo->save($item_data,$item['id']);
 		}
 		$this->db->trans_complete();
 		
