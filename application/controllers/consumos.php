@@ -137,6 +137,7 @@ class Consumos extends Secure_area {
             'consumo_medidor' => $this->input->post('consumo_medidor'),
             'valor_a_pagar' => $this->input->post('valor_a_pagar'),
             'fecha_consumo' => $this->input->post('fecha_consumo'),
+            'valor_cuota' => $this->input->post('valor_cuota'),
             'fecha_hasta' => $fecha_hasta,
             'fecha_creación' => date('Y-m-d H:i:s'),
             'fecha_actualizacion' => date('Y-m-d H:i:s'),

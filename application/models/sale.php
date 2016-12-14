@@ -76,9 +76,14 @@ class Sale extends CI_Model
 			(
 				'sale_id'=>$sale_id,
 				'consumo_id'=>$item['id'],
-				'description'=>$item['consumo_medidor'],
+				'consumo_medidor'=>$item['consumo_medidor'],
+                                'line'=>$item['line'],
 				'fecha_consumo'=>$item['fecha_consumo'],
-				'item_cost_price'=>$item['valor_a_pagar']
+				'cargo'=>$item['cargo'],
+				'valor_cuota'=>$item['valor_cuota'],
+				'valor_a_pagar'=>$item['valor_a_pagar'],
+				'cargo'=>$item['cargo'],
+				'detalle_cargo'=>$item['detalle_cargo'],
 			);
 
 			$this->db->insert('sales_items',$sales_items_data);

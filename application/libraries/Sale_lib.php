@@ -152,13 +152,13 @@ class Sale_lib
 		$this->CI->session->set_userdata('almacen_mode',$almacen);
 	}
 
-	function add_item($item_id,$quantity=1,$discount=0,$price=null,$tax=null,$description=null,$serialnumber=null,$almacen = null)
-	{
+	function add_item($item_id,$quantity=1,$discount=0,$price=null,$tax=null,$description=null,$serialnumber=null,$almacen = null){
 		//make sure item exists
+//                var_dump($item_id);
 		if(!$this->CI->Customer->exists($item_id))
 		{
-			//try to get item id given an item_number
-			$test = $item_id = $this->CI->Customer->get_item_id($item_id);
+			//try to get item id given an account_number
+			$test = $item_id = $this->CI->Customer->get_customer_id($item_id);
 
 			if(!$item_id)
 				return false;
@@ -177,6 +177,10 @@ class Sale_lib
 		$updatekey=0;                    //Key to use to update(quantity)
                 
                 $items = $this->CI->consumo->get_all(100,0,array('id_cliente'=>$item_id,'estado'=>'generado'));
+                for($idx = 0;$idx<count($items);$idx++){
+                    $items[$idx]['line'] = $idx;
+                }
+                
                 if(count($items)>0)
                     $this->set_customer($item_id);
                 $this->set_cart($items);
@@ -219,7 +223,7 @@ class Sale_lib
 			'allow_alt_description'=>$this->CI->Item->get_info($item_id)->allow_alt_description,
 			'is_serialized'=>$this->CI->Item->get_info($item_id)->is_serialized,
 			'quantity'=>$quantity,
-            'discount'=>$discount==null?0:$discount,
+                        'discount'=>$discount==null?0:$discount,
 			'price'=>$price!=null ? $price: round($item->unit_price+(($almacen->utilidad/100)*$item->unit_price),0)
 			//'stock'=>$this->CI->Item->get_info($item_id)->quantity
 			)
