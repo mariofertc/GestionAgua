@@ -1,8 +1,8 @@
 {% extends _layout %}
 {% block css %}
     {{parent()}}
-    <link rel="stylesheet" href="{{base_url()}}css/phppos_print.css"/>
-    <link rel="stylesheet" href="{{base_url()}}css/receipt.css"/>
+    <link rel="stylesheet" href="{{base_url()}}css/phppos_print.css" media="print"/>
+    <link rel="stylesheet" href="{{base_url()}}css/receipt.css" media="screen"/>
 {% endblock %}
 {% block content %}
     <div id="receipt_wrapper">
@@ -23,27 +23,43 @@
 
         <table id="receipt_items">
             <tr>
-                <th style="width:25%;">{{ line('sales_item_number')}}</th>
-                <th style="width:25%;">{{ line('items_item')}}</th>
-                <th style="width:17%;">{{ line('common_price')}}</th>
-                <th style="width:16%;text-align:center;">{{ line('sales_quantity')}}</th>
-                <th style="width:16%;text-align:center;">{{ line('sales_discount')}}</th>
-                <th style="width:17%;text-align:right;">{{ line('sales_total')}}</th>
+                <th style="width:11%;">{{ line('consumo_id')}}</th>
+                <th style="width:30%;">{{ line('consumo_registro_medidor')}}</th>
+                <th style="width:30%;">{{ line('sales_date')}}</th>
+                <th style="width:15%;text-align:center;">{{ line('consumo_cargo')}}</th>
+                <th style="width:16%;text-align:center;">{{ line('consumo_valor_cuota')}}</th>
+                <th style="width:15%;text-align:right;">{{ line('sales_total')}}</th>
+
+                {#                <th style="width:25%;">{{ line('sales_item_number')}}</th>
+                                <th style="width:25%;">{{ line('items_item')}}</th>
+                                <th style="width:17%;">{{ line('common_price')}}</th>
+                                <th style="width:16%;text-align:center;">{{ line('sales_quantity')}}</th>
+                                <th style="width:16%;text-align:center;">{{ line('sales_discount')}}</th>
+                                <th style="width:17%;text-align:right;">{{ line('sales_total')}}</th>#}
             </tr>
             {% for line, item in cart %}
                 <tr>
-                    <td>{{ item['item_number']}}</td>
+                    <td style="align:center;">{{ item['id']}}<br>
+                    <td style="align:center;">{{item['consumo_medidor']}}<br /> [{{ item['registro_medidor']}} {{line('sales_stock')}}]</td>
+
+                    <td>{{ item['fecha_consumo']}}</td>
+                    <td style='text-align:center;'>{{ item['cargo']}}</td>
+                    <td style='text-align:center;'>{{ to_currency(item['valor_cuota'])}}</td>
+                    <td style='text-align:right;'>{{ to_currency(item['valor_a_pagar'])}}</td>
+
+
+                    {#<td>{{ item['item_number']}}</td>
                     <td><span class='long_name'>{{ item['name']}}</span><span class='short_name'>{{ item['name'][0:10] }}</span></td>
                     <td>{{to_currency(item['price'])}}</td>
                     <td style='text-align:center;'>{{ item['quantity']}}</td>
                     <td style='text-align:center;'>{{ item['discount']}}</td>
-                    <td style='text-align:right;'>{{to_currency(item['price']*item['quantity']-item['price']*item['quantity']*item['discount']/100)}}</td>
+                    <td style='text-align:right;'>{{to_currency(item['price']*item['quantity']-item['price']*item['quantity']*item['discount']/100)}}</td>#}
                 </tr>
-                <tr>
+                {#<tr>
                     <td colspan="2" align="center">{{ item['description']}}</td>
                     <td colspan="2" >{{ item['serialnumber']}}</td>
                     <td colspan="2">{{'&nbsp;'}}</td>
-                </tr>
+                </tr>#}
 
             {% endfor %}
             <tr>
@@ -89,18 +105,26 @@
             {{return_policy|nl2br}}
         </div>
         <div id='barcode'>
-            <img src="{{base_url()}}index.php/barcode?barcode={{sale_id}}&text={{sale_id}}&width=250&height=50" />
+            {#            <img src="{{base_url()}}index.php/barcode?barcode={{sale_id}}&text={{sale_id}}&width=250&height=50" />#}
+            <svg id="code39"></svg>
+
         </div>
     </div>
 {% endblock %}
 
 {% block javascript %}
     {{ parent() }}
+    <script src="{{base_url()}}assets/bower_components/JsBarcode/dist/JsBarcode.all.min.js"></script>
     <script type="text/javascript">
         $(window).load(function () {
         {% if print_after_sale %}                   
             window.print();
         {% endif %}
+            });
+            $(document).ready(function () {
+                var id = "{{sale_id}}";
+                //JsBarcode("#code128", id);
+                JsBarcode("#code39", id, {format: "code39"});
             });
     </script>
 {% endblock %}

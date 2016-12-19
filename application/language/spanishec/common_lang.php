@@ -1,4 +1,5 @@
 <?php
+$lang['common_system']='Gestión de Agua';
 $lang['common_common']='Común';
 $lang['common_submit']='Enviar';
 $lang['common_or']='Ó';
@@ -54,3 +55,4 @@ $lang['common_error']='Error';
 $lang['common_warning']='Advertencia';
 $lang['common_fecha_desde']='Fecha desde';
 $lang['common_fecha_hasta']='Fecha hasta';
+$lang['common_pie_recibo']='Nota al pie del recibo';

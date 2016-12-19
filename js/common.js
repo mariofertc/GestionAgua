@@ -73,22 +73,20 @@ function get_dimensions()
 
 function set_feedback(text, classname, keep_displayed)
 {
-    if (text != '')
-    {
-        $('#feedback_bar').removeClass();
-        $('#feedback_bar').addClass(classname);
-        $('#feedback_bar').text(text);
-        $('#feedback_bar').css('opacity', '1');
-
-        if (!keep_displayed)
-        {
-            $('#feedback_bar').fadeTo(5000, 1);
-            $('#feedback_bar').fadeTo("fast", 0);
-        }
-    } else
-    {
-        $('#feedback_bar').css('opacity', '0');
-    }
+	if (text != '')
+	{
+		switch(classname){
+			case 'success_message':
+				new PNotify({title: 'Operación exitosa' , text: text, type: 'success', delay: 2000, nonblock: true});
+			break;
+			case 'error_message':
+				new PNotify({title: 'Lo sentimos!' , text: text, type: 'error', delay: 2000, nonblock: true});
+			break;
+			default:
+				$('#feedback_bar').css('opacity', '0');
+			break;
+		}
+	}
 }
 
 //validation and submit handling

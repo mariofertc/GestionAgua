@@ -18,7 +18,7 @@
                 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
                 <![endif]-->
 
-            <title>Punto de Venta PHP | {{line(title)}}</title>
+            <title>{{line('common_system')}} | {{line(title)}}</title>
         {% endblock %}
     </head>
     <body>
@@ -29,16 +29,24 @@
         {% block content %}
 
         {% endblock %}
-
+<div id="feedback_bar"></div>
         {% block javascript %}
-            <script src="{{base_url()}}assets/bower_components/jquery/dist/jquery.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+            <script src="{{base_url()}}assets/bower_components/jquery/dist/jquery.js" type="text/javascript"></script>
+            <script src="{{base_url()}}assets/bower_components/jquery-validation/dist/jquery.validate.js"></script>
+            <script src="{{base_url()}}assets/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+            <script src="{{base_url()}}assets/bower_components/metisMenu/dist/metisMenu.js"></script>
+            <script src="{{base_url()}}assets/bower_components/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js"></script>
+            <script src="{{base_url()}}js/common.js"></script>
+    <script src="{{base_url()}}assets/bower_components/pnotify/pnotify.core.js"></script>
+    <script src="{{base_url()}}assets/bower_components/jquery-ui/jquery-ui.min.js"></script>
+            {#<script src="{{base_url()}}assets/bower_components/jquery/dist/jquery.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
             <script src="{{base_url()}}assets/bower_components/jquery-validation/dist/jquery.validate.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
             <script src="{{base_url()}}assets/bower_components/bootstrap/dist/js/bootstrap.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
             <script src="{{base_url()}}assets/bower_components/metisMenu/dist/metisMenu.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
             <script src="{{base_url()}}assets/bower_components/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
             <script src="{{base_url()}}js/common.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
     <script src="{{base_url()}}assets/bower_components/pnotify/pnotify.core.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
-    <script src="{{base_url()}}assets/bower_components/jquery-ui/jquery-ui.min.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+    <script src="{{base_url()}}assets/bower_components/jquery-ui/jquery-ui.min.js" type="text/javascript" language="javascript" charset="UTF-8"></script>#}
         {%endblock%}        
     </body>
 </html>

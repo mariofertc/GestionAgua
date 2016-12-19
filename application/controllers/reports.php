@@ -3,8 +3,6 @@
 require_once ("secure_area.php");
 require_once (APPPATH . "libraries/ofc-library/open-flash-chart.php");
 
-//require_once ("interfaces/idata_controller.php");
-//class Reports extends Secure_area implements iPerson_controller
 class Reports extends Secure_area {
 
     function __construct() {
@@ -751,7 +749,8 @@ class Reports extends Secure_area {
             $summary_data[] = array(anchor('sales/receipt/' . $row['sale_id'], 'POS ' . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']), $row['payment_type'], $row['comment']);
 
             foreach ($report_data['details'][$key] as $drow) {
-                $details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], $drow['quantity_purchased'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']), to_currency($drow['profit']), $drow['discount_percent'] . '%');
+                $details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']), to_currency($drow['profit']), $drow['discount_percent'] . '%');
+//                $details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], $drow['quantity_purchased'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']), to_currency($drow['profit']), $drow['discount_percent'] . '%');
             }
         }
 
@@ -828,23 +827,24 @@ class Reports extends Secure_area {
     }
 
     function detailed_sales($start_date, $end_date, $export_excel = 0) {
+        //die();
         $this->load->model('reports/Detailed_sales');
         $model = $this->Detailed_sales;
 
         $headers = $model->getDataColumns();
         $report_data = $model->getData(array('start_date' => $start_date, 'end_date' => $end_date));
+//die();
 
         $summary_data = array();
         $details_data = array();
 
         foreach ($report_data['summary'] as $key => $row) {
-            $summary_data[] = array(anchor('sales/edit/' . $row['sale_id'], 'POS ' . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], $row['customer_name'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']), $row['payment_type'], $row['comment']);
+            $summary_data[] = array(anchor('sales/edit/' . $row['sale_id'], 'POS ' . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], $row['customer_name'], to_currency($row['subtotal']), to_currency($row['total']),  to_currency($row['profit']), $row['payment_type'], $row['comment']);
 
 //            foreach ($report_data['details'][$key] as $drow) {
 //                $details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], $drow['quantity_purchased'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']), to_currency($drow['profit']), $drow['discount_percent'] . '%');
 //            }
         }
-
         $data = array(
             "title" => $this->lang->line('reports_detailed_sales_report'),
             "subtitle" => date('m/d/Y', strtotime($start_date)) . '-' . date('m/d/Y', strtotime($end_date)),

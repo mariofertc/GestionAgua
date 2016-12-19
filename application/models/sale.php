@@ -151,38 +151,33 @@ class Sale extends CI_Model
 	//We create a temp table that allows us to do easy report/sales queries
 	public function create_sales_items_temp_table()
 	{
-		if($this->db->table_exists('phppos_sales_items_temp'))
+		if($this->db->table_exists('sales_items_temp'))
 		{
 			//Borra datos previos
 			$this->db->query("drop table ".$this->db->dbprefix('sales_items_temp'));
 		}
 		$this->db->query("CREATE TABLE if not exists ".$this->db->dbprefix('sales_items_temp')."
-		(SELECT date(sale_time) as sale_date, ".$this->db->dbprefix('sales_items').".sale_id, comment, payment_type, customer_id, employee_id, 
-		".$this->db->dbprefix('items').".item_id, supplier_id, quantity_purchased, item_cost_price, item_unit_price, SUM(percent) as item_tax_percent,
-		discount_percent, (item_unit_price*quantity_purchased-item_unit_price*quantity_purchased*discount_percent/100) as subtotal,
-		".$this->db->dbprefix('sales_items').".line as line, serialnumber, ".$this->db->dbprefix('sales_items').".description as description,
-		ROUND((item_unit_price*quantity_purchased-item_unit_price*quantity_purchased*discount_percent/100)*(1+(SUM(percent)/100)),2) as total,
-		ROUND((item_unit_price*quantity_purchased-item_unit_price*quantity_purchased*discount_percent/100)*(SUM(percent)/100),2) as tax,
-		(item_unit_price*quantity_purchased-item_unit_price*quantity_purchased*discount_percent/100) - (item_cost_price*quantity_purchased) as profit, nombre as almacen, phppos_almacenes.almacen_id as almacen_id
+		(SELECT date(sale_time) as sale_date, consumo.id as consumo_id, ".$this->db->dbprefix('sales_items').".sale_id, comment, payment_type, customer_id, employee_id, 
+		".$this->db->dbprefix('consumo').".id, consumo.consumo_medidor as subtotal, registro_medidor, consumo.fecha_consumo, consumo.cargo, consumo.detalle_cargo,
+		consumo.valor_cuota as profit, consumo.valor_a_pagar as total
 		FROM ".$this->db->dbprefix('sales_items')."
 		INNER JOIN ".$this->db->dbprefix('sales')."
 		ON  ".$this->db->dbprefix('sales_items').'.sale_id='.$this->db->dbprefix('sales').'.sale_id'."
-		LEFT OUTER JOIN ".$this->db->dbprefix('almacenes')." ON  ".$this->db->dbprefix('sales').'.almacen_id='.$this->db->dbprefix('almacenes').'.almacen_id'."
-		INNER JOIN ".$this->db->dbprefix('items')." ON  ".$this->db->dbprefix('sales_items').'.item_id='.$this->db->dbprefix('items').'.item_id'."
-		LEFT OUTER JOIN ".$this->db->dbprefix('suppliers')." ON  ".$this->db->dbprefix('items').'.supplier_id='.$this->db->dbprefix('suppliers').'.person_id'."
-		LEFT OUTER JOIN ".$this->db->dbprefix('sales_items_taxes')." ON  "
-		.$this->db->dbprefix('sales_items').'.sale_id='.$this->db->dbprefix('sales_items_taxes').'.sale_id'." and "
-		.$this->db->dbprefix('sales_items').'.item_id='.$this->db->dbprefix('sales_items_taxes').'.item_id'." and "
-		.$this->db->dbprefix('sales_items').'.line='.$this->db->dbprefix('sales_items_taxes').'.line'."
-		GROUP BY sale_id, item_id, line)");
+		INNER JOIN ".$this->db->dbprefix('consumo')." ON  ".$this->db->dbprefix('sales_items').'.consumo_id='.$this->db->dbprefix('consumo').'.id'.
+//		LEFT OUTER JOIN ".$this->db->dbprefix('sales_items_taxes')." ON  "
+//		.$this->db->dbprefix('sales_items').'.sale_id='.$this->db->dbprefix('sales_items_taxes').'.sale_id '.
+//		.$this->db->dbprefix('sales_items').'.item_id='.$this->db->dbprefix('sales_items_taxes').'.item_id'." and "
+//		.$this->db->dbprefix('sales_items').'.line='.$this->db->dbprefix('sales_items_taxes').'.line'."
+//		.$this->db->dbprefix('sales_items').'.line='.$this->db->dbprefix('sales_items_taxes').'.line'."
+		" GROUP BY sale_id, consumo_id, line)");
 
 		//Update null item_tax_percents to be 0 instead of null
-		$this->db->where('item_tax_percent IS NULL');
-		$this->db->update('sales_items_temp', array('item_tax_percent' => 0));
+		//$this->db->where('item_tax_percent IS NULL');
+		//$this->db->update('sales_items_temp', array('item_tax_percent' => 0));
 
 		//Update null tax to be 0 instead of null
-		$this->db->where('tax IS NULL');
-		$this->db->update('sales_items_temp', array('tax' => 0));
+		//$this->db->where('tax IS NULL');
+		//$this->db->update('sales_items_temp', array('tax' => 0));
 
 		//Update null subtotals to be equal to the total as these don't have tax
 		$this->db->query('UPDATE '.$this->db->dbprefix('sales_items_temp'). ' SET total=subtotal WHERE total IS NULL');

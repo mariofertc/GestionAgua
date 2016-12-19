@@ -3,7 +3,6 @@
     {{parent()}}
     <link rel="stylesheet" href="{{base_url()}}assets/bower_components/datatables/media/css/jquery.dataTables.css"/>
     <link rel="stylesheet" href="{{base_url()}}assets/bower_components/datatables-fixedcolumns/css/dataTables.fixedColumns.css"/>
-    <link rel="stylesheet" href="{{base_url()}}assets/bower_components/pnotify/pnotify.core.css"/>
 {% endblock %}
 {% block header %}
     {% include 'partials/header.html.twig' %}
@@ -37,39 +36,22 @@
                                         {{ form_label(line('config_phone')~':', 'phone',{'class':'wide required'}) }}
                                         {{ form_input({'name':'phone','id':'phone','value':config('phone'),'class':"form-control"}) }}
                                     </div>
-                                    <div class="form-group">
-                                        {{ form_label(line('config_default_tax_rate_1')~':', 'default_tax_1_rate',{'class':'wide required'}) }}
-                                        {{ form_input({'name':'default_tax_1_name','id':'default_tax_1_name','size':'10','value':config('default_tax_1_name')!=FALSE ? config('default_tax_1_name') : line('items_sales_tax_1'),'class':"form-control"}) }}
-                                        <div class="form-group input-group">    
-                                            {{ form_input({'name':'default_tax_1_rate','id':'default_tax_1_rate','size':'4','value':config('default_tax_1_rate'),'class':"form-control"}) }}
-                                            <span class="input-group-addon">%</span>
-                                        </div>
-                                    </div>
 
-                                    <div class="form-group">
-                                        {{ form_label(line('config_default_tax_rate_2')~':', 'default_tax_1_rate',{'class':'wide'}) }}
-                                        {{ form_input({'name':'default_tax_2_name','id':'default_tax_2_name','size':'10','value':config('default_tax_2_name')!=FALSE ? config('default_tax_2_name') : line('items_sales_tax_2'),'class':"form-control"}) }}
-
-                                        <div class="form-group input-group">                                     
-                                            {{ form_input({'name':'default_tax_2_rate','id':'default_tax_2_rate','size':'4','value':config('default_tax_2_rate'),'class':"form-control"}) }}
-                                            <span class="input-group-addon">%</span>
-                                        </div>
-                                    </div>
                                     <div class="form-group">
                                         {{ form_label(line('common_email')~':', 'email',{'class':'wide'}) }}
                                         {{ form_input({'name':'email','id':'email','value':config('email'),'class':"form-control"}) }}
                                     </div>
                                     <div class="form-group">
-                                        {{ form_label(line('config_fax')~':', 'fax',{'class':'wide'}) }}
-                                        <div class='form_field'>
-                                            {{ form_input({'name':'fax','id':'fax','value':config('fax'),'class':"form-control"}) }}
-                                        </div>
                                         <div class="form-group">
                                             {{ form_label(line('config_website')~':', 'website',{'class':'wide'}) }}
                                             {{ form_input({'name':'website','id':'website','value':config('website'),'class':"form-control"}) }}
                                         </div>
                                         <div class="form-group">
-                                            {{ form_label(line('common_return_policy')~':', 'return_policy',{'class':'wide required'}) }}
+                                            {{ form_label(line('config_factura_apocope')~':', 'factura_apocope',{'class':'wide'}) }}
+                                            {{ form_input({'name':'factura_apocope','id':'factura_apocope','value':config('factura_apocope'),'class':"form-control"}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form_label(line('common_pie_recibo')~':', 'return_policy',{'class':'wide required'}) }}
                                             {{ form_textarea({'name':'return_policy','id':'return_policy','rows':'4','cols':'17','value':config('return_policy'),'class':"form-control"}) }}
                                         </div>
                                         <div class="form-group">
@@ -167,10 +149,9 @@
 		'Pacific/Auckland':'(GMT+12:00) Auckland, Wellington',
 		'Etc/GMT-12':'(GMT+12:00) Fiji, Kamchatka, Marshall Is.',
 		'Pacific/Chatham':'(GMT+12:45) Chatham Islands',
-		'Pacific/Tongatapu':'(GMT+13:00) Nuku\'alofa',
+		'Pacific/Tongatapu':'(GMT+13:00) Nukualofa',
 		'Pacific/Kiritimati':'(GMT+14:00) Kiritimati'
-		}, config('timezone') ? config('timezone') : timezone,"class='form-control'" ) 
-}}
+		}, config('timezone') ? config('timezone') : timezone,"class='form-control'" ) }}
 	</div>
 <div class="form-group">
 {{ form_label(line('config_printe_after_sale')~':', 'print_after_sale',{'class':'wide'}) }}
@@ -181,24 +162,22 @@
 </fieldset>
 </div>
 {{ form_close()}}
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
 <div id="feedback_bar"></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-
-
 {% endblock %}
 {% block javascript %}
     {{ parent() }}
-<script type='text/javascript'>
-
-//validation and submit handling
+<script type="text/javascript" language="javascript" >
 $(document).ready(function()
 {
+//validation and submit handling
 	$('#config_form').validate({
 		submitHandler:function(form)
 		{

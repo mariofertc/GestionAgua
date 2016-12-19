@@ -20,6 +20,8 @@ function line($text, $opt = NULL) {
 
 function config($var) {
     $CI = & get_instance();
+    //echo $CI->config->item($var);
+    //echo($var);
     return $CI->config->item($var);
 }
 

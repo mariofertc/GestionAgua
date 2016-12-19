@@ -178,6 +178,7 @@ class Sales extends Secure_area {
             $data['error_message'] = $this->lang->line('sales_transaction_failed');
         }
         
+        $data['factura_apocope'] = $this->Appconfig->get('factura_apocope');
         $this->twiggy->set($data);
         $this->sale_lib->clear_all();
         //$this->load->view("receivings/receipt", $data);
@@ -205,7 +206,7 @@ class Sales extends Secure_area {
             $cust_info = $this->Customer->get_info($customer_id);
             $data['customer'] = $cust_info->first_name . ' ' . $cust_info->last_name;
         }
-        $data['sale_id'] = 'POS ' . $sale_id;
+        $data['sale_id'] = $this->config->item('factura_apocope') . $sale_id;
         $data['print_after_sale'] = $this->Appconfig->get('print_after_sale');
         $data['company'] = $this->config->item('company');
         $data['address'] = $this->config->item('address');
