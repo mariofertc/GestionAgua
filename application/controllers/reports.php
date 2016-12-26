@@ -401,8 +401,8 @@ class Reports extends Secure_area {
             "title" => $this->lang->line('reports_sales_summary_report'),
             "data_file" => site_url("reports/graphical_summary_sales_graph/$start_date/$end_date"),
             "subtitle" => date('m/d/Y', strtotime($start_date)) . '-' . date('m/d/Y', strtotime($end_date)),
-            "summary_data" => $model->getSummaryData(array('start_date' => $start_date, 'end_date' => $end_date)),
-            "summary_almacen" => $model->getSummaryAlmacenes(array('start_date' => $start_date, 'end_date' => $end_date))
+            "summary_data" => $model->getSummaryData(array('start_date' => $start_date, 'end_date' => $end_date))
+//            "summary_almacen" => $model->getSummaryAlmacenes(array('start_date' => $start_date, 'end_date' => $end_date))
         );
         $this->twiggy->set($data);
         $this->twiggy->display('reports/graphical');
@@ -422,13 +422,14 @@ class Reports extends Secure_area {
         }
 
         //Almacenes
-        $datos_almacenes = $model->getAlmacenes(array('start_date' => $start_date, 'end_date' => $end_date));
+//        $datos_almacenes = $model->getAlmacenes(array('start_date' => $start_date, 'end_date' => $end_date));
+        $datos = $model->getData(array('start_date' => $start_date, 'end_date' => $end_date));
         $graph_datos = array();
 
         $cllColores = array();
-        foreach ($datos_almacenes as $row) {
-            $graph_datos[$row['almacen']][date('m/d/Y', strtotime($row['sale_date']))] = $row['total'];
-            $cllColores[$row['almacen']] = random_color();
+        foreach ($datos as $row) {
+            $graph_datos[$row['sale_date']][date('m/d/Y', strtotime($row['sale_date']))] = $row['total'];
+            $cllColores[$row['sale_date']] = random_color();
         }
         //var_dump($graph_datos);
 
@@ -440,7 +441,7 @@ class Reports extends Secure_area {
             "datos" => $graph_datos,
             "colores" => $cllColores
         );
-        $this->load->view("reports/graphs/line", $data);
+        $this->do_line($data);
     }
 
     //Graphical summary items report
@@ -479,7 +480,8 @@ class Reports extends Secure_area {
             "data" => $graph_data
         );
 
-        $this->load->view("reports/graphs/hbar", $data);
+//        $this->load->view("reports/graphs/hbar", $data);
+        $this->do_hbar($data);
     }
 
     /**
@@ -507,7 +509,8 @@ class Reports extends Secure_area {
 
         $graph_data = array();
         foreach ($report_data as $row) {
-            $graph_data[$row['category']] = $row['total'];
+            $graph_data[$row['nombre_tipo_consumo']] = $row['total'];
+//            $graph_data[$row['category']] = $row['total'];
         }
 
         $data = array(
@@ -515,7 +518,8 @@ class Reports extends Secure_area {
             "data" => $graph_data
         );
 
-        $this->load->view("reports/graphs/pie", $data);
+//        $this->load->view("reports/graphs/pie", $data);
+        $this->do_pie($data);
     }
 
     function graphical_summary_suppliers($start_date, $end_date) {
@@ -580,7 +584,8 @@ class Reports extends Secure_area {
             "data" => $graph_data
         );
 
-        $this->load->view("reports/graphs/pie", $data);
+        //$this->load->view("reports/graphs/pie", $data);
+        $this->do_pie($data);
     }
 
     function graphical_summary_taxes($start_date, $end_date) {
@@ -648,7 +653,8 @@ class Reports extends Secure_area {
             "data" => $graph_data
         );
 
-        $this->load->view("reports/graphs/hbar", $data);
+        //$this->load->view("reports/graphs/hbar", $data);
+        $this->do_hbar($data);
     }
 
     //Graphical summary discounts report
@@ -684,7 +690,8 @@ class Reports extends Secure_area {
             "data" => $graph_data
         );
 
-        $this->load->view("reports/graphs/bar", $data);
+//        $this->load->view("reports/graphs/bar", $data);
+        $this->do_bar($data);
     }
 
     function graphical_summary_payments($start_date, $end_date) {
@@ -726,12 +733,12 @@ class Reports extends Secure_area {
         $data['specific_input_name'] = $this->lang->line('reports_customer');
 
         $customers = array();
-        foreach ($this->Customer->get_all(1000,0) as $customer) {
+        foreach ($this->Customer->get_all(1000, 0) as $customer) {
             $customers[$customer['person_id']] = $customer['first_name'] . ' ' . $customer['last_name'];
         }
         $data['specific_input_data'] = $customers;
 //        $this->load->view("reports/specific_input", $data);
-         $this->twiggy->set($data);
+        $this->twiggy->set($data);
         $this->twiggy->display('reports/specific_input');
     }
 
@@ -746,10 +753,13 @@ class Reports extends Secure_area {
         $details_data = array();
 
         foreach ($report_data['summary'] as $key => $row) {
-            $summary_data[] = array(anchor('sales/receipt/' . $row['sale_id'], 'POS ' . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']), $row['payment_type'], $row['comment']);
+//            $summary_data[] = array(anchor('sales/receipt/' . $row['sale_id'], 'POS ' . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']), $row['payment_type'], $row['comment']);
+//            $summary_data[] = array(anchor('sales/receipt/' . $row['sale_id'], $this->config->item('factura_apocope') . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['profit']), $row['payment_type'], $row['comment']);
+            $summary_data[] = array(anchor('sales/receipt/' . $row['sale_id'], $this->config->item('factura_apocope') . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], $row['consumo_medidor'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['total']), $row['payment_type'], $row['comment']);
 
             foreach ($report_data['details'][$key] as $drow) {
-                $details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']), to_currency($drow['profit']), $drow['discount_percent'] . '%');
+//                $details_data[$key][] = array($drow['fecha_consumo'], $drow['registro_medidor'], $drow['consumo_medidor'], $drow['valor_a_pagar'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['profit']), $drow['cargo'], $drow['detalle_cargo'], $drow['valor_cuota']);
+//                $details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']), to_currency($drow['profit']), $drow['discount_percent'] . '%');
 //                $details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], $drow['quantity_purchased'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']), to_currency($drow['profit']), $drow['discount_percent'] . '%');
             }
         }
@@ -770,7 +780,7 @@ class Reports extends Secure_area {
             return $this->export_excel($data);
         }
 //        $this->load->view("reports/tabular_details", $data);
-         $this->twiggy->set($data);
+        $this->twiggy->set($data);
         $this->twiggy->display("reports/tabular_details");
     }
 
@@ -779,12 +789,12 @@ class Reports extends Secure_area {
         $data['specific_input_name'] = $this->lang->line('reports_employee');
 
         $employees = array();
-        foreach ($this->Employee->get_all()->result() as $employee) {
-            $employees[$employee->person_id] = $employee->first_name . ' ' . $employee->last_name;
+        foreach ($this->Employee->get_all() as $employee) {
+            $employees[$employee['person_id']] = $employee['first_name'] . ' ' . $employee['last_name'];
         }
         $data['specific_input_data'] = $employees;
 //        $this->load->view("reports/specific_input", $data);
-         $this->twiggy->set($data);
+        $this->twiggy->set($data);
         $this->twiggy->display('reports/specific_input');
     }
 
@@ -799,10 +809,11 @@ class Reports extends Secure_area {
         $details_data = array();
 
         foreach ($report_data['summary'] as $key => $row) {
-            $summary_data[] = array(anchor('sales/receipt/' . $row['sale_id'], 'POS ' . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['customer_name'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']), $row['payment_type'], $row['comment']);
-
+//            $summary_data[] = array(anchor('sales/receipt/' . $row['sale_id'], 'POS ' . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['customer_name'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']), $row['payment_type'], $row['comment']);
+            $summary_data[] = array(anchor('sales/receipt/' . $row['sale_id'], $this->config->item('factura_apocope') . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], $row['consumo_medidor'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['total']), $row['payment_type'], $row['comment']);
             foreach ($report_data['details'][$key] as $drow) {
-                $details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], $drow['quantity_purchased'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']), to_currency($drow['profit']), $drow['discount_percent'] . '%');
+//                $details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], $drow['quantity_purchased'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']), to_currency($drow['profit']), $drow['discount_percent'] . '%');
+                $details_data[$key][] = array($drow['fecha_consumo'], $drow['registro_medidor'], $drow['consumo_medidor'], $drow['valor_a_pagar'], to_currency($drow['valor_cuota']), to_currency($drow['cargo']), to_currency($drow['total']), $drow['detalle_cargo'], $drow['valor_cuota']);
             }
         }
 
@@ -817,12 +828,12 @@ class Reports extends Secure_area {
             "export_excel" => $export_excel,
             'data' => $summary_data
         );
-         if ($export_excel == 1) {
+        if ($export_excel == 1) {
             return $this->export_excel($data);
         }
 
 //        $this->load->view("reports/tabular_details", $data);
-         $this->twiggy->set($data);
+        $this->twiggy->set($data);
         $this->twiggy->display("reports/tabular_details");
     }
 
@@ -839,50 +850,13 @@ class Reports extends Secure_area {
         $details_data = array();
 
         foreach ($report_data['summary'] as $key => $row) {
-            $summary_data[] = array(anchor('sales/edit/' . $row['sale_id'], 'POS ' . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], $row['customer_name'], to_currency($row['subtotal']), to_currency($row['total']),  to_currency($row['profit']), $row['payment_type'], $row['comment']);
+//            $summary_data[] = array(anchor('sales/edit/' . $row['sale_id'], 'POS ' . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], $row['customer_name'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['profit']), $row['payment_type'], $row['comment']);
+            $summary_data[] = array(anchor('sales/receipt/' . $row['sale_id'], $this->config->item('factura_apocope') . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], $row['customer_name'], $row['consumo_medidor'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['total']), $row['payment_type'], $row['comment']);
 
 //            foreach ($report_data['details'][$key] as $drow) {
 //                $details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], $drow['quantity_purchased'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']), to_currency($drow['profit']), $drow['discount_percent'] . '%');
 //            }
         }
-        $data = array(
-            "title" => $this->lang->line('reports_detailed_sales_report'),
-            "subtitle" => date('m/d/Y', strtotime($start_date)) . '-' . date('m/d/Y', strtotime($end_date)),
-            "headers" => $model->getDataColumns(),
-            "summary_data" => $summary_data,
-            "details_data" => $details_data,
-            "overall_summary_data" => $model->getSummaryData(array('start_date' => $start_date, 'end_date' => $end_date)),
-            "export_excel" => $export_excel
-        );
-
-        if ($export_excel == 1) {
-            return $this->export_excel($data);
-        }
-
-        $this->twiggy->set($data);
-        $this->twiggy->display("reports/tabular_details");
-
-//        $this->load->view("reports/tabular_details", $data);
-    }
-
-    function detailed_sales_old($start_date, $end_date, $export_excel = 0) {
-        $this->load->model('reports/Detailed_sales');
-        $model = $this->Detailed_sales;
-
-        $headers = $model->getDataColumns();
-        $report_data = $model->getData(array('start_date' => $start_date, 'end_date' => $end_date));
-
-        $summary_data = array();
-        $details_data = array();
-
-        foreach ($report_data['summary'] as $key => $row) {
-            $summary_data[] = array(anchor('sales/edit/' . $row['sale_id'], 'POS ' . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], $row['customer_name'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']), $row['payment_type'], $row['comment']);
-
-            foreach ($report_data['details'][$key] as $drow) {
-                $details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], $drow['quantity_purchased'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']), to_currency($drow['profit']), $drow['discount_percent'] . '%');
-            }
-        }
-
         $data = array(
             "title" => $this->lang->line('reports_detailed_sales_report'),
             "subtitle" => date('m/d/Y', strtotime($start_date)) . '-' . date('m/d/Y', strtotime($end_date)),
@@ -927,7 +901,7 @@ class Reports extends Secure_area {
             $payment_id = null;
             foreach ($report_data['payments'][$key] as $drow) {
                 if ($drow['por_cobrar'] == '1') {
-                    $sum_pagos+=$drow['payment_amount'];
+                    $sum_pagos += $drow['payment_amount'];
                     $payment_id = $drow['payment_id'];
                 }
             }
@@ -937,7 +911,7 @@ class Reports extends Secure_area {
                     $line = 1;
                 }
                 $details_data[$key][] = array(date('m/d/Y', strtotime($drow['abono_time'])), $drow['abono_amount'], $drow['abono_type'], $drow['abono_comment']);
-                $sum_abono+=$drow['abono_amount'];
+                $sum_abono += $drow['abono_amount'];
             }
             //$sumary_data[$key] = $sumary_data[$key];
             //array_push($sumary_data[$line],'22s');
@@ -987,7 +961,7 @@ class Reports extends Secure_area {
             $payment_id = null;
             foreach ($report_data['payments'][$key] as $drow) {
                 if ($drow['por_cobrar'] == '1') {
-                    $sum_pagos+=$drow['payment_amount'];
+                    $sum_pagos += $drow['payment_amount'];
                     $payment_id = $drow['payment_id'];
                 }
             }
@@ -997,7 +971,7 @@ class Reports extends Secure_area {
                     $line = 1;
                 }
                 $details_data[$key][] = array(date('m/d/Y', strtotime($drow['time'])), $drow['amount'], $drow['type'], $drow['comment']);
-                $sum_abono+=$drow['amount'];
+                $sum_abono += $drow['amount'];
             }
             //$sumary_data[$key] = $sumary_data[$key];
             //array_push($sumary_data[$line],'22s');
@@ -1195,6 +1169,9 @@ class Reports extends Secure_area {
             $line_data[] = (float) $value;
             $labels[] = (string) $label;
         }
+
+
+
         $hol = new hollow_dot();
         $hol->size(3)->halo_size(1)->tooltip('#x_label#<br>#val#');
 
@@ -1206,8 +1183,7 @@ class Reports extends Secure_area {
 
 //New lines stores
         $chart = new open_flash_chart();
-//        $chart->set_title(new title($title));
-        $chart->set_title($title);
+        $chart->set_title(new title($title));
         $chart->add_element($line);
         $color = "fffff";
         foreach ($datos as $label => $valor) {
@@ -1237,6 +1213,137 @@ class Reports extends Secure_area {
 // $chart->set_y_legend("222");
         $chart->set_bg_colour("#f3f3f3");
 
+
+        if (isset($yaxis_label)) {
+            $y_legend = new y_legend($yaxis_label);
+            $y_legend->set_style('{font-size: 20px; color: #000000}');
+            $chart->set_y_legend($y_legend);
+        }
+
+        if (isset($xaxis_label)) {
+            $x_legend = new x_legend($xaxis_label);
+            $x_legend->set_style('{font-size: 20px; color: #000000}');
+            $chart->set_x_legend($x_legend);
+        }
+
+        echo $chart->toPrettyString();
+    }
+
+    function do_pie($result) {
+        extract($result);
+        $this->output->set_header("Cache-Control: no-store, no-cache, must-revalidate");
+        $this->output->set_header("Pragma: public");
+        $title = new title($title);
+
+        $pie = new pie();
+        $pie->set_alpha(0.6);
+        $pie->set_start_angle(35);
+        $pie->add_animation(new pie_fade());
+        $pie->set_tooltip('#val# of #total#<br>#percent# of 100%');
+        $pie->set_colours(get_random_colors(count($data)));
+
+        $pie_values = array();
+        foreach ($data as $label => $value) {
+            $pie_values[] = new pie_value((float) $value, (string) $label);
+        }
+        $pie->set_values($pie_values);
+        $chart = new open_flash_chart();
+        $chart->set_title($title);
+        $chart->set_bg_colour("#f3f3f3");
+        $chart->add_element($pie);
+        $chart->x_axis = null;
+        echo $chart->toPrettyString();
+    }
+
+    function do_hbar($result) {
+        extract($result);
+        $this->output->set_header("Cache-Control: no-store, no-cache, must-revalidate");
+        $this->output->set_header("Pragma: public");
+
+        $title = new title($title);
+
+        $hbar = new hbar('#86BBEF');
+        $hbar->set_tooltip($this->lang->line('reports_revenue') . ': #val#');
+        $y_labels = array();
+        $max_value = 0;
+        foreach ($data as $label => $value) {
+            if ($max_value < $value) {
+                $max_value = $value;
+            }
+            $y_labels[] = (string) $label;
+            $hbar->append_value(new hbar_value(0, (float) $value));
+        }
+        $chart = new open_flash_chart();
+        $chart->set_title($title);
+        $chart->add_element($hbar);
+
+        $step_count = $max_value > 0 ? $max_value / 10 : 1;
+        $x = new x_axis();
+        $x->set_offset(false);
+        $x->set_steps($max_value / 10);
+
+        $chart->set_x_axis($x);
+
+        $y = new y_axis();
+        $y->set_offset(true);
+        $y->set_labels($y_labels);
+        $chart->add_y_axis($y);
+
+        if (isset($yaxis_label)) {
+            $y_legend = new y_legend($yaxis_label);
+            $y_legend->set_style('{font-size: 20px; color: #000000}');
+            $chart->set_y_legend($y_legend);
+        }
+
+        if (isset($xaxis_label)) {
+            $x_legend = new x_legend($xaxis_label);
+            $x_legend->set_style('{font-size: 20px; color: #000000}');
+            $chart->set_x_legend($x_legend);
+        }
+
+        $chart->set_bg_colour("#f3f3f3");
+
+        $tooltip = new tooltip();
+        $tooltip->set_hover();
+        $tooltip->set_stroke(1);
+        $tooltip->set_colour("#000000");
+        $tooltip->set_background_colour("#ffffff");
+        $chart->set_tooltip($tooltip);
+
+
+        echo $chart->toPrettyString();
+    }
+
+    public function do_bar($result) {
+        extract($result);
+        $this->output->set_header("Cache-Control: no-store, no-cache, must-revalidate");
+        $this->output->set_header("Pragma: public");
+        $bar = new bar_filled('#4386a1', '#577261');
+
+        $bar_labels = array();
+        $bar_values = array();
+
+        foreach ($data as $label => $value) {
+            $bar_labels[] = (string) $label;
+            $bar_values[] = (float) $value;
+        }
+
+        $bar->set_values($bar_values);
+
+        $chart = new open_flash_chart();
+        $chart->set_title(new title($title));
+        $x = new x_axis();
+        $x->steps(1);
+        $x->set_labels_from_array($bar_labels);
+        $chart->set_x_axis($x);
+
+        $y = new y_axis();
+        $y->set_tick_length(7);
+        $y->set_range(0, (count($data) > 0 ? max($data) : 0) + 25, ((count($data) > 0 ? max($data) : 0) + 25) / 10);
+        $chart->set_y_axis($y);
+        $chart->set_bg_colour("#f3f3f3");
+
+        $chart->add_element($bar);
 
         if (isset($yaxis_label)) {
             $y_legend = new y_legend($yaxis_label);

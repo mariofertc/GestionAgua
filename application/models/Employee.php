@@ -23,7 +23,7 @@ class Employee extends Person {
         $this->db->join('people', 'employees.person_id=people.person_id');
         if ($where != "")
             $this->db->where($where);
-        $this->db->where('username !=', 'mariofertc');
+//        $this->db->where('username !=', 'mariofertc');
         $this->db->where('deleted', 0);
         $this->db->order_by($order);
         $this->db->limit($num, $offset);

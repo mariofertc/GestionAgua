@@ -9,11 +9,13 @@ class Summary_sales extends Report {
     }
 
     public function getDataColumns() {
+//        return array($this->lang->line('reports_date'), $this->lang->line('reports_subtotal'), $this->lang->line('reports_total'), $this->lang->line('reports_tax'), $this->lang->line('reports_profit'));
         return array($this->lang->line('reports_date'), $this->lang->line('reports_subtotal'), $this->lang->line('reports_total'), $this->lang->line('reports_tax'), $this->lang->line('reports_profit'));
     }
 
     public function getData(array $inputs) {
-        $this->db->select('sale_date, sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax,sum(profit) as profit');
+//        $this->db->select('sale_date, sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax,sum(profit) as profit');
+        $this->db->select('sale_date, sum(consumo_medidor) as consumo_medidor, sum(valor_cuota) as valor_cuota,  sum(cargo) as cargo, sum(total) as total');
         $this->db->from('sales_items_temp');
         
         $this->db->group_by('sale_date');
@@ -23,14 +25,15 @@ class Summary_sales extends Report {
     }
 
     public function getSummaryData(array $inputs) {
-        $this->db->select('sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax,sum(profit) as profit');
+//        $this->db->select('sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax,sum(profit) as profit');
+        $this->db->select('sum(consumo_medidor), sum(valor_cuota) as valor_cuota, sum(cargo) as cargo, sum(total) as total');
         $this->db->from('sales_items_temp');
         $this->db->where('sale_date BETWEEN "' . $inputs['start_date'] . '" and "' . $inputs['end_date'] . '"');
         
         return $this->db->get()->row_array();
     }
 
-    public function getAlmacenes(array $inputs) {
+    /*public function getAlmacenes(array $inputs) {
         $this->db->select('sale_date, sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax,sum(profit) as profit, almacen');
         $this->db->from('sales_items_temp');
         $this->db->group_by('sale_date', 'almacen');
@@ -46,6 +49,6 @@ class Summary_sales extends Report {
         $this->db->where('sale_date BETWEEN "' . $inputs['start_date'] . '" and "' . $inputs['end_date'] . '"');
         $this->db->order_by('almacen');
         return $this->db->get()->result_array();
-    }
+    }*/
 
 }

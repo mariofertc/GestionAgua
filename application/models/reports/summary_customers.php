@@ -14,7 +14,8 @@ class Summary_customers extends Report
 	
 	public function getData(array $inputs)
 	{
-		$this->db->select('CONCAT(first_name, " ",last_name) as customer, sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax,sum(profit) as profit', false);
+//		$this->db->select('CONCAT(first_name, " ",last_name) as customer, sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax,sum(profit) as profit', false);
+                $this->db->select('CONCAT(first_name," ",last_name) as customer, sum(consumo_medidor) as consumo_medidor,  sum(valor_cuota) as valor_cuota,  sum(cargo) as cargo, sum(total) as total, sales_items_temp.payment_type, comment', false);
 		$this->db->from('sales_items_temp');
 		$this->db->join('customers', 'customers.person_id = sales_items_temp.customer_id');
 		$this->db->join('people', 'customers.person_id = people.person_id');
@@ -27,7 +28,8 @@ class Summary_customers extends Report
 	
 	public function getSummaryData(array $inputs)
 	{
-		$this->db->select('sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax, sum(profit) as profit');
+//		$this->db->select('sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax, sum(profit) as profit');
+		$this->db->select('sum(consumo_medidor), sum(valor_cuota) as valor_cuota, sum(cargo) as cargo, sum(total) as total');
 		$this->db->from('sales_items_temp');
 		$this->db->join('customers', 'customers.person_id = sales_items_temp.customer_id');
 		$this->db->join('people', 'customers.person_id = people.person_id');
@@ -36,4 +38,3 @@ class Summary_customers extends Report
 		return $this->db->get()->row_array();
 	}
 }
-?>

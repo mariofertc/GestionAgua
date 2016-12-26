@@ -15,7 +15,7 @@ $lang['reports_quantity_purchased'] = 'Cantidad Vendida';
 $lang['reports_serial_number'] = 'Serial #';
 $lang['reports_description'] = 'Descripción';
 $lang['reports_sale_id'] = 'ID de Venta';
-$lang['reports_items_purchased'] = 'Artículos Comprados';
+$lang['reports_items_purchased'] = 'Meses Pagados';
 $lang['reports_sold_by'] = 'Vendido Por';
 $lang['reports_sold_to'] = 'Vendido A';
 $lang['reports_category'] = 'Categoría';
@@ -90,4 +90,6 @@ $lang['reports_detailed_por_pagar_report'] = 'Reporte De Cuentas por Pagar';
 $lang['reports_total_porpagar'] = 'Total por Pagar';
 $lang['reports_total_por_cobrar'] = 'Total por Cobrar';
 $lang['reports_almacen'] = 'Almacén';
-?>
+$lang['reports_consumo_medidor'] = 'Consumo Medidor';
+$lang['reports_valor_cuota'] = 'Valor Cuota';
+$lang['reports_cargo'] = 'Cargo';
