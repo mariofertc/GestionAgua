@@ -139,7 +139,8 @@ class Customers extends Person_controller {
      * @since: 10.1
      */
     function excel_import() {
-        $this->load->view("customers/excel_import", null);
+//        $this->load->view("customers/excel_import", null);
+        $this->twiggy->display("customers/excel_import");
     }
 
     /**

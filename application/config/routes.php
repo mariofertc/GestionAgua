@@ -60,3 +60,7 @@ $route['reports/specific_employee'] = "reports/specific_employee_input";
 
 $route['reports/(graphical_:any)/(:any)/(:any)'] = "reports/$1/$2/$3";
 $route['reports/graphical_:any'] = "reports/date_input";
+
+//$route['reports/summary_sales'] = "reports/specific_summary_sale_input";
+$route['reports/(summary_:any)/(:any)/(:any)'] = "reports/$1/$2/$3";
+$route['reports/summary_:any'] = "reports/date_input_excel_export";

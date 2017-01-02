@@ -9,7 +9,8 @@ class Summary_employees extends Report
 	
 	public function getDataColumns()
 	{
-		return array($this->lang->line('reports_employee'), $this->lang->line('reports_subtotal'), $this->lang->line('reports_total'), $this->lang->line('reports_tax'), $this->lang->line('reports_profit'));
+//		return array($this->lang->line('reports_employee'), $this->lang->line('reports_subtotal'), $this->lang->line('reports_total'), $this->lang->line('reports_tax'), $this->lang->line('reports_profit'));
+            return array($this->lang->line('reports_employee'), $this->lang->line('reports_valor_cuota'), $this->lang->line('reports_cargo'), $this->lang->line('reports_total'), $this->lang->line('reports_consumo_medidor'));
 	}
 	
 	public function getData(array $inputs)

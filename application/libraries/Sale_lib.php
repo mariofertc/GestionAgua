@@ -190,11 +190,11 @@ class Sale_lib {
                 'line' => $insertkey,
                 'registro_medidor' => $item->registro_medidor,
                 'consumo_medidor' => $item->consumo_medidor,
-                'valor_a_pagar' => (double)$item->valor_a_pagar,
+                'valor_a_pagar' => (double) $item->valor_a_pagar,
                 'fecha_consumo' => $item->fecha_consumo,
-                'cargo' => (double)$item->cargo,
+                'cargo' => (double) $item->cargo,
                 'detalle_cargo' => $item->detalle_cargo,
-                'valor_cuota' => (double)$item->valor_cuota
+                'valor_cuota' => (double) $item->valor_cuota
             )
         );
         //add to existing array
@@ -311,7 +311,7 @@ class Sale_lib {
         $this->delete_customer();
 
         foreach ($this->CI->Sale->get_sale_items($sale_id)->result() as $row) {
-            $this->add_item(null,$row->consumo_id);//, $row->consumo_medidor, $row->valor_a_pagar, $row->fecha_consumo, $row->valor_cuota, $row->cargo, $row->detalle_cargo);
+            $this->add_item(null, $row->consumo_id); //, $row->consumo_medidor, $row->valor_a_pagar, $row->fecha_consumo, $row->valor_cuota, $row->cargo, $row->detalle_cargo);
         }
         foreach ($this->CI->Sale->get_sale_payments($sale_id)->result() as $row) {
             //$this->add_payment($row->payment_type,$row->payment_amount);
@@ -336,6 +336,8 @@ class Sale_lib {
     function delete_item($line) {
         $items = $this->get_cart();
         unset($items[$line]);
+        if (count($items) == 0)
+            $this->delete_customer();
         $this->set_cart($items);
     }
 

@@ -115,7 +115,8 @@ class Reports extends Secure_area {
         $report_data = $model->getData(array('start_date' => $start_date, 'end_date' => $end_date, 'almacen_id' => $almacen_id));
 
         foreach ($report_data as $row) {
-            $tabular_data[] = array($row['sale_date'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']));
+//            $tabular_data[] = array($row['sale_date'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']));
+            $tabular_data[] = array($row['sale_date'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['total']), ($row['consumo_medidor']));
         }
 
         $data = array(
@@ -152,14 +153,14 @@ class Reports extends Secure_area {
 
     function specific_summary_sale_input() {
         $data = $this->_get_common_report_data();
-        $data['specific_input_name'] = $this->lang->line('reports_almacen');
+//        $data['specific_input_name'] = $this->lang->line('reports_almacen'); 
 
-        $almacenes = array('Todos');
-        foreach ($this->Almacen->get_all() as $almacen) {
-            $almacenes[$almacen['almacen_id']] = $almacen['nombre'];
-        }
+//        $almacenes = array('Todos');
+//        foreach ($this->Almacen->get_all() as $almacen) {
+//            $almacenes[$almacen['almacen_id']] = $almacen['nombre'];
+//        }
         //var_dump($almacenes);
-        $data['specific_input_data'] = $almacenes;
+//        $data['specific_input_data'] = $almacenes;
 //        $this->load->view("reports/specific_input", $data);
         $this->twiggy->set($data);
         $this->twiggy->display('reports/specific_input');
@@ -175,7 +176,9 @@ class Reports extends Secure_area {
         $report_data = $model->getData(array('start_date' => $start_date, 'end_date' => $end_date));
 
         foreach ($report_data as $row) {
-            $tabular_data[] = array($row['category'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']));
+//            $tabular_data[] = array($row['category'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']));
+//            $tabular_data[] = array($row['category'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']));
+            $tabular_data[] = array($row['nombre_tipo_consumo'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['total']), ($row['consumo_medidor']));
         }
 
         $data = array(
@@ -201,7 +204,8 @@ class Reports extends Secure_area {
         $report_data = $model->getData(array('start_date' => $start_date, 'end_date' => $end_date));
 
         foreach ($report_data as $row) {
-            $tabular_data[] = array($row['customer'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']));
+//            $tabular_data[] = array($row['customer'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']));
+            $tabular_data[] = array($row['customer'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['total']), ($row['consumo_medidor']));
         }
 
         $data = array(
@@ -228,7 +232,8 @@ class Reports extends Secure_area {
         $report_data = $model->getData(array('start_date' => $start_date, 'end_date' => $end_date));
 
         foreach ($report_data as $row) {
-            $tabular_data[] = array($row['supplier'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']));
+            //$tabular_data[] = array($row['supplier'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']));
+            $tabular_data[] = array($row['supplier'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['total']), ($row['consumo_medidor']));
         }
 
         $data = array(
@@ -282,7 +287,8 @@ class Reports extends Secure_area {
         $report_data = $model->getData(array('start_date' => $start_date, 'end_date' => $end_date));
 
         foreach ($report_data as $row) {
-            $tabular_data[] = array($row['employee'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']));
+//            $tabular_data[] = array($row['employee'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']));
+            $tabular_data[] = array($row['employee'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['total']), ($row['consumo_medidor']));
         }
 
         $data = array(
