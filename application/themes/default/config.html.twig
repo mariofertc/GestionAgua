@@ -42,25 +42,28 @@
                                         {{ form_input({'name':'email','id':'email','value':config('email'),'class':"form-control"}) }}
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-group">
-                                            {{ form_label(line('config_website')~':', 'website',{'class':'wide'}) }}
-                                            {{ form_input({'name':'website','id':'website','value':config('website'),'class':"form-control"}) }}
-                                        </div>
-                                        <div class="form-group">
-                                            {{ form_label(line('config_factura_apocope')~':', 'factura_apocope',{'class':'wide'}) }}
-                                            {{ form_input({'name':'factura_apocope','id':'factura_apocope','value':config('factura_apocope'),'class':"form-control"}) }}
-                                        </div>
-                                        <div class="form-group">
-                                            {{ form_label(line('common_pie_recibo')~':', 'return_policy',{'class':'wide required'}) }}
-                                            {{ form_textarea({'name':'return_policy','id':'return_policy','rows':'4','cols':'17','value':config('return_policy'),'class':"form-control"}) }}
-                                        </div>
-                                        <div class="form-group">
-                                            {{ form_label(line('config_language')~':', 'language',{'class':'wide required'}) }}
-                                            {{ form_dropdown('language', {'spanishec'  : 'Español-Ecuador','english'  : 'English','indonesia'    : 'Indonesia','spanish'   : 'Spanish'}, config('language'),"class='form-control'") }}
-                                        </div>
-                                        <div class="form-group">
-                                            {{ form_label(line('config_timezone')~':', 'timezone',{'class':'wide required'}) }}
-                                            {{ form_dropdown('timezone', {
+                                        {{ form_label(line('config_website')~':', 'website',{'class':'wide'}) }}
+                                        {{ form_input({'name':'website','id':'website','value':config('website'),'class':"form-control"}) }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form_label(line('config_interest')~':', 'interest',{'class':'wide'}) }}
+                                        {{ form_input({'name':'interest','id':'interest','size':'10','value':config('interest')!=FALSE ? config('interest') : '0','class':"form-control"}) }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form_label(line('config_factura_apocope')~':', 'factura_apocope',{'class':'wide'}) }}
+                                        {{ form_input({'name':'factura_apocope','id':'factura_apocope','value':config('factura_apocope'),'class':"form-control"}) }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form_label(line('common_pie_recibo')~':', 'return_policy',{'class':'wide required'}) }}
+                                        {{ form_textarea({'name':'return_policy','id':'return_policy','rows':'4','cols':'17','value':config('return_policy'),'class':"form-control"}) }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form_label(line('config_language')~':', 'language',{'class':'wide required'}) }}
+                                        {{ form_dropdown('language', {'spanishec'  : 'Español-Ecuador','english'  : 'English','indonesia'    : 'Indonesia','spanish'   : 'Spanish'}, config('language'),"class='form-control'") }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form_label(line('config_timezone')~':', 'timezone',{'class':'wide required'}) }}
+                                        {{ form_dropdown('timezone', {
 		'Pacific/Midway':'(GMT-11:00) Midway Island, Samoa',
 		'America/Adak':'(GMT-10:00) Hawaii-Aleutian',
 		'Etc/GMT+10':'(GMT-10:00) Hawaii',
@@ -152,81 +155,79 @@
 		'Pacific/Tongatapu':'(GMT+13:00) Nukualofa',
 		'Pacific/Kiritimati':'(GMT+14:00) Kiritimati'
 		}, config('timezone') ? config('timezone') : timezone,"class='form-control'" ) }}
-	</div>
-<div class="form-group">
-{{ form_label(line('config_printe_after_sale')~':', 'print_after_sale',{'class':'wide'}) }}
-	{{ form_checkbox({'name':'print_after_sale','id':'print_after_sale','value':'print_after_sale','checked':config('print_after_sale'),'class':"checkbox-inline"}) }}
-	</div>
-</div>
-{{ form_submit({'name':'submit','id':'submit','value':line('common_submit'),'class':'btn btn-default'}) }}
-</fieldset>
-</div>
-{{ form_close()}}
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form_label(line('config_printe_after_sale')~':', 'print_after_sale',{'class':'wide'}) }}
+                                        {{ form_checkbox({'name':'print_after_sale','id':'print_after_sale','value':'print_after_sale','checked':config('print_after_sale'),'class':"checkbox-inline"}) }}
+                                    </div>
+                            </div>
+                            {{ form_submit({'name':'submit','id':'submit','value':line('common_submit'),'class':'btn btn-default'}) }}
+                            </fieldset>
+                        </div>
+                        {{ form_close()}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-<div id="feedback_bar"></div>
+    <div id="feedback_bar"></div>
 {% endblock %}
 {% block javascript %}
     {{ parent() }}
-<script type="text/javascript" language="javascript" >
-$(document).ready(function()
-{
-//validation and submit handling
-	$('#config_form').validate({
-		submitHandler:function(form)
-		{
-                       $.ajax({
+    <script type="text/javascript" language="javascript" >
+        $(document).ready(function ()
+        {
+            //validation and submit handling
+            $('#config_form').validate({
+                submitHandler: function (form)
+                {
+                    $.ajax({
                         type: $(form).attr('method'),
                         url: $(form).attr('action'),
                         data: $(form).serialize(),
                         success: function (response) {
-				if(response.success){
-					set_feedback(response.message,'success_message',false);		
-				}
-				else{
-					set_feedback(response.message,'error_message',true);		
-				}
-			},
-			dataType:'json'
-		});
+                            if (response.success) {
+                                set_feedback(response.message, 'success_message', false);
+                            } else {
+                                set_feedback(response.message, 'error_message', true);
+                            }
+                        },
+                        dataType: 'json'
+                    });
 
-		},
-		errorLabelContainer: "#error_message_box",
- 		wrapper: "li",
-		rules: 
-		{
-			company: "required",
-			address: "required",
-    		phone: "required",
-    		default_tax_rate:
-    		{
-    			required:true,
-    			number:true
-    		},
-    		email:"email",
-    		return_policy: "required"    		
-   		},
-		messages: 
-		{
-     		company: "{{line('config_company_required')}}",
-     		address: "{{line('config_address_required')}}",
-     		phone: "{{line('config_phone_required')}}",
-     		default_tax_rate:
-    		{
-    			required:"{{line('config_default_tax_rate_required')}}",
-    			number:"{{line('config_default_tax_rate_number')}}"
-    		},
-     		email: "{{line('common_email_invalid_format')}}",
-     		return_policy:"{{line('config_return_policy_required')}}"
-	
-		}
-	});
-});
-</script>
+                },
+                errorLabelContainer: "#error_message_box",
+                wrapper: "li",
+                rules:
+                        {
+                            company: "required",
+                            address: "required",
+                            phone: "required",
+                            default_tax_rate:
+                                    {
+                                        required: true,
+                                        number: true
+                                    },
+                            email: "email",
+                            return_policy: "required"
+                        },
+                messages:
+                        {
+                            company: "{{line('config_company_required')}}",
+                            address: "{{line('config_address_required')}}",
+                            phone: "{{line('config_phone_required')}}",
+                            default_tax_rate:
+                                    {
+                                        required: "{{line('config_default_tax_rate_required')}}",
+                                        number: "{{line('config_default_tax_rate_number')}}"
+                                    },
+                            email: "{{line('common_email_invalid_format')}}",
+                            return_policy: "{{line('config_return_policy_required')}}"
+
+                        }
+            });
+        });
+    </script>
 {% endblock %}

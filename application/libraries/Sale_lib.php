@@ -147,6 +147,17 @@ class Sale_lib {
         if (is_null($consumo_id)) {
             $items = $this->CI->consumo->get_all(100, 0, array('id_cliente' => $customer_id, 'estado' => 'generado'));
             for ($idx = 0; $idx < count($items); $idx++) {
+                //Vemos si es mayor de dos meses para aplicar intereses.
+                $d1 = new DateTime();
+                $d2 = new DateTime($items[$idx]['fecha_consumo']);
+                $meses_morosidad = $d1->diff($d2)->m;
+                if ($d1 > $d2 && $meses_morosidad >= 2) {
+                    //var_dump(); // int(4)
+                    $interes = $this->CI->Appconfig->get('interest');
+                    $items[$idx]['interest'] = ($interes / 100 / 12) * $items[$idx]['valor_cuota'] * $meses_morosidad;
+                    $items[$idx]['valor_a_pagar'] = $items[$idx]['valor_a_pagar'] + ($interes / 100 / 12) * $items[$idx]['valor_cuota'] * $meses_morosidad;
+                }
+
                 $items[$idx]['line'] = $idx;
             }
 
@@ -155,6 +166,7 @@ class Sale_lib {
             $this->set_cart($items);
             return true;
         }
+        //Aca no llega
         $items = $this->get_cart();
         //We need to loop through all items in the cart.
         //If the item is already there, get it's key($updatekey).
@@ -190,6 +202,7 @@ class Sale_lib {
                 'line' => $insertkey,
                 'registro_medidor' => $item->registro_medidor,
                 'consumo_medidor' => $item->consumo_medidor,
+                'interest' => (double) 0.58,
                 'valor_a_pagar' => (double) $item->valor_a_pagar,
                 'fecha_consumo' => $item->fecha_consumo,
                 'cargo' => (double) $item->cargo,
@@ -362,30 +375,35 @@ class Sale_lib {
     }
 
     function get_taxes() {
-        return 0;
+//        return 0;
         $customer_id = $this->get_customer();
         $customer = $this->CI->Customer->get_info($customer_id);
 
         //Do not charge sales tax if we have a customer that is not taxable
-        if (!$customer->taxable and $customer_id != -1) {
-            return array();
-        }
+//        if (!$customer->taxable and $customer_id != -1) {
+//            return array();
+//        }
 
-        $taxes = array();
+        $interes = $this->CI->Appconfig->get('interest');
+        $tax_amount = 0;
         foreach ($this->get_cart() as $line => $item) {
-            $tax_info = $this->CI->Item_taxes->get_info($item['item_id']);
-
-            foreach ($tax_info as $tax) {
-                $name = $tax['percent'] . '% ' . $tax['name'];
-                $tax_amount = ($item['price'] * $item['quantity'] - $item['price'] * $item['quantity'] * $item['discount'] / 100) * (($tax['percent']) / 100);
-
-
-                if (!isset($taxes[$name])) {
-                    $taxes[$name] = 0;
-                }
-                $taxes[$name] += $tax_amount;
+            //$tax_info = $this->CI->Item_taxes->get_info($item['item_id']);
+            // foreach ($tax_info as $tax) {
+            $name = "";
+//                $tax_amount = ($item['price'] * $item['quantity'] - $item['price'] * $item['quantity']) * (($interes) / 100);
+            /* $tax_amount = $interes;
+              $taxes = array('Interés' => $tax_amount); */
+            $d1 = new DateTime();
+            $d2 = new DateTime($item['fecha_consumo']);
+            $meses_morosidad = $d1->diff($d2)->m;
+            if ($d1 > $d2 && $meses_morosidad >= 2) {
+                //var_dump(); // int(4)
+                $tax_amount += ($interes / 100 / 12) * $item['valor_cuota'] * $meses_morosidad;
             }
+
+            //}
         }
+        $taxes = array('Interés' => $tax_amount); 
 
         return $taxes;
     }
@@ -406,10 +424,9 @@ class Sale_lib {
 //                    $total+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
         }
 
-        /* foreach($this->get_taxes() as $tax)
-          {
-          $total+=$tax;
-          } */
+//        foreach ($this->get_taxes() as $tax) {
+//            $total += $tax;
+//        }
 
         return to_currency_no_money($total);
     }

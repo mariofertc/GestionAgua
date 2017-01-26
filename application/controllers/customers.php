@@ -169,7 +169,10 @@ class Customers extends Person_controller {
                         $customer_id = $this->Customer->get_customer_id($account_number);
                         $customer_data = array(
                             'account_number' => $account_number,
-                            'taxable' => $this->spreadsheetexcelreader->val($i, 'B')
+                            'taxable' => $this->spreadsheetexcelreader->val($i, 'B'),
+                            'id_tipo' => $this->spreadsheetexcelreader->val($i, 'N'),
+                            'fecha_ingreso' => $this->spreadsheetexcelreader->val($i, 'O'),
+                            'registro_inicial' => $this->spreadsheetexcelreader->val($i, 'P')
                         );
                         $person_data = array(
                             'first_name' => $this->spreadsheetexcelreader->val($i, 'C'),

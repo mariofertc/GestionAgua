@@ -21,3 +21,4 @@ $lang['config_printe_after_sale']='Imprimir recibo venta';
 $lang['config_language'] = 'Lenguaje';
 $lang['config_timezone'] = 'Huso Horario';
 $lang['config_factura_apocope'] = 'Apócope factura';
+$lang['config_interest'] = 'Interés';

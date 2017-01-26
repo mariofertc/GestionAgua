@@ -78,6 +78,7 @@ class Sale extends CI_Model {
                 'valor_a_pagar' => $item['valor_a_pagar'],
                 'cargo' => $item['cargo'],
                 'detalle_cargo' => $item['detalle_cargo'],
+                'interes' => $item['interest'],
             );
 
             $this->db->insert('sales_items', $sales_items_data);

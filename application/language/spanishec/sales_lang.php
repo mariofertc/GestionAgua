@@ -79,4 +79,4 @@ $lang['sales_comments'] = 'Comentarios';
 $lang['sales_unsuspend_and_delete'] = 'Activar';
 $lang['sales_unsuspend'] = 'Activar';
 $lang['sales_successfully_suspended_sale'] = 'Tu venta ha sido suspendida sactisfactoriamente';
-?>
+$lang['sales_interest'] = 'Interés';

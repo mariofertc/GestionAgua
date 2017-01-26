@@ -305,7 +305,7 @@ class Sales extends Secure_area {
         //$data['almacenes'] = $this->Almacen->get_all_id();
         //$data['almacen'] = $this->sale_lib->get_almacen();
         $data['subtotal'] = $this->sale_lib->get_subtotal();
-        //$data['taxes'] = $this->sale_lib->get_taxes();
+        $data['interests'] = $this->sale_lib->get_taxes();
         $data['total'] = $this->sale_lib->get_total();
 //        $data['items_module_allowed'] = $this->Employee->has_permission('items', $person_info->person_id);
         //Alain Multiple Payments
@@ -391,5 +391,3 @@ class Sales extends Secure_area {
     }
 
 }
-
-?>

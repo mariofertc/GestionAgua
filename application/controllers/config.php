@@ -27,6 +27,7 @@ class Config extends Secure_area {
             'default_tax_1_name' => $this->input->post('default_tax_1_name'),
             'default_tax_2_rate' => $this->input->post('default_tax_2_rate'),
             'default_tax_2_name' => $this->input->post('default_tax_2_name'),
+            'interest' => $this->input->post('interest'),
             'return_policy' => $this->input->post('return_policy'),
             'language' => $this->input->post('language'),
             'timezone' => $this->input->post('timezone'),
