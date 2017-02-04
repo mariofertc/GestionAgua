@@ -143,21 +143,25 @@ class Sale_lib {
         }
         //Get all items in the cart so far...
 
-
         if (is_null($consumo_id)) {
             $items = $this->CI->consumo->get_all(100, 0, array('id_cliente' => $customer_id, 'estado' => 'generado'));
             for ($idx = 0; $idx < count($items); $idx++) {
-                //Vemos si es mayor de dos meses para aplicar intereses.
-                $d1 = new DateTime();
-                $d2 = new DateTime($items[$idx]['fecha_consumo']);
-                $meses_morosidad = $d1->diff($d2)->m;
-                if ($d1 > $d2 && $meses_morosidad >= 2) {
-                    //var_dump(); // int(4)
-                    $interes = $this->CI->Appconfig->get('interest');
-                    $items[$idx]['interest'] = ($interes / 100 / 12) * $items[$idx]['valor_cuota'] * $meses_morosidad;
-                    $items[$idx]['valor_a_pagar'] = $items[$idx]['valor_a_pagar'] + ($interes / 100 / 12) * $items[$idx]['valor_cuota'] * $meses_morosidad;
+                //echo $items[$idx]['interes_generado'];
+                var_dump($items[$idx]['interes_generado']);
+                if ($items[$idx]['interes_generado'] == null) {
+                    //Vemos si es mayor de dos meses para aplicar intereses.
+                    $d1 = new DateTime();
+                    $d2 = new DateTime($items[$idx]['fecha_consumo']);
+                    $meses_morosidad = $d1->diff($d2)->m;
+                    if ($d1 > $d2 && $meses_morosidad >= 2) {
+                        //var_dump(); // int(4)
+                        $interes = $this->CI->Appconfig->get('interest');
+                        $items[$idx]['interes_generado'] = ($interes / 100 / 12) * $items[$idx]['valor_cuota'] * $meses_morosidad;
+                        $items[$idx]['valor_a_pagar'] = $items[$idx]['valor_a_pagar'] + ($interes / 100 / 12) * $items[$idx]['valor_cuota'] * $meses_morosidad;
+                    }
+                } else {
+                    $items[$idx]['valor_a_pagar'] = $items[$idx]['valor_a_pagar'] + $items[$idx]['interes_generado'];
                 }
-
                 $items[$idx]['line'] = $idx;
             }
 
@@ -202,8 +206,8 @@ class Sale_lib {
                 'line' => $insertkey,
                 'registro_medidor' => $item->registro_medidor,
                 'consumo_medidor' => $item->consumo_medidor,
-                'interest' => (double) 0.58,
-                'valor_a_pagar' => (double) $item->valor_a_pagar,
+                'interes_generado' => $item->interes_generado,
+                'valor_a_pagar' => (double) $item->valor_a_pagar + ($item->interes_generado!=null?$item->interes_generado:0),
                 'fecha_consumo' => $item->fecha_consumo,
                 'cargo' => (double) $item->cargo,
                 'detalle_cargo' => $item->detalle_cargo,
@@ -387,23 +391,22 @@ class Sale_lib {
         $interes = $this->CI->Appconfig->get('interest');
         $tax_amount = 0;
         foreach ($this->get_cart() as $line => $item) {
-            //$tax_info = $this->CI->Item_taxes->get_info($item['item_id']);
-            // foreach ($tax_info as $tax) {
-            $name = "";
-//                $tax_amount = ($item['price'] * $item['quantity'] - $item['price'] * $item['quantity']) * (($interes) / 100);
-            /* $tax_amount = $interes;
-              $taxes = array('Interés' => $tax_amount); */
-            $d1 = new DateTime();
-            $d2 = new DateTime($item['fecha_consumo']);
-            $meses_morosidad = $d1->diff($d2)->m;
-            if ($d1 > $d2 && $meses_morosidad >= 2) {
-                //var_dump(); // int(4)
-                $tax_amount += ($interes / 100 / 12) * $item['valor_cuota'] * $meses_morosidad;
+            if (!isset($item['interes_generado'])) {
+                $d1 = new DateTime();
+                $d2 = new DateTime($item['fecha_consumo']);
+                $meses_morosidad = $d1->diff($d2)->m;
+                if ($d1 > $d2 && $meses_morosidad >= 2) {
+                    //var_dump(); // int(4)
+                    $tax_amount += ($interes / 100 / 12) * $item['valor_cuota'] * $meses_morosidad;
+                }
+            } else {
+                $tax_amount += $item['interes_generado'];
             }
 
             //}
         }
-        $taxes = array('Interés' => $tax_amount); 
+        $taxes = array('Interés' => $tax_amount);
+        //print_r($taxes);
 
         return $taxes;
     }

@@ -138,7 +138,7 @@ class Sales extends Secure_area {
     function complete() {
         $data['cart'] = $this->sale_lib->get_cart();
         $data['subtotal'] = $this->sale_lib->get_subtotal();
-        $data['taxes'] = $this->sale_lib->get_taxes();
+        $data['interest'] = $this->sale_lib->get_taxes();
         $data['total'] = $this->sale_lib->get_total();
         $data['receipt_title'] = $this->lang->line('sales_receipt');
         $data['transaction_time'] = date('m/d/Y h:i:s a');
@@ -171,14 +171,20 @@ class Sales extends Secure_area {
             $this->_reload($data);
             return false;
         }
+        $this->save_consumos();
 
+        $data['factura_apocope'] = $this->Appconfig->get('factura_apocope');
         //SAVE sale to database
-        $data['sale_id'] = 'Vent ' . $this->Sale->save($data['cart'], $customer_id, $employee_id, $comment, $data['payments'], false, $data);
-        if ($data['sale_id'] == 'Vent -1') {
+        $data['sale_id'] = $data['factura_apocope'] . $this->Sale->save($data['cart'], $customer_id, $employee_id, $comment, $data['payments'], false, $data);
+        if ($data['sale_id'] == $data['factura_apocope'].'-1') {
             $data['error_message'] = $this->lang->line('sales_transaction_failed');
         }
+        //Update consumos.
+        $data['company'] = $this->config->item('company');
+        $data['address'] = $this->config->item('address');
+        $data['phone'] = $this->config->item('phone');
+        $data['return_policy'] = $this->config->item('return_policy');
         
-        $data['factura_apocope'] = $this->Appconfig->get('factura_apocope');
         $this->twiggy->set($data);
         $this->sale_lib->clear_all();
         //$this->load->view("receivings/receipt", $data);
@@ -191,7 +197,7 @@ class Sales extends Secure_area {
         $data['cart'] = $this->sale_lib->get_cart();
         $data['payments'] = $this->sale_lib->get_payments();
         $data['subtotal'] = $this->sale_lib->get_subtotal();
-        $data['taxes'] = $this->sale_lib->get_taxes();
+        $data['interest'] = $this->sale_lib->get_taxes();
         $data['total'] = $this->sale_lib->get_total();
         $data['receipt_title'] = $this->lang->line('sales_receipt');
         $data['transaction_time'] = date('m/d/Y h:i:s a', strtotime($sale_info['sale_time']));
@@ -294,6 +300,13 @@ class Sales extends Secure_area {
             echo json_encode(array('success' => true, 'message' => $this->lang->line('sales_successfully_updated')));
         } else {
             echo json_encode(array('success' => false, 'message' => $this->lang->line('sales_unsuccessfully_updated')));
+        }
+    }
+    
+    function save_consumos() {
+        $consumos_data = $this->sale_lib->get_cart();
+        foreach($consumos_data as $consumo){
+            $this->consumo->update_interest($consumo,$consumo['id']);
         }
     }
 

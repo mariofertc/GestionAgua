@@ -110,6 +110,7 @@ class Consumos extends Secure_area {
         $data['valor_cambio_medidor'] = $valor_cambio_medidor;
         //var_dump($tasas_aplicables);
         $data['registro_anterior'] = $registro_anterior;
+        echo $registro_anterior;
         //2016-12-26
         $fecha_anterior = DateTime::createFromFormat('Y-m-d',$fecha_anterior)->add(new DateInterval("P1M"))->format('Y-m-d');
         $data['fecha_consumo'] = $fecha_anterior;

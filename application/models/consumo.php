@@ -110,16 +110,33 @@ class Consumo extends CI_Model {
         //Run these queries as a transaction, we want to make sure we do all or nothing
         $this->db->trans_start();
 
-      
-            //if (parent::save($person_data, $customer_id)) {
-            if (!$consumo_id or ! $this->exists($consumo_id)) {
-                $success = $this->db->insert('consumo', $consumo_data);
-                $consumo_data['id'] = $this->db->insert_id();
-            } else {
-                $this->db->where('id', $consumo_id);
-                $success = $this->db->update('consumo', $consumo_data);
-            }
-        
+
+        //if (parent::save($person_data, $customer_id)) {
+        if (!$consumo_id or ! $this->exists($consumo_id)) {
+            $success = $this->db->insert('consumo', $consumo_data);
+            $consumo_data['id'] = $this->db->insert_id();
+        } else {
+            $this->db->where('id', $consumo_id);
+            $success = $this->db->update('consumo', $consumo_data);
+        }
+
+
+        $this->db->trans_complete();
+        return $success;
+    }
+
+    /**
+     * Update the interest gained.
+     * @param type $consumo_data
+     * @param type $consumo_id
+     * @return type
+     */
+    function update_interest(&$consumo_data, $consumo_id) {
+        $success = false;
+        //Run these queries as a transaction, we want to make sure we do all or nothing
+        $this->db->trans_start();
+        $this->db->where('id', $consumo_id);
+        $success = $this->db->update('consumo', array('interes_generado'=>$consumo_data['interes_generado']));        
 
         $this->db->trans_complete();
         return $success;

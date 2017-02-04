@@ -71,7 +71,7 @@
                                                                     {{ form_hidden('price',item['fecha_consumo'])}}
                                                                     <td>{{ item['cargo']}}</td>
                                                                 <td>{{ to_currency(item['valor_cuota'])}}</td>
-                                                                <td>{{ to_currency(item['interest'])}}</td>
+                                                                <td>{{ to_currency(item['interes_generado'])}}</td>
                                                                 <td>{{ to_currency(item['valor_a_pagar'])}}</td>
 {#                                                                <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>#}
 {#                                                                <td>{{ to_currency(item['price']*item['quantity']-item['price']*item['quantity']*item['discount']/100)}}</td> <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>#}
@@ -168,7 +168,7 @@
                                                         {{ form_open("sales/complete",{'id':'finish_sale_form'})}}
                                                         <label id="comment_label" for="comment">{{ line('common_comments')}}:</label>
                                                         {{ form_textarea({'name':'comment','value':'','rows':'4','cols':'23',class:'form-control'})}}
-                                                        <a id="suspend_sale_button" src="#" href="#" class="btn btn-primary">{{ line('sales_suspend') }}</a>
+{#                                                        <a id="suspend_sale_button" src="#" href="#" class="btn btn-primary">{{ line('sales_suspend') }}</a>#}
                                                     </div>
                                                 </div>
                                                 <a id="finish_sale_button" href="#">
@@ -363,15 +363,7 @@
                 {
                     if (confirm('{{ line("sales_confirm_finish_sale")}}'))
                     {
-                        $('#finish_sale_form').submit();
-                    }
-                });
-
-                $("#suspend_sale_button").click(function ()
-                {
-                    if (confirm('{{ line("sales_confirm_suspend_sale")}}'))
-                    {
-                        $('#finish_sale_form').attr('action', '{{ site_url("sales/suspend")}}');
+                        {#location.reload();#}
                         $('#finish_sale_form').submit();
                     }
                 });

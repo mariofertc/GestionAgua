@@ -25,9 +25,10 @@
             <tr>
                 <th style="width:11%;">{{ line('consumo_id')}}</th>
                 <th style="width:30%;">{{ line('consumo_registro_medidor')}}</th>
-                <th style="width:30%;">{{ line('sales_date')}}</th>
+                <th style="width:15%;">{{ line('sales_date')}}</th>
                 <th style="width:15%;text-align:center;">{{ line('consumo_cargo')}}</th>
                 <th style="width:16%;text-align:center;">{{ line('consumo_valor_cuota')}}</th>
+                <th style="width:15%;text-align:center;">{{ line('sales_interest')}}</th>
                 <th style="width:15%;text-align:right;">{{ line('sales_total')}}</th>
 
                 {#                <th style="width:25%;">{{ line('sales_item_number')}}</th>
@@ -45,6 +46,7 @@
                     <td>{{ item['fecha_consumo']}}</td>
                     <td style='text-align:center;'>{{ item['cargo']}}</td>
                     <td style='text-align:center;'>{{ to_currency(item['valor_cuota'])}}</td>
+                    <td style='text-align:center;'>{{ to_currency(item['interes_generado'])}}</td>
                     <td style='text-align:right;'>{{ to_currency(item['valor_a_pagar'])}}</td>
 
 
@@ -62,27 +64,29 @@
                 </tr>#}
 
             {% endfor %}
+            {%set span_name=5%}
+            {%set span_value=3%}
             <tr>
-                <td colspan="4" style='text-align:right;border-top:2px solid #000000;'>{{ line('sales_sub_total')}}</td>
-                <td colspan="2" style='text-align:right;border-top:2px solid #000000;'>{{to_currency(subtotal)}}</td>
+                <td colspan="{{span_name}}" style='text-align:right;border-top:2px solid #000000;'>{{ line('sales_sub_total')}}</td>
+                <td colspan="{{span_value}}" style='text-align:right;border-top:2px solid #000000;'>{{to_currency(subtotal)}}</td>
             </tr>
 
-            {% for name, value in taxes %}
+            {% for name, value in interest %}
                 <tr>
-                    <td colspan="4" style='text-align:right;'>{{ name}}:</td>
-                    <td colspan="2" style='text-align:right;'>{{to_currency(value)}}</td>
+                    <td colspan="{{span_name}}" style='text-align:right;'>{{ name}}:</td>
+                    <td colspan="{{span_value}}" style='text-align:right;'>{{to_currency(value)}}</td>
                 </tr>
             {% endfor %}
 
             <tr>
-                <td colspan="4" style='text-align:right;'>{{ line('sales_total')}}</td>
-                <td colspan="2" style='text-align:right'>{{to_currency(total)}}</td>
+                <td colspan="{{span_name}}" style='text-align:right;'>{{ line('sales_total')}}</td>
+                <td colspan="{{span_value}}" style='text-align:right'>{{to_currency(total)}}</td>
             </tr>
-            <tr><td colspan="6">&nbsp;</td></tr>
+            <tr><td colspan="7">&nbsp;</td></tr>
 
             {% for payment_id,payment in payments %}
                 <tr>
-                    <td colspan="2" style="text-align:right;">{{ line('sales_payment')}}</td>
+                    <td colspan="3" style="text-align:right;">{{ line('sales_payment')}}</td>
                     <td colspan="2" style="text-align:right;">{{ payment['payment_type']    }} </td>
                     <td colspan="2" style="text-align:right">{{ to_currency(payment['payment_amount'] * -1 )  }}  </td>
                 </tr>
@@ -90,12 +94,12 @@
 
             <tr><td colspan="6">&nbsp;</td></tr>
             <tr>
-                <td colspan="4" style='text-align:right;'>{{ line('sales_amount_tendered')}}</td>
-                <td colspan="2" style='text-align:right'>{{ amount_tendered}}</td>
+                <td colspan="{{span_name}}" style='text-align:right;'>{{ line('sales_amount_tendered')}}</td>
+                <td colspan="{{span_value}}" style='text-align:right'>{{ amount_tendered}}</td>
             </tr>
 
             <tr>
-                <td colspan="4" style='text-align:right;'>{{ line('sales_change_due')}}</td>
+                <td colspan="{{span_name}}" style='text-align:right;'>{{ line('sales_change_due')}}</td>
                 <td colspan="2" style='text-align:right'>{{ amount_change}}</td>
             </tr>
 
@@ -109,6 +113,7 @@
             <svg id="code39"></svg>
 
         </div>
+            <a id="footer" href="{{site_url('sales')}}">Regresar</a>
     </div>
 {% endblock %}
 

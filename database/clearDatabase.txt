@@ -1,0 +1,10 @@
+truncate table sales_payments;
+truncate table sales_items;
+truncate table sales;
+truncate table consumo;
+
+truncate table sales_payments;
+truncate table sales_items;
+truncate table sales;
+update consumo set interes_generado = null;
+update consumo set estado ='generado';

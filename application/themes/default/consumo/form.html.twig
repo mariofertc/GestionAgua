@@ -109,20 +109,16 @@
                     rules: {
                         registro_medidor: {
                             required:1,
-                            min: '{{registro_anterior}}'
+                            min: {{registro_anterior}}
                         },
-                        valor_a_pagar: {
-                            min: 1
-                        }
+{#                        valor_a_pagar: {min: 1}#}
                     },
                     messages: {
                         registro_medidor: {
                             required:"Favor ingrese el registro del medidor",
                             min :"El registro debe ser mayor o igual al regisro del mes anterior",
                         },
-                        valor_a_pagar: {
-                            min:"Ingreso incorrecto del registro del medidor"
-                        }
+{#                        valor_a_pagar: {min:"Ingreso incorrecto del registro del medidor"}#}
                     }
                 });
             });
