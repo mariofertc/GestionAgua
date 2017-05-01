@@ -1,0 +1,137 @@
+{% extends _layout %}
+{% block css %}
+{#    {{parent()}}#}
+    <link rel="stylesheet" href="{{base_url()}}css/phppos_print.css" media="print"/>
+    <link rel="stylesheet" href="{{base_url()}}css/receipt.css" media="screen"/>
+{% endblock %}
+{% block content %}
+    <div id="receipt_wrapper">
+        <div id="receipt_header">
+            <div id="company_name">{{ company }}</div>
+            <div id="company_address">{{ address|nl2br }}</div>
+            <div id="company_phone">{{ phone }}</div>
+            <div id="sale_receipt">{{ receipt_title }}</div>
+            <div id="sale_time">{{ transaction_time }}</div>
+        </div>
+        <div id="receipt_general_info">
+            {% if customer is not empty %}
+                <div id="customer">{{ line('customers_customer')~": "~customer}}</div>
+                <div id="customer">{{ line('customers_ci')~": "~ci}}</div>
+            {% endif %}
+            <div id="sale_id">{{ line('sales_id')~": "~sale_id}}</div>
+            <div id="employee">{{ line('employees_seller')~": "~employee}}</div>
+        </div>
+
+        <table id="receipt_items">
+            <tr>
+                <th style="width:11%;">{{ line('consumo_id')}}</th>
+                <th style="width:30%;">{{ line('consumo_registro_medidor')}}</th>
+                <th style="width:15%;">{{ line('sales_date')}}</th>
+                <th style="width:15%;text-align:center;">{{ line('consumo_cargo')}}</th>
+                <th style="width:16%;text-align:center;">{{ line('consumo_valor_cuota')}}</th>
+                <th style="width:15%;text-align:center;">{{ line('sales_interest')}}</th>
+                <th style="width:15%;text-align:right;">{{ line('sales_total')}}</th>
+
+                {#                <th style="width:25%;">{{ line('sales_item_number')}}</th>
+                                <th style="width:25%;">{{ line('items_item')}}</th>
+                                <th style="width:17%;">{{ line('common_price')}}</th>
+                                <th style="width:16%;text-align:center;">{{ line('sales_quantity')}}</th>
+                                <th style="width:16%;text-align:center;">{{ line('sales_discount')}}</th>
+                                <th style="width:17%;text-align:right;">{{ line('sales_total')}}</th>#}
+            </tr>
+            {% for line, item in cart %}
+                <tr>
+                    <td style="align:center;">{{ item['id']}}<br>
+                    <td style="align:center;">{{item['consumo_medidor']}}<br /> [{{ item['registro_medidor']}} {{line('consumo_registro_medidor')}}]</td>
+
+                    <td>{{ item['fecha_consumo']}}</td>
+                    <td style='text-align:center;'>{{ item['cargo']}}</td>
+                    <td style='text-align:center;'>{{ to_currency(item['valor_cuota'])}}</td>
+                    <td style='text-align:center;'>{{ to_currency(item['interes_generado'])}}</td>
+                    <td style='text-align:right;'>{{ to_currency(item['valor_a_pagar'])}}</td>
+
+
+                    {#<td>{{ item['item_number']}}</td>
+                    <td><span class='long_name'>{{ item['name']}}</span><span class='short_name'>{{ item['name'][0:10] }}</span></td>
+                    <td>{{to_currency(item['price'])}}</td>
+                    <td style='text-align:center;'>{{ item['quantity']}}</td>
+                    <td style='text-align:center;'>{{ item['discount']}}</td>
+                    <td style='text-align:right;'>{{to_currency(item['price']*item['quantity']-item['price']*item['quantity']*item['discount']/100)}}</td>#}
+                </tr>
+                {#<tr>
+                    <td colspan="2" align="center">{{ item['description']}}</td>
+                    <td colspan="2" >{{ item['serialnumber']}}</td>
+                    <td colspan="2">{{'&nbsp;'}}</td>
+                </tr>#}
+
+            {% endfor %}
+            {%set span_name=5%}
+            {%set span_value=3%}
+            <tr>
+                <td colspan="{{span_name}}" style='text-align:right;border-top:2px solid #000000;'>{{ line('sales_sub_total')}}</td>
+                <td colspan="{{span_value}}" style='text-align:right;border-top:2px solid #000000;'>{{to_currency(subtotal)}}</td>
+            </tr>
+
+            {% for name, value in interest %}
+                <tr>
+                    <td colspan="{{span_name}}" style='text-align:right;'>{{ name}}:</td>
+                    <td colspan="{{span_value}}" style='text-align:right;'>{{to_currency(value)}}</td>
+                </tr>
+            {% endfor %}
+
+            <tr>
+                <td colspan="{{span_name}}" style='text-align:right;'>{{ line('sales_total')}}</td>
+                <td colspan="{{span_value}}" style='text-align:right'>{{to_currency(total)}}</td>
+            </tr>
+            <tr><td colspan="7">&nbsp;</td></tr>
+
+            {% for payment_id,payment in payments %}
+                <tr>
+                    <td colspan="3" style="text-align:right;">{{ line('sales_payment')}}</td>
+                    <td colspan="2" style="text-align:right;">{{ payment['payment_type']    }} </td>
+                    <td colspan="2" style="text-align:right">{{ to_currency(payment['payment_amount'] * -1 )  }}  </td>
+                </tr>
+            {% endfor %}
+
+            <tr><td colspan="6">&nbsp;</td></tr>
+            <tr>
+                <td colspan="{{span_name}}" style='text-align:right;'>{{ line('sales_amount_tendered')}}</td>
+                <td colspan="{{span_value}}" style='text-align:right'>{{ amount_tendered}}</td>
+            </tr>
+
+            <tr>
+                <td colspan="{{span_name}}" style='text-align:right;'>{{ line('sales_change_due')}}</td>
+                <td colspan="2" style='text-align:right'>{{ amount_change}}</td>
+            </tr>
+
+        </table>
+
+        <div id="sale_return_policy">
+            {{return_policy|nl2br}}
+        </div>
+        <div id='barcode'>
+            {#            <img src="{{base_url()}}index.php/barcode?barcode={{sale_id}}&text={{sale_id}}&width=250&height=50" />#}
+            <svg id="code39"></svg>
+
+        </div>
+            <a id="footer" href="{{site_url('sales')}}">Regresar</a>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+{#    {{ parent() }}#}
+<script src="{{base_url()}}assets/bower_components/jquery/dist/jquery.js" type="text/javascript"></script>
+    <script src="{{base_url()}}assets/bower_components/JsBarcode/dist/JsBarcode.all.min.js"></script>
+    <script type="text/javascript">
+        $(window).load(function () {
+        {% if print_after_sale %}                   
+            window.print();
+        {% endif %}
+            });
+            $(document).ready(function () {
+                var id = "{{sale_id}}";
+                //JsBarcode("#code128", id);
+                JsBarcode("#code39", id, {format: "code39",fontSize:12,height:"0"});
+            });
+    </script>
+{% endblock %}
