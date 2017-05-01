@@ -8,17 +8,14 @@
     <div id="receipt_wrapper">
         <div id="receipt_header">
             <div id="company_name">{{ company }}</div>
-            <div id="company_address">{{ address|nl2br }}</div>
             <div id="company_phone">{{ phone }}</div>
-            <div id="sale_receipt">{{ receipt_title }}</div>
-            <div id="sale_time">{{ transaction_time }}</div>
+            <div id="sale_receipt">{{ receipt_title }} {{sale_id}}  - {{ transaction_time }}</div>
         </div>
         <div id="receipt_general_info">
             {% if customer is not empty %}
                 <div id="customer">{{ line('customers_customer')~": "~customer}}</div>
                 <div id="customer">{{ line('customers_ci')~": "~ci}}</div>
             {% endif %}
-            <div id="sale_id">{{ line('sales_id')~": "~sale_id}}</div>
             <div id="employee">{{ line('employees_seller')~": "~employee}}</div>
         </div>
 
@@ -62,7 +59,6 @@
                 <td colspan="{{span_name}}" style='text-align:right;'>{{ line('sales_total')}}</td>
                 <td colspan="{{span_value}}" style='text-align:right'>{{to_currency(total)}}</td>
             </tr>
-            <tr><td colspan="7">&nbsp;</td></tr>
 
             {% for payment_id,payment in payments %}
                 <tr>
@@ -72,7 +68,6 @@
                 </tr>
             {% endfor %}
 
-            <tr><td colspan="6">&nbsp;</td></tr>
             <tr>
                 <td colspan="{{span_name}}" style='text-align:right;'>{{ line('sales_amount_tendered')}}</td>
                 <td colspan="{{span_value}}" style='text-align:right'>{{ amount_tendered}}</td>
@@ -85,14 +80,9 @@
 
         </table>
 
-        <div id="sale_return_policy">
+        {#<div id="sale_return_policy">
             {{return_policy|nl2br}}
-        </div>
-        <div id='barcode'>
-            {#            <img src="{{base_url()}}index.php/barcode?barcode={{sale_id}}&text={{sale_id}}&width=250&height=50" />#}
-            <svg id="code39"></svg>
-
-        </div>
+        </div>#}
             <a id="footer" href="{{site_url('sales')}}">Regresar</a>
     </div>
 {% endblock %}
