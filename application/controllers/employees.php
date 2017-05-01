@@ -111,7 +111,7 @@ class Employees extends Person_controller {
             //failure
             echo json_encode(array('success' => false, 'message' => $this->lang->line('employees_error_updating_demo_admin') . ' ' .
                 $person_data['first_name'] . ' ' . $person_data['last_name'], 'person_id' => -1));
-        } elseif ($this->Employee->save($person_data, $employee_data, $permission_data, $employee_id)) {
+        } elseif ($this->Employee->save_employee($person_data, $employee_data, $permission_data, $employee_id)) {
             //New employee
             if ($employee_id == -1) {
                 echo json_encode(array('success' => true, 'message' => $this->lang->line('employees_successful_adding') . ' ' .

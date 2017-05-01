@@ -6,6 +6,7 @@ class Employee extends Person {
      */
 
     function exists($person_id) {
+//var_dump($person_id);
         $this->db->from('employees');
         $this->db->join('people', 'people.person_id = employees.person_id');
         $this->db->where('employees.person_id', $person_id);
