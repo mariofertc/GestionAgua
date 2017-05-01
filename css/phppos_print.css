@@ -1,41 +1,55 @@
 body
 {
-	background-color:#FFFFFF;
-	font-size:75%;	
+    background-color:#FFFFFF;
+    /*font-size:75%;*/	
+    font-size:12px;	
+    text-align: center;
+    margin: 0;
 }
 
 #menubar,#footer
 {
-	display:none;
+    display:none;
 }
 
 #content_area
 {
-	width:100%;
+    width:100%;
 }
 
 #content_area_wrapper
 {
-	border:0px;
+    border:0px;
 }
 
 #sale_return_policy
 {
-	width:100%;
-	text-align:center;
+    width:100%;
+    text-align:center;
 }
 
 .long_name
 {
-	display:none;
+    display:none;
 }
 
 .short_name
 {
-	display:inline;
+    display:inline;
 }
 
 #receipt_items td
 {
-	white-space:nowrap;
+    white-space:nowrap;
 }
+@media print 
+{
+    @page
+    {
+        /*    size: 8.5in 5.5in;
+            size: landscape;
+            size: 5.5in 8.5in;  */
+        margin: 70pt 60pt 70pt;
+    }
+}
+
