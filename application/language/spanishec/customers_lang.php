@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $lang['customers_new']='Nuevo Cliente';
 $lang['customers_customer']='Cliente';
 $lang['customers_update']='Actualizar Cliente';
