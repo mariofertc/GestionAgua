@@ -52,7 +52,6 @@ $lang['reports_customers'] = 'Clientes';
 $lang['reports_suppliers'] = 'Proveedores';
 $lang['reports_items'] = 'Artículos';
 $lang['reports_employees'] = 'Empleados';
-$lang['reports_customer'] = 'Cliente';
 $lang['reports_employee'] = 'Empleado';
 $lang['reports_tax_percent'] = 'Porcentaje Impuesto';
 $lang['reports_sales_amount'] = 'Cantidad de Ventas';
