@@ -94,7 +94,7 @@ class Consumos extends Secure_area {
                 if (strlen($formula) != 0) {
                     $formula .= ",";
                 }
-                $formula.="if(A2<$rango,$valor";
+                $formula.="if(A2<=$rango,$valor";
             }
             else{
                 $valor_cambio_medidor = $valor;
