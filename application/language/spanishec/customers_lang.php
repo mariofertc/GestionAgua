@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 $lang['customers_new']='Nuevo Cliente';
 $lang['customers_customer']='Cliente';
 $lang['customers_update']='Actualizar Cliente';
@@ -16,3 +16,4 @@ $lang['customers_taxable']='Grava Impuestos';
 $lang['customers_tipo_cuenta']='Tipo de Cuenta';
 $lang['customers_registro_inicial']='Registro Inicial';
 $lang['customers_fecha_ingreso']='Fecha Ingreso';
+$lang['customers_ci']='Cédula';

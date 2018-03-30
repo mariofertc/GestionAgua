@@ -11,12 +11,12 @@ class Summary_sales extends Report {
     public function getDataColumns() {
 //        return array($this->lang->line('reports_date'), $this->lang->line('reports_subtotal'), $this->lang->line('reports_total'), $this->lang->line('reports_tax'), $this->lang->line('reports_profit'));
 //        return array($this->lang->line('reports_date'), $this->lang->line('reports_subtotal'), $this->lang->line('reports_total'), $this->lang->line('reports_tax'), $this->lang->line('reports_profit'));
-        return array($this->lang->line('reports_date'), $this->lang->line('reports_valor_cuota'), $this->lang->line('reports_cargo'), $this->lang->line('reports_total'), $this->lang->line('reports_consumo_medidor'));
+        return array($this->lang->line('reports_date'), $this->lang->line('reports_consumo_medidor'), $this->lang->line('reports_valor_cuota'), $this->lang->line('reports_cargo'),$this->lang->line('reports_interes'), $this->lang->line('reports_total'));
     }
 
     public function getData(array $inputs) {
 //        $this->db->select('sale_date, sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax,sum(profit) as profit');
-        $this->db->select('sale_date, sum(consumo_medidor) as consumo_medidor, sum(valor_cuota) as valor_cuota,  sum(cargo) as cargo, sum(total) as total');
+        $this->db->select('sale_date, sum(consumo_medidor) as consumo_medidor, sum(valor_cuota) as valor_cuota,  sum(cargo) as cargo,sum(interes) as interes, sum(total) as total');
         $this->db->from('sales_items_temp');
         
         $this->db->group_by('sale_date');
@@ -27,7 +27,7 @@ class Summary_sales extends Report {
 
     public function getSummaryData(array $inputs) {
 //        $this->db->select('sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax,sum(profit) as profit');
-        $this->db->select('sum(consumo_medidor), sum(valor_cuota) as valor_cuota, sum(cargo) as cargo, sum(total) as total');
+        $this->db->select('sum(consumo_medidor) as consumo_medidor, sum(valor_cuota) as valor_cuota, sum(cargo) as cargo, sum(interes) as interes, sum(total) as total');
         $this->db->from('sales_items_temp');
         $this->db->where('sale_date BETWEEN "' . $inputs['start_date'] . '" and "' . $inputs['end_date'] . '"');
         

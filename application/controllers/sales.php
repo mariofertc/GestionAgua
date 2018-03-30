@@ -156,6 +156,7 @@ class Sales extends Secure_area {
         if ($customer_id != -1) {
             $cust_info = $this->Customer->get_info($customer_id);
             $data['customer'] = $cust_info->first_name . ' ' . $cust_info->last_name;
+            $data['ci'] = $cust_info->zip;
         }
 
         $total_payments = 0;
@@ -211,6 +212,7 @@ class Sales extends Secure_area {
         if ($customer_id != -1) {
             $cust_info = $this->Customer->get_info($customer_id);
             $data['customer'] = $cust_info->first_name . ' ' . $cust_info->last_name;
+            $data['ci'] = $cust_info->zip;
         }
         $data['sale_id'] = $this->config->item('factura_apocope') . $sale_id;
         $data['print_after_sale'] = $this->Appconfig->get('print_after_sale');

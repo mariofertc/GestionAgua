@@ -45,7 +45,7 @@
                     <div class="panel-footer">
                         {#<?php foreach($summary_data as $name=>$value) { ?>#}
                         {%for name, value in summary_data %}
-                            <div class="summary_row">{{line('reports_'~name)~ ': '~(name=="items"?value:to_currency(value))}}</div>
+                            <div class="summary_row">{{line('reports_'~name)~ ': '~(name=="consumo_medidor"?value~" m3":to_currency(value))}}</div>
                         {% endfor %}
                     </div>
                 </div>

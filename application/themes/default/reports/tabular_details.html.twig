@@ -68,7 +68,7 @@
                     </div>
                     <div class="panel-footer">
                         {%for name, value in overall_summary_data %}
-                            <div class="summary_row">{{line('reports_'~name)~ ': '~(name=="items"?value:to_currency(value))}}</div>
+                            <div class="summary_row">{{line('reports_'~name)~ ': '~(name=="consumo_medidor"?value~" m3":to_currency(value))}}</div>
                         {% endfor %}
                     </div>
                 </div>

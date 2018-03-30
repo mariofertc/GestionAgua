@@ -116,7 +116,7 @@ class Reports extends Secure_area {
 
         foreach ($report_data as $row) {
 //            $tabular_data[] = array($row['sale_date'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']));
-            $tabular_data[] = array($row['sale_date'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['total']), ($row['consumo_medidor']));
+            $tabular_data[] = array($row['sale_date'], $row['consumo_medidor'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['interes']),to_currency($row['total']));
         }
 
         $data = array(
@@ -857,7 +857,8 @@ class Reports extends Secure_area {
 
         foreach ($report_data['summary'] as $key => $row) {
 //            $summary_data[] = array(anchor('sales/edit/' . $row['sale_id'], 'POS ' . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], $row['customer_name'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['profit']), $row['payment_type'], $row['comment']);
-            $summary_data[] = array(anchor('sales/receipt/' . $row['sale_id'], $this->config->item('factura_apocope') . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], $row['customer_name'], $row['consumo_medidor'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['total']), $row['payment_type'], $row['comment']);
+//            $summary_data[] = array(anchor('sales/receipt/' . $row['sale_id'], $this->config->item('factura_apocope') . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['ci'], $row['items_purchased'], $row['employee_name'], $row['customer_name'], $row['consumo_medidor'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['total']), $row['payment_type'], $row['comment']);
+            $summary_data[] = array(anchor('sales/receipt/' . $row['sale_id'], $this->config->item('factura_apocope') . $row['sale_id'], array('target' => '_blank')), $row['sale_date'], $row['ci'], $row['items_purchased'], $row['employee_name'], $row['customer_name'], $row['consumo_medidor'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['interes']), to_currency($row['total']), $row['payment_type'], $row['comment']);
 
 //            foreach ($report_data['details'][$key] as $drow) {
 //                $details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], $drow['quantity_purchased'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']), to_currency($drow['profit']), $drow['discount_percent'] . '%');

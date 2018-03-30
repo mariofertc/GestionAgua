@@ -1,60 +1,60 @@
 #receipt_wrapper
 {
-	font-family:Arial;
-	width:100%;	
+    font-family:Arial;
+    width:100%;	
 }
 
 #receipt_header
 {
-	text-align:center;
+    text-align:center;
 }
 
 #company_name
 {
-	font-size: 1.5em;
-	font-weight:bold;
+    font-size: 1.5em;
+    font-weight:bold;
 }
 
 #company_phone
 {
-	margin-bottom:15px;
+    margin-bottom:15px;
 
 }
 
 #sale_time
 {
-	margin-bottom:5px;
+    margin-bottom:5px;
 }
 
 #receipt_items
 {
-	position:relative;
-	border-collapse:collapse;
-	margin-top:15px;
-	margin-bottom:15px;
-	width:100%;
+    position:relative;
+    border-collapse:collapse;
+    margin-top:15px;
+    margin-bottom:15px;
+    width:100%;
 }
 
 #receipt_items td
 {
-	position:relative;
-	padding:3px;	
+    position:relative;
+    padding:3px;	
 }
 
 .short_name
 {
-	display:none;
+    display:none;
 }
 
 #sale_return_policy
 {
-	width:80%;
-	margin:0 auto;
-	text-align:center;
+    width:80%;
+    margin:0 auto;
+    text-align:center;
 }
 
 #barcode
 {
-	margin-top:10px;
-	text-align:center;
+    margin-top:10px;
+    text-align:center;
 }

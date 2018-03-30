@@ -93,3 +93,5 @@ $lang['reports_almacen'] = 'Almacén';
 $lang['reports_consumo_medidor'] = 'Consumo Medidor';
 $lang['reports_valor_cuota'] = 'Valor Cuota';
 $lang['reports_cargo'] = 'Cargo';
+$lang['reports_interes'] = 'Interés';
+$lang['reports_ci'] = 'CI';
