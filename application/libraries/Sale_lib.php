@@ -147,7 +147,7 @@ class Sale_lib {
             $items = $this->CI->consumo->get_all(100, 0, array('id_cliente' => $customer_id, 'estado' => 'generado'));
             for ($idx = 0; $idx < count($items); $idx++) {
                 //echo $items[$idx]['interes_generado'];
-                var_dump($items[$idx]['interes_generado']);
+                //var_dump($items[$idx]['interes_generado']);
                 if ($items[$idx]['interes_generado'] == null) {
                     //Vemos si es mayor de dos meses para aplicar intereses.
                     $d1 = new DateTime();

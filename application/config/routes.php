@@ -55,6 +55,10 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['reports/(detailed_sales)/(:any)/(:any)'] = "reports/$1/$2/$3";
 $route['reports/detailed_sales'] = "reports/date_input";
+
+$route['reports/(detailed_consumos)/(:any)/(:any)'] = "reports/$1/$2/$3";
+$route['reports/detailed_consumos'] = "reports/date_input";
+
 $route['reports/specific_customer'] = "reports/specific_customer_input";
 $route['reports/specific_employee'] = "reports/specific_employee_input";
 
