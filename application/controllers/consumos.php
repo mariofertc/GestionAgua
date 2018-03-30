@@ -69,7 +69,7 @@ class Consumos extends Secure_area {
         
         $tipo_consumo = $this->tipo_consumo->get_all(100,0,"","","id,nombre");        
         $registro_anterior = $this->consumo->get_all(1000,0,"id_cliente=$customer_id","id");
-//print_r($registro_anterior);
+
         
         if(count($registro_anterior)==0){
             $registro_anterior = $person_info->registro_inicial;
