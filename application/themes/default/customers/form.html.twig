@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="field_row clearfix">	
-        {{form_label(line('customers_registro_inicial')~':', 'registro_inicial')}}
+        {{form_label(line('customers_registro_inicial')~" ("~line('customers_registro_inicial_inicia')~")"~':', 'registro_inicial')}}
         <div class='form_field'>
             {{ form_input({'name':'registro_inicial', 'id':'registro_inicial', 'value':person_info.registro_inicial,'class':'form-control'})}}
         </div>

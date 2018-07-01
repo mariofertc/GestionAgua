@@ -76,7 +76,7 @@
 {#                                                                <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>#}
 {#                                                                <td>{{ to_currency(item['price']*item['quantity']-item['price']*item['quantity']*item['discount']/100)}}</td> <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>#}
                                                             </tr>
-                                                            <tr>
+                                                            {#<tr>
                                                                 <td style="color:#2F4F4F">{{ line('sales_description_abbrv')~':' }}</td>
                                                                 <td colspan=2 style="text-align:left;">
                                                                     {% if item['allow_alt_description']==1 %}
@@ -98,7 +98,7 @@
                                                             </tr>
                                                             <tr style="height:3px">
                                                                 <td colspan=8 style="background-color:white"> </td>
-                                                            </tr>		{{form_close()}}
+                                                            </tr>#}		{{form_close()}}
                                                         {% endfor %}
                                                     {% endif %}
                                                 </tbody>

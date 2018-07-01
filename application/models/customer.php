@@ -140,6 +140,12 @@ class Customer extends Person {
         return $success;
     }
 
+	 function update_consumo_inicial($customer_id) {
+		 $this->db->set('registro_inicial',0);
+		 $this->db->where('person_id', $customer_id);
+		 $success = $this->db->update('customers');
+		 return $success;
+	 }
     /*
       Deletes one customer
      */

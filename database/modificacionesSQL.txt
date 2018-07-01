@@ -1,0 +1,3 @@
+update consumo set fecha_consumo = '2018-05-03 00:00:00', fecha_hasta='2018-06-03 00:00:00' where id = 2646;
+update consumo set deleted = 1 where id = 2346;
+delete from consumo where id in (2649,2650);
