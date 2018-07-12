@@ -68,13 +68,20 @@ class Consumos extends Secure_area {
         $data['consumo_info'] = $consumo_info;
         
         $tipo_consumo = $this->tipo_consumo->get_all(100,0,"","","id,nombre");        
-        $registro_anterior = $this->consumo->get_all(1000,0,"id_cliente=$customer_id","id");
-
+        //$registro_anterior = $this->consumo->get_all(1000,0,"id_cliente=$customer_id","id");
+        $registro_anterior = $this->consumo->get_all(1000,0,"id_cliente=$customer_id","fecha_consumo asc");
         
         if(count($registro_anterior)==0){
             $registro_anterior = $person_info->registro_inicial;
             $fecha_anterior = $person_info->fecha_ingreso;
-        }else{
+        }
+		//Cuando reinician el medidor
+		if($person_info->registro_inicial == -1){
+			$registro_tmp = $registro_anterior[count($registro_anterior)-1];
+            $fecha_anterior = substr($registro_tmp['fecha_consumo'],0,10);
+			$registro_anterior = 0;
+		}
+		else{
             $registro_tmp = $registro_anterior[count($registro_anterior)-1];
             $registro_anterior = $registro_tmp['registro_medidor'];
             $fecha_anterior = substr($registro_tmp['fecha_consumo'],0,10);
@@ -132,8 +139,10 @@ class Consumos extends Secure_area {
         $valor_cuota = $this->input->post('valor_cuota');
         $cuota = $this->cuota->get_id_by_consumo($id_tipo_consumo,$valor_cuota);
         $id_cuota = $cuota->id;
+		$id_cliente = $this->input->post('id_cliente');
+		$registro_inicial = $this->input->post('registro_inicial');
         $consumo_data = array(
-            'id_cliente' => $this->input->post('id_cliente'),
+            'id_cliente' => $id_cliente,
             'id_cuota' => $id_cuota,
             'registro_medidor' => $this->input->post('registro_medidor'),
             'consumo_medidor' => $this->input->post('consumo_medidor'),
@@ -148,6 +157,10 @@ class Consumos extends Secure_area {
             'detalle_cargo' => $this->input->post('es_cambio_medidor')?'Cambio de Medidor':null
         );
         if ($this->consumo->save($consumo_data, $consumo_id)) {
+			//Actualizamos el consumo inicial si es nuevo medidor.
+			if($registro_inicial == -1){
+				$this->Customer->update_consumo_inicial($id_cliente);
+			}
             //New customer
             if ($consumo_id == -1) {
                 echo json_encode(array('success' => true, 'message' => $this->lang->line('consumo_successful_adding') . ' ' .

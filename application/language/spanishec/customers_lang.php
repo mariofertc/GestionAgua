@@ -17,3 +17,4 @@ $lang['customers_tipo_cuenta']='Tipo de Cuenta';
 $lang['customers_registro_inicial']='Registro Inicial';
 $lang['customers_fecha_ingreso']='Fecha Ingreso';
 $lang['customers_ci']='Cédula';
+$lang['customers_registro_inicial_inicia']='-1 reinicia el conteo del medidor';
