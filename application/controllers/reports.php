@@ -235,7 +235,7 @@ class Reports extends Secure_area {
 
         foreach ($report_data as $row) {
 //            $tabular_data[] = array($row['customer'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['profit']));
-            $tabular_data[] = array($row['customer'], to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['total']), ($row['consumo_medidor']));
+            $tabular_data[] = array($row['zip'], $row['customer'], $row['account_number'],$row['tipo_consumo'],to_currency($row['valor_cuota']), to_currency($row['cargo']), to_currency($row['total']), $row['consumo_medidor'],$row['promedio_consumo_medidor']);
         }
 
         $data = array(
