@@ -78,7 +78,11 @@ class Consumos extends Secure_area {
 		//Cuando reinician el medidor
 		if($person_info->registro_inicial == -1){
 			$registro_tmp = $registro_anterior[count($registro_anterior)-1];
-            $fecha_anterior = substr($registro_tmp['fecha_consumo'],0,10);
+			if(isset($registro_tmp['fecha_consumo'])){
+				$fecha_anterior = substr($registro_tmp['fecha_consumo'],0,10);
+			}else{
+				$fecha_anterior = $person_info->fecha_ingreso;
+			}
 			$registro_anterior = 0;
 		}
 		else{
@@ -118,7 +122,7 @@ class Consumos extends Secure_area {
         $data['valor_cambio_medidor'] = $valor_cambio_medidor;
         //var_dump($tasas_aplicables);
         $data['registro_anterior'] = $registro_anterior;
-        echo $registro_anterior;
+        //echo $registro_anterior;
         //2016-12-26
         $fecha_anterior = DateTime::createFromFormat('Y-m-d',$fecha_anterior)->add(new DateInterval("P1M"))->format('Y-m-d');
         $data['fecha_consumo'] = $fecha_anterior;
