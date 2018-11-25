@@ -770,7 +770,7 @@ class Reports extends Secure_area {
 
         $customers = array();
         foreach ($this->Customer->get_all(1000, 0) as $customer) {
-            $customers[$customer['person_id']] = $customer['first_name'] . ' ' . $customer['last_name'];
+            $customers[$customer['person_id']] = $customer['last_name'] . ' ' . $customer['first_name'];
         }
         $data['specific_input_data'] = $customers;
 //        $this->load->view("reports/specific_input", $data);
@@ -802,7 +802,7 @@ class Reports extends Secure_area {
 
         $customer_info = $this->Customer->get_info($customer_id);
         $data = array(
-            "title" => $customer_info->first_name . ' ' . $customer_info->last_name . ' ' . $this->lang->line('reports_report'),
+            "title" => $customer_info->last_name . ' ' . $customer_info->first_name . ' ' . $this->lang->line('reports_report'),
             "subtitle" => date('m/d/Y', strtotime($start_date)) . '-' . date('m/d/Y', strtotime($end_date)),
             "headers" => $model->getDataColumns(),
             "summary_data" => $summary_data,
@@ -826,7 +826,7 @@ class Reports extends Secure_area {
 
         $employees = array();
         foreach ($this->Employee->get_all() as $employee) {
-            $employees[$employee['person_id']] = $employee['first_name'] . ' ' . $employee['last_name'];
+            $employees[$employee['person_id']] = $employee['last_name'] . ' ' . $employee['first_name'];
         }
         $data['specific_input_data'] = $employees;
 //        $this->load->view("reports/specific_input", $data);
@@ -855,7 +855,7 @@ class Reports extends Secure_area {
 
         $employee_info = $this->Employee->get_info($employee_id);
         $data = array(
-            "title" => $employee_info->first_name . ' ' . $employee_info->last_name . ' ' . $this->lang->line('reports_report'),
+            "title" => $employee_info->last_name . ' ' . $employee_info->first_name . ' ' . $this->lang->line('reports_report'),
             "subtitle" => date('m/d/Y', strtotime($start_date)) . '-' . date('m/d/Y', strtotime($end_date)),
             "headers" => $model->getDataColumns(),
             "summary_data" => $summary_data,

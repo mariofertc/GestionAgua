@@ -38,7 +38,10 @@ class Customer extends Person {
         if ($where != "")
             $this->db->where($where);
         $this->db->where('deleted', 0);
-        $this->db->order_by($order);
+		if($order == null)
+			$this->db->order_by('last_name');
+		else	
+			$this->db->order_by($order);
         $this->db->limit($num, $offset);
 
         return $this->db->get()->result_array();

@@ -21,8 +21,11 @@ class Detailed_consumos extends Report
 		$this->db->join('people as customer', 'c.id_cliente = customer.person_id', 'left');
 		$this->db->where('fecha_consumo BETWEEN "'. $inputs['start_date']. '" and "'. $inputs['end_date'].'"');
         $this->db->where("estado='generado'");
+        $this->db->where("deleted=0");
 		$this->db->group_by('c.id');
-		$this->db->order_by('c.id');
+		//$this->db->order_by('c.id');
+		$this->db->order_by('ci, c.fecha_consumo');
+
 
 		$data = array();
 		$data['summary'] = $this->db->get()->result_array();
