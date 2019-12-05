@@ -26,12 +26,30 @@ class Consumos extends Secure_area {
 		$aColumns = array('person_id', 'first_name', 'last_name', 'email','phone_number');
 		//Eventos Tabla
 		$cllAccion = array(
-				'1' => array(
+				'0' => array(
 						'function' => "view",
-						'common_language' => "consumo_add",
+						'common_language' => "consumo_consumo",
 						'language' => "_update",
 						'width' => $this->get_form_width(),
 						'height' => $this->get_form_height()),
+                '1' => array(
+                        'function' => "view",
+                        'common_language' => "consumo_acometida",
+                        'language' => "_update",
+                        'width' => $this->get_form_width(),
+                        'height' => $this->get_form_height()),
+                '2' => array(
+                        'function' => "view",
+                        'common_language' => "consumo_multa",
+                        'language' => "_update",
+                        'width' => $this->get_form_width(),
+                        'height' => $this->get_form_height()),
+                '3' => array(
+                        'function' => "view",
+                        'common_language' => "consumo_medidor",
+                        'language' => "_update",
+                        'width' => $this->get_form_width(),
+                        'height' => $this->get_form_height()),
 				);
 		echo getData($this->Customer, $aColumns, $cllAccion);
 	}

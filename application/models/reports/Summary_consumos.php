@@ -20,6 +20,7 @@ class Summary_consumos extends Report {
         //$this->db->having('fecha_consumo BETWEEN "' . $inputs['start_date'] . '" and "' . $inputs['end_date'] . '"');
         $this->db->where('fecha_consumo BETWEEN "' . $inputs['start_date'] . '" and "' . $inputs['end_date'] . '"');
         $this->db->where('estado','generado');
+		$this->db->where("deleted=0");
         $this->db->group_by('id_cliente');
         $this->db->order_by('id_cliente');
         return $this->db->get()->result_array();

@@ -12,3 +12,6 @@ $lang['consumo_fecha']="Fecha Consumo";
 $lang['consumo_valor_cuota']="Valor Cuota";
 $lang['consumo_id']="ID";
 $lang['consumo_cargo']="Cargo";
+$lang['consumo_multa']="Multa";
+$lang['consumo_acometida']="Acometida";
+$lang['consumo_medidor']="Medidor";
