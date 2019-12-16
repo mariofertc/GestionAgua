@@ -54,5 +54,7 @@ $lang['common_images_save_first']='Favor primero guarde el Artículo, para poder
 $lang['common_error']='Error';
 $lang['common_warning']='Advertencia';
 $lang['common_fecha_desde']='Fecha desde';
+$lang['common_date']='Fecha';
 $lang['common_fecha_hasta']='Fecha hasta';
 $lang['common_pie_recibo']='Nota al pie del recibo';
+$lang['common_observations']='Observaciones';

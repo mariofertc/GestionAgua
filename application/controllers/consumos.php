@@ -33,19 +33,19 @@ class Consumos extends Secure_area {
 						'width' => $this->get_form_width(),
 						'height' => $this->get_form_height()),
                 '1' => array(
-                        'function' => "view",
+                        'function' => "view_acometida",
                         'common_language' => "consumo_acometida",
                         'language' => "_update",
                         'width' => $this->get_form_width(),
                         'height' => $this->get_form_height()),
                 '2' => array(
-                        'function' => "view",
+                        'function' => "view_multa",
                         'common_language' => "consumo_multa",
                         'language' => "_update",
                         'width' => $this->get_form_width(),
                         'height' => $this->get_form_height()),
                 '3' => array(
-                        'function' => "view",
+                        'function' => "view_medidor",
                         'common_language' => "consumo_medidor",
                         'language' => "_update",
                         'width' => $this->get_form_width(),
@@ -152,6 +152,40 @@ class Consumos extends Secure_area {
         $data['tipo_consumo'] = array_to_htmlcombo($tipo_consumo, array('blank_text' => 'Escoja una opción', 'id' => 'id', 'name' => 'nombre'));        
          $this->twiggy->set($data);
         $this->twiggy->display('consumo/form');
+    }
+
+    /**
+     * Insert acometida value
+     * @param type $customer_id
+     */
+    function view_acometida($customer_id = -1,$consumo_id = -1) {
+        $person_info = $this->Customer->get_info($customer_id);
+        $data['person_info'] = $person_info;
+        $data['tipo_consumo'] = array_to_htmlcombo($tipo_consumo, array('blank_text' => 'Escoja una opción', 'id' => 'id', 'name' => 'nombre'));        
+         $this->twiggy->set($data);
+        $this->twiggy->display('consumo/form_acometida');
+    }
+    /**
+     * Insert medidor value
+     * @param type $customer_id
+     */
+    function view_medidor($customer_id = -1,$consumo_id = -1) {
+        $person_info = $this->Customer->get_info($customer_id);
+        $data['person_info'] = $person_info;
+        $data['tipo_consumo'] = array_to_htmlcombo($tipo_consumo, array('blank_text' => 'Escoja una opción', 'id' => 'id', 'name' => 'nombre'));        
+         $this->twiggy->set($data);
+        $this->twiggy->display('consumo/form_medidor');
+    }
+    /**
+     * Insert multa value
+     * @param type $customer_id
+     */
+    function view_multa($customer_id = -1,$consumo_id = -1) {
+        $person_info = $this->Customer->get_info($customer_id);
+        $data['person_info'] = $person_info;
+        //$data['tipo_consumo'] = array_to_htmlcombo($tipo_consumo, array('blank_text' => 'Escoja una opción', 'id' => 'id', 'name' => 'nombre'));        
+         $this->twiggy->set($data);
+        $this->twiggy->display('consumo/form_multa');
     }
 
     /*
