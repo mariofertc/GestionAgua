@@ -1,99 +1,52 @@
-<style>
-    .ui-datepicker-calendar {display: none;}
-</style>
-{{form_open('consumos/save/'~consumo_id,{'id':'consumo_form'})}}
+{{form_open('consumos/save_multa/'~consumo_id,{'id':'consumo_form'})}}
 <div id="required_fields_message">{{line('common_fields_required_message')}}</div>
 <ul id="error_message_box"></ul>
 <fieldset id="customer_basic_info">
-    <legend>{{line("consumo_basic_information")}}</legend>
+    <legend>{{line("consumo_medidor_registro")}}</legend>
     <div class="field_row clearfix">    
-        {{form_label(line('consumo_fecha')~':', 'fecha_consumo')}}
+        {{form_label(line('common_date')~':', 'fecha')}}
         <div class='form_field'>
-            {{ form_input({'name':'fecha_consumo', 'id':'fecha_consumo', 'value':fecha_consumo,'class':'form-control', 'readonly':true})}}
-        </div>
-    </div>
-    <div class="field_row clearfix">    
-        {{form_label(line('consumo_registro_medidor')~' (ant ' ~ registro_anterior ~ '):', 'registro_medidor')}}
-        <div class='form_field'>
-            {{ form_input({'name':'registro_medidor', 'id':'registro_medidor','class':'form-control  text-right',
-'data-cell':'A1','data-format':"0,0[.]00",'data-formula':"", 'type':"text"})}}
+            {{ form_input({'name':'fecha', 'id':'fecha', 'value':fecha|date("m/d/Y"),'class':'form-control'})}}
         </div>
     </div>
 
-    <div class="field_row clearfix">    
-        {{form_label(line('consumo_es_cambio_medidor')~':', 'es_cambio_medidor')}}
-        <label>{{ form_checkbox({'name':'es_cambio_medidor', 'id':'es_cambio_medidor', 'value':valor_cambio_medidor,'data-cell':'A5'})}}
-            $  {{valor_cambio_medidor}}
-        </label>
-    </div>
-
-    <div class="field_row clearfix">    
+    {# <div class="field_row clearfix">    
         {{form_label(line('consumo_medidor')~':', 'consumo_medidor')}}
         <div class='form_field'>
             {{ form_input({'name':'consumo_medidor', 'id':'consumo_medidor', 'value':person_info.consumo_medidor,'class':'form-control', 'readonly':true,
 'data-formula':"if((A1-"~registro_anterior~")<0,0,A1-"~registro_anterior~")",'data-cell':"A2"})}}
-            {#'data-formula':"if(registro_medidor-"~registro_anterior~"<0,0,"~registro_anterior~"+registro_medidor)",'data-cell':"Ac"})}}#}
         </div>
+    </div> #}
 
-    </div>
-    <div class="field_row clearfix">    
-        {{form_label(line('consumo_valor_cuota')~':', 'valor_cuota')}}
-        <div class='form_field'>
-            {{ form_input({'name':'valor_cuota', 'id':'valor_cuota','class':'form-control','readonly':true,
-'data-formula':formula_cuota,'data-cell':"A4"})}}
-        </div>
-    </div>
     <div class="field_row clearfix">    
         {{form_label(line('consumo_valor_a_pagar')~':', 'valor_a_pagar')}}
         <div class='form_field'>
-            {{ form_input({'name':'valor_a_pagar', 'id':'valor_a_pagar', 'value':person_info.valor_a_pagar,'class':'form-control',
-'readonly':true,
-'data-formula':"if((A1-"~registro_anterior~")<0,0,A4+A5)",'data-cell':"A3"})}}
+            {{ form_input({'name':'valor_a_pagar', 'id':'valor_a_pagar', 'value':person_info.valor_a_pagar,'class':'form-control'})}}
+        </div>
+    </div>
+
+    <div class="field_row clearfix">    
+        {{form_label(line('common_observations')~':', 'observaciones')}}
+        <div class='form_field'>
+            {{ form_textarea({'name':'observaciones', 'id':'observaciones', 'value':person_info.observaciones,'class':'form-control','rows' : '4'})}}
         </div>
     </div>
     {{ form_hidden('id_cliente', person_info.person_id)}}
     {{ form_hidden('registro_inicial', person_info.registro_inicial)}}
     {{ form_hidden('id_tipo_consumo', person_info.id_tipo_consumo)}}
-
-
 </div>
-
-{#<div class="field_row clearfix">  
-    {{ form_label(line('customers_taxable')~':', 'taxable')}}
-    <div class='form_field'>
-        {{form_checkbox('taxable', '1', person_info.taxable == '' ? 'true' : person_info.taxable)}}
-    </div>
-</div>#}
 <br>
 {{ form_submit({'name':'submit', 'id':'submit', 'value':line('common_submit'), 'class':'btn btn-success btn-block'})}}
 </fieldset>
 {{form_close()}}
 {% block javascript %}
     <script type='text/javascript'>
-
-        if (typeof window.jQuery.fn.calx === 'function') {
-            //inicializa_form();
-            console.log("Carga cache");
-            calcula();
-        } else {
-            console.log("Primera Carga");
-            var script = document.createElement("script");
-            script.type = "text/javascript";
-            script.src = "{{base_url()}}assets/bower_components/jquery-calx/jquery-calx-2.2.7.js";
-        {#            $.getScript(script.src);#}
-        {#     $.getScript("{{base_url()}}assets/bower_components/tag-it/js/tag-it.min.js"); #}
-                $.getScript(script.src, function () {
-                    calcula();
-                });
-            }
-
             //validation and submit handling
             $(document).ready(function () {
+                $('#fecha').datepicker({startDate: '01/01/1970'});
                 $('#consumo_form').validate({
-{#                    ignore: [":hidden"],#}
-{#                    ignore: [""],#}
                     submitHandler: function (form) {
-                        calcula();
+                        //calcula();
                         $.ajax({
                             type: $(form).attr('method'),
                             url: $(form).attr('action'),
@@ -108,24 +61,24 @@
                         });
                     },
                     rules: {
-                        registro_medidor: {
+                        fecha: {
                             required:1,
-                            min: {{registro_anterior}}
+                            //min: {{registro_anterior}}
                         },
-{#                        valor_a_pagar: {min: 1}#}
+                        valor_a_pagar:{
+                            required:1,
+                            //min: {{registro_anterior}}
+                        }
                     },
                     messages: {
-                        registro_medidor: {
-                            required:"Favor ingrese el registro del medidor",
-                            min :"El registro debe ser mayor o igual al regisro del mes anterior",
+                        fecha: {
+                            required:"{{consumo_multa_fecha_required}}"
                         },
-{#                        valor_a_pagar: {min:"Ingreso incorrecto del registro del medidor"}#}
+                        valor_a_pagar: {
+                            required:"{{consumo_multa_valor_required}}"
+                        }
                     }
                 });
             });
-            function calcula() {
-        {#        $('subsistencia_total_').val(10);#}
-                $('#consumo_form').calx();
-            }
     </script>
 {% endblock %}

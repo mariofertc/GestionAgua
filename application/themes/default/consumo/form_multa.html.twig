@@ -6,7 +6,7 @@
     <div class="field_row clearfix">    
         {{form_label(line('common_date')~':', 'fecha')}}
         <div class='form_field'>
-            {{ form_input({'name':'fecha', 'id':'fecha', 'value':fecha|date("m/d/Y"),'class':'form-control'})}}
+            {{ form_input({'name':'fecha', 'id':'fecha', 'value':fecha|date("Y-m-d"),'class':'form-control'})}}
         </div>
     </div>
 
@@ -43,7 +43,10 @@
     <script type='text/javascript'>
             //validation and submit handling
             $(document).ready(function () {
-                $('#fecha').datepicker({startDate: '01/01/1970'});
+                $('#fecha').datepicker({
+                    startDate: '2018-01-01',
+                    dateFormat: 'yy-mm-dd' 
+                });
                 $('#consumo_form').validate({
                     submitHandler: function (form) {
                         //calcula();

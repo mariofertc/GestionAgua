@@ -1,0 +1,8 @@
+alter table consumo add column tipo_consumo varchar(15) default 'consumo' comment '("consumo", "multa", "cambio_medidor", "acometida")';
+
+'Insert multas
+insert into cuotas values(LAST_INSERT_ID(), 'multa', 20, now(), 1,0);
+insert into cuotas values(LAST_INSERT_ID(), 'multa', 20, now(), 2,0);
+insert into cuotas values(LAST_INSERT_ID(), 'multa', 20, now(), 3,0);
+insert into cuotas values(LAST_INSERT_ID(), 'multa', 20, now(), 4,0);
+insert into cuotas values(LAST_INSERT_ID(), 'multa', 20, now(), 5,0);

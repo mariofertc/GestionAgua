@@ -26,6 +26,14 @@ class Cuota extends CI_Model {
         $this->db->where('valor',$valor);
         $this->db->where('deleted', 0);
         return $this->db->get()->first_row();
+    } 
+
+    function get_id_by_rango_consumo($id_tipo_consumo, $rango) {
+        $this->db->from('cuotas');
+        $this->db->where('id_tipo_consumo',$id_tipo_consumo);
+        $this->db->where('rango',$rango);
+        $this->db->where('deleted', 0);
+        return $this->db->get()->first_row();
     }
 
     /*
