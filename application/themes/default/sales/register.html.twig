@@ -59,12 +59,12 @@
                                                 <tbody id="cart_contents">
                                                     {% if cart|length>0 %}
                                                         {% for item_id, item in cart %}
-                                                            {#line('sales_no_items_in_cart'#}
+                                                            {# {{line('sales_no_items_in_cart')}} #}
                                                             {{ form_open("sales/edit_item/"~item_id) }}
+                                                            {% if item['tipo_consumo'] == 'consumo' %}
                                                             <tr>
                                                                 <td>{{ anchor("sales/delete_item/"~ item_id,'['~line('common_delete')~']')}}</td>
-
-                                                                <td style="align:center;">{{ item['id']}}<br>
+                                                                <td style="align:center;">{{ item['id']}}<br></td>
                                                                 <td style="align:center;">{{item['consumo_medidor']}}<br /> [{{ item['registro_medidor']}} {{line('consumo_registro_medidor')}}]</td>
                                                                    
                                                                     <td>{{ item['fecha_consumo']}}</td>
@@ -73,32 +73,24 @@
                                                                 <td>{{ to_currency(item['valor_cuota'])}}</td>
                                                                 <td>{{ to_currency(item['interes_generado'])}}</td>
                                                                 <td>{{ to_currency(item['valor_a_pagar'])}}</td>
+                                                            </tr>
+                                                            {% elseif item['tipo_consumo'] == 'multa' %}
+                                                            <tr class='info'>
+                                                                <td>{{ anchor("sales/delete_item/"~ item_id,'['~line('common_delete')~']')}}</td>
+                                                                <td style="align:center;">{{ item['id']}}<br></td>
+                                                                <td style="align:center;">{{item['detalle_cargo']}}<br /> [{{ item['tipo_consumo']}}]</td>
+                                                                   
+                                                                    <td>{{ item['fecha_consumo']}}</td>
+                                                                    {{ form_hidden('price',item['fecha_consumo'])}}
+                                                                    <td>{{ item['cargo']}}</td>
+                                                                <td>{{ to_currency(item['valor_cuota'])}}</td>
+                                                                <td>{{ to_currency(item['interes_generado'])}}</td>
+                                                                <td>{{ to_currency(item['valor_a_pagar'])}}</td>
+                                                            </tr>
+                                                            {% endif %}
 {#                                                                <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>#}
 {#                                                                <td>{{ to_currency(item['price']*item['quantity']-item['price']*item['quantity']*item['discount']/100)}}</td> <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>#}
-                                                            </tr>
-                                                            {#<tr>
-                                                                <td style="color:#2F4F4F">{{ line('sales_description_abbrv')~':' }}</td>
-                                                                <td colspan=2 style="text-align:left;">
-                                                                    {% if item['allow_alt_description']==1 %}
-                                                                        {{ form_input({'name':'description','value':item['description'],'size':'20'}) }}
-                                                                    {% else %}
-                                                                        {{item['description']}}
-                                                                        {{form_hidden('description',item['description'])}}
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td>&nbsp;</td>
-                                                                <td style="color:#2F4F4F">
-                                                                    {% if item['is_serialized']==1 %}
-                                                                        {{line('sales_serial')~':'}}
-                                                                    {% endif %}</td>
-                                                                <td colspan=3 style="text-align:left;">
-                                                                    {% if item['is_serialized']==1 %}
-                                                                        {{form_input({'name':'serialnumber','value':item['serialnumber'],'size':'20'}) }}
-                                                                    {% endif %}</td>
-                                                            </tr>
-                                                            <tr style="height:3px">
-                                                                <td colspan=8 style="background-color:white"> </td>
-                                                            </tr>#}		{{form_close()}}
+                                                            {{form_close()}}
                                                         {% endfor %}
                                                     {% endif %}
                                                 </tbody>
@@ -116,19 +108,8 @@
                                                 <div class="row">{{line("sales_customer")~': <b>'~customer~ '</b><br/>'}}
                                                 </div>
                                             </div>
-{#                                            {{anchor("sales/delete_customer",'<div class="panel-footer"><span class="pull-left">'~line("common_delete")~" "~line("customers_customer")~'</span><span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span><div class="clearfix"></div></div>')}}#}
                                         </div>
                                         {% else %}
-                                            {#{{form_open("sales/select_customer",{'id':'select_customer_form'})}}
-                                        <div class="form-group-sm">
-                                            <label id="customer_label" for="customer">{{ line('sales_select_customer')}}</label>
-                                            {{ form_input({'name':'customer','id':'customer','size':'30','value':line('sales_start_typing_customer_name'), 'class':'form-control'})}}
-                                        </div>
-                                        {{form_close()}}#}
-                                        {#<div style="margin-top:5px;text-align:center;">
-                                            <h3 style="margin: 5px 0 5px 0">{{ line('common_or')}}</h3>
-                                            {{ anchor("customers/view/-1?width=350",line('sales_new_customer'),{'class':'thickbox none btn btn-warning btn-sm','title':line('sales_new_customer')})}}
-                                        </div>#}
                                         <div class="clearfix">&nbsp;</div>
                                     {% endif %}
                                     <div class="panel panel-yellow">
@@ -168,7 +149,6 @@
                                                         {{ form_open("sales/complete",{'id':'finish_sale_form'})}}
                                                         <label id="comment_label" for="comment">{{ line('common_comments')}}:</label>
                                                         {{ form_textarea({'name':'comment','value':'','rows':'4','cols':'23',class:'form-control'})}}
-{#                                                        <a id="suspend_sale_button" src="#" href="#" class="btn btn-primary">{{ line('sales_suspend') }}</a>#}
                                                     </div>
                                                 </div>
                                                 <a id="finish_sale_button" href="#">
@@ -319,21 +299,6 @@
                     $(this).attr('value', '');
                 });
 
-                /*$("#customer").autocomplete('{{site_url("sales/customer_search")}}',
-                 {
-                 minChars: 0,
-                 delay: 10,
-                 max: 100,
-                 formatItem: function (row) {
-                 return row[1];
-                 }
-                 });
-                 
-                 $("#customer").result(function (event, data, formatted)
-                 {
-                 $("#select_customer_form").submit();
-                 });*/
-
                 $("#customer").autocomplete({source: function (request, response) {
                         $.ajax({
                             url: "{{site_url('sales/customer_search')}}",
@@ -351,7 +316,6 @@
                         valor = ui.item.value;
                         $(this).val(valor.split("|")[0]);
                         $("#select_customer_form").submit();
-                        //alert("User selected: " + ui.item.value);
                     }});
 
                 $('#customer').blur(function ()

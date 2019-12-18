@@ -3,7 +3,11 @@
 </style>
 {{form_open('consumos/save/'~consumo_id,{'id':'consumo_form'})}}
 <div id="required_fields_message">{{line('common_fields_required_message')}}</div>
-<ul id="error_message_box"></ul>
+<ul id="error_message_box">
+    {% if error %}
+        {{error}}
+    {% endif %}
+</ul>
 <fieldset id="customer_basic_info">
     <legend>{{line("consumo_basic_information")}}</legend>
     <div class="field_row clearfix">	

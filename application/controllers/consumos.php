@@ -87,7 +87,11 @@ class Consumos extends Secure_area {
         
         $tipo_consumo = $this->tipo_consumo->get_all(100,0,"","","id,nombre");        
         //$registro_anterior = $this->consumo->get_all(1000,0,"id_cliente=$customer_id","id");
-        $registro_anterior = $this->consumo->get_all(1000,0,"id_cliente=$customer_id","fecha_consumo asc");
+        $where = array(
+            'id_cliente'=>$customer_id,
+            'consumo.tipo_consumo'=> 'consumo'
+        );
+        $registro_anterior = $this->consumo->get_all(1000,0,$where,"fecha_consumo asc");
         
         if(count($registro_anterior)==0){
             $registro_anterior = $person_info->registro_inicial;
@@ -114,7 +118,7 @@ class Consumos extends Secure_area {
         }
         if(is_null($registro_anterior) || is_null($fecha_anterior)){
             $data['error'] = "Sin registros anteriores. Revise información del cliente";
-            return null;
+            //return null;
         }
 //        $tasas_aplicables = $this->cuota->get_all(0,100,array('id_tipo_consumo'=>$person_info->person_id));
         $tasas_aplicables = $this->cuota->get_all(100,0,'id_tipo_consumo='.$person_info->id_tipo_consumo);

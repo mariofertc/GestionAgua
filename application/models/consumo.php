@@ -28,6 +28,7 @@ class Consumo extends CI_Model {
             $this->db->where($where);
         }
         $this->db->where('consumo.deleted', 0);
+        //$this->db->where('consumo.tipo_consumo', 'consumo');
         $this->db->order_by($order);
         $this->db->limit($num, $offset);
 

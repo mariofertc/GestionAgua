@@ -211,7 +211,8 @@ class Sale_lib {
                 'fecha_consumo' => $item->fecha_consumo,
                 'cargo' => (double) $item->cargo,
                 'detalle_cargo' => $item->detalle_cargo,
-                'valor_cuota' => (double) $item->valor_cuota
+                'valor_cuota' => (double) $item->valor_cuota,
+                'tipo_consumo' => $item->tipo_consumo
             )
         );
         //add to existing array
