@@ -1,0 +1,80 @@
+{# {{form_open('consumos/save_'~tipo_consumo~'/'~consumo_id,{'id':'consumo_form'})}} #}
+{{form_open('consumos/save_generic/'~consumo_id,{'id':'consumo_form'})}}
+<div id="required_fields_message">{{line('common_fields_required_message')}}</div>
+<ul id="error_message_box"></ul>
+<fieldset id="customer_basic_info">
+    <legend>{{line("consumo_"~tipo_consumo~"_registro")}}</legend>
+    <div class="field_row clearfix">    
+        {{form_label(line('common_date')~':', 'fecha')}}
+        <div class='form_field'>
+            {{ form_input({'name':'fecha', 'id':'fecha', 'value':fecha|date("Y-m-d"),'class':'form-control'})}}
+        </div>
+    </div>
+    <div class="field_row clearfix">    
+        {{form_label(line('consumo_valor_a_pagar')~':', 'valor_a_pagar')}}
+        <div class='form_field'>
+            {{ form_input({'name':'valor_a_pagar', 'id':'valor_a_pagar', 'value':valor,'class':'form-control', 'readonly':true})}}
+        </div>
+    </div>
+
+    <div class="field_row clearfix">    
+        {{form_label(line('common_observations')~':', 'observaciones')}}
+        <div class='form_field'>
+            {{ form_textarea({'name':'observaciones', 'id':'observaciones', 'value':person_info.observaciones,'class':'form-control','rows' : '4'})}}
+        </div>
+    </div>
+    {{ form_hidden('id_cliente', person_info.person_id)}}
+    {{ form_hidden('registro_inicial', person_info.registro_inicial)}}
+    {{ form_hidden('id_tipo_consumo', person_info.id_tipo_consumo)}}
+    {{ form_hidden('tipo_consumo', tipo_consumo)}}
+</div>
+<br>
+{{ form_submit({'name':'submit', 'id':'submit', 'value':line('common_submit'), 'class':'btn btn-success btn-block'})}}
+</fieldset>
+{{form_close()}}
+{% block javascript %}
+    <script type='text/javascript'>
+            //validation and submit handling
+            $(document).ready(function () {
+                $('#fecha').datepicker({
+                    startDate: '2018-01-01',
+                    dateFormat: 'yy-mm-dd' 
+                });
+                $('#consumo_form').validate({
+                    submitHandler: function (form) {
+                        //calcula();
+                        $.ajax({
+                            type: $(form).attr('method'),
+                            url: $(form).attr('action'),
+                            data: $(form).serialize(),
+                            success: function (response)
+                            {
+                                tb_remove();
+                                post_person_form_submit(response);
+                                console.log(response);
+                            },
+                            dataType: 'json'
+                        });
+                    },
+                    rules: {
+                        fecha: {
+                            required:1,
+                            //min: {{registro_anterior}}
+                        },
+                        valor_a_pagar:{
+                            required:1,
+                            //min: {{registro_anterior}}
+                        }
+                    },
+                    messages: {
+                        fecha: {
+                            required:"{{consumo_multa_fecha_required}}"
+                        },
+                        valor_a_pagar: {
+                            required:"{{consumo_multa_valor_required}}"
+                        }
+                    }
+                });
+            });
+    </script>
+{% endblock %}
