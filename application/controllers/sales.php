@@ -97,21 +97,23 @@ class Sales extends Secure_area {
 
     function edit_item($line) {
         $data = array();
-        $this->_reload($data);
-        return;
+        /*$this->_reload($data);
+        return;*/
 
-        $this->form_validation->set_rules('price', 'lang:items_price', 'required|numeric');
-        $this->form_validation->set_rules('quantity', 'lang:items_quantity', 'required|numeric');
+        //$this->form_validation->set_rules('price', 'lang:items_price', 'required|numeric');
+        $this->form_validation->set_rules('discount', 'lang:items_price', 'required|numeric');
+        //$this->form_validation->set_rules('quantity', 'lang:items_quantity', 'required|numeric');
 
-        $description = $this->input->post("description");
-        $serialnumber = $this->input->post("serialnumber");
-        $price = $this->input->post("price");
-        $quantity = $this->input->post("quantity");
+        //$description = $this->input->post("description");
+        //$serialnumber = $this->input->post("serialnumber");
+        // $price = $this->input->post("price");
+        //$price = $this->input->post("valor_a_pagar");
+        //$quantity = $this->input->post("quantity");
         $discount = $this->input->post("discount");
 
 
         if ($this->form_validation->run() != FALSE) {
-            $this->sale_lib->edit_item($line, $description, $serialnumber, $quantity, $discount, $price);
+            $this->sale_lib->edit_item($line, $discount);
         } else {
             $data['error'] = $this->lang->line('sales_error_editing_item');
         }

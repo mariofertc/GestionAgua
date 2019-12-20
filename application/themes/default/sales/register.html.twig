@@ -66,15 +66,18 @@
                                                                 <td style="align:center;">{{ item['id']}}<br></td>
                                                                 <td style="align:center;">{{item['consumo_medidor']}}<br /> [{{ item['registro_medidor']}} {{line('consumo_registro_medidor')}}]</td>
                                                                     <td>{{ item['fecha_consumo']}}</td>
-                                                                    {{ form_hidden('price',item['fecha_consumo'])}}
+                                                                    {# {{ form_hidden('price',item['fecha_consumo'])}} #}
                                                                     <td>{{ item['cargo']}}</td>
                                                                 <td>{{ to_currency(item['valor_cuota'])}}</td>
                                                                 <td>{{ to_currency(item['interes_generado'])}}</td>
                                                                 <td>{{ to_currency(item['valor_a_pagar'])}}</td>
                                                                 
                                                                 {% if item['tipo_consumo'] == 'acometida' %}
-                                                                    <td>{{ form_input({'name':'discount','value':item['discount'],'size':'3',class:"form-control input-sm"})}}</td>        
-                                                                <td>{{ to_currency(item['price']*item['quantity']-item['price']*item['quantity']*item['discount']/100)}}</td> <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>
+                                                                <tr>
+                                                                    <td colspan="5"></td><td>{{ form_input({'name':'discount','value':item['discount'],'size':'3',class:"form-control input-sm"})}}</td>        
+                                                                    {# <td>{{ to_currency(item['discount'])}}</td> <td>{{ form_submit("edit_item", line('sales_edit'),'class="btn btn-info btn-sm"')}}</td> #}
+                                                                    <td>{{ to_currency(item['valor_a_pagar']-item['discount'])}}</td> <td>{{ form_submit("edit_item", line('sales_edit'),'class="btn btn-info btn-sm"')}}</td>
+                                                                </tr>
                                                                 {% endif %}
 
                                                             </tr>

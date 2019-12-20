@@ -284,14 +284,11 @@ class Sale_lib {
         return -1;
     }
 
-    function edit_item($line, $description, $serialnumber, $quantity, $discount, $price) {
+    function edit_item($line, $discount) {
         $items = $this->get_cart();
         if (isset($items[$line])) {
-            $items[$line]['description'] = $description;
-            $items[$line]['serialnumber'] = $serialnumber;
-            $items[$line]['quantity'] = $quantity;
             $items[$line]['discount'] = $discount;
-            $items[$line]['price'] = $price;
+            // $items[$line]['valor_a_pagar'] = $price;
             $this->set_cart($items);
         }
 
