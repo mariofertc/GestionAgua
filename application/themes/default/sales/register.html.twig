@@ -87,6 +87,32 @@
                                                                 <td>{{ to_currency(item['interes_generado'])}}</td>
                                                                 <td>{{ to_currency(item['valor_a_pagar'])}}</td>
                                                             </tr>
+                                                            {% elseif item['tipo_consumo'] == 'medidor' %}
+                                                            <tr class='warning'>
+                                                                <td>{{ anchor("sales/delete_item/"~ item_id,'['~line('common_delete')~']')}}</td>
+                                                                <td style="align:center;">{{ item['id']}}<br></td>
+                                                                <td style="align:center;">{{item['detalle_cargo']}}<br /> [{{ item['tipo_consumo']}}]</td>
+                                                                   
+                                                                    <td>{{ item['fecha_consumo']}}</td>
+                                                                    {{ form_hidden('price',item['fecha_consumo'])}}
+                                                                    <td>{{ item['cargo']}}</td>
+                                                                <td>{{ to_currency(item['valor_cuota'])}}</td>
+                                                                <td>{{ to_currency(item['interes_generado'])}}</td>
+                                                                <td>{{ to_currency(item['valor_a_pagar'])}}</td>
+                                                            </tr>
+                                                        {% elseif item['tipo_consumo'] == 'acometida' %}
+                                                            <tr class='danger'>
+                                                                <td>{{ anchor("sales/delete_item/"~ item_id,'['~line('common_delete')~']')}}</td>
+                                                                <td style="align:center;">{{ item['id']}}<br></td>
+                                                                <td style="align:center;">{{item['detalle_cargo']}}<br /> [{{ item['tipo_consumo']}}]</td>
+                                                                   
+                                                                    <td>{{ item['fecha_consumo']}}</td>
+                                                                    {{ form_hidden('price',item['fecha_consumo'])}}
+                                                                    <td>{{ item['cargo']}}</td>
+                                                                <td>{{ to_currency(item['valor_cuota'])}}</td>
+                                                                <td>{{ to_currency(item['interes_generado'])}}</td>
+                                                                <td>{{ to_currency(item['valor_a_pagar'])}}</td>
+                                                            </tr>
                                                             {% endif %}
 {#                                                                <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>#}
 {#                                                                <td>{{ to_currency(item['price']*item['quantity']-item['price']*item['quantity']*item['discount']/100)}}</td> <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>#}

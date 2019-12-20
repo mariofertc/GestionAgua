@@ -162,34 +162,32 @@ class Consumos extends Secure_area {
      * Insert acometida value
      * @param type $customer_id
      */
-    function view_acometida($customer_id = -1,$consumo_id = -1) {
-        $person_info = $this->Customer->get_info($customer_id);
-        $data['person_info'] = $person_info;
-        //$data['tipo_consumo'] = array_to_htmlcombo($tipo_consumo, array('blank_text' => 'Escoja una opción', 'id' => 'id', 'name' => 'nombre'));        
-        $this->twiggy->set($data);
-        $this->twiggy->display('consumo/form_acometida');
+    function view_acometida($customer_id = -1) {
+        $data = $this->view_generic($customer_id, "acometida");
     }
     /**
      * Insert medidor value
      * @param type $customer_id
      */
-    function view_medidor($customer_id = -1,$consumo_id = -1) {
-        $person_info = $this->Customer->get_info($customer_id);
-        $data['person_info'] = $person_info;
-        //$data['tipo_consumo'] = array_to_htmlcombo($tipo_consumo, array('blank_text' => 'Escoja una opción', 'id' => 'id', 'name' => 'nombre'));        
-        $this->twiggy->set($data);
-        $this->twiggy->display('consumo/form_medidor');
+    function view_medidor($customer_id = -1) {
+        $data = $this->view_generic($customer_id, "medidor");
     }
     /**
      * Insert multa value
      * @param type $customer_id
      */
-    function view_multa($customer_id = -1,$consumo_id = -1) {
+    function view_multa($customer_id = -1) {
+        $data = $this->view_generic($customer_id, "multa");
+    }
+
+    function view_generic($customer_id = -1, $tipo_consumo) {
         $person_info = $this->Customer->get_info($customer_id);
         $data['person_info'] = $person_info;
-        //$data['tipo_consumo'] = array_to_htmlcombo($tipo_consumo, array('blank_text' => 'Escoja una opción', 'id' => 'id', 'name' => 'nombre'));        
+        $cuota = $this->cuota->get_id_by_rango_consumo($person_info->id_tipo_consumo, $tipo_consumo);
+        $data['valor'] = $cuota->valor;
+        $data['tipo_consumo'] = $tipo_consumo;
         $this->twiggy->set($data);
-        $this->twiggy->display('consumo/form_multa');
+        $this->twiggy->display('consumo/form_generic');
     }
 
     /**
@@ -241,32 +239,25 @@ class Consumos extends Secure_area {
     /**
      * Inserts/updates a consumption
      */
-    function save_multa($consumo_id = -1) {
-        $tipo_consumo = 'multa';
+    function save_generic($consumo_id = -1) {
+        $tipo_consumo = $this->input->post('tipo_consumo');;
         //Id Cuota
         $id_tipo_consumo = $this->input->post('id_tipo_consumo');
         $cuota = $this->cuota->get_id_by_rango_consumo($id_tipo_consumo,$tipo_consumo);
-        //$valor_cuota = $this->input->post('valor_a_pagar');
         $id_cliente = $this->input->post('id_cliente');
-        $registro_inicial = $this->input->post('registro_inicial');
         $consumo_data = array(
             'id_cliente' => $id_cliente,
             'id_cuota' => $cuota->id,
-            // 'valor_a_pagar' => $this->input->post('valor_a_pagar'),
             'valor_a_pagar' => $cuota->valor,
             'fecha_consumo' => $this->input->post('fecha'),
             'fecha_creación' => date('Y-m-d H:i:s'),
             'fecha_actualizacion' => date('Y-m-d H:i:s'),
             'estado' => 'generado',
             'tipo_consumo' => $tipo_consumo,
-            'detalle_cargo' => 'Multa 2 pg'
+            'detalle_cargo' => $this->input->post('observaciones')
         );
         if ($this->consumo->save($consumo_data, $consumo_id)) {
-            //Actualizamos el consumo inicial si es nuevo medidor.
-            if($registro_inicial == -1){
-                $this->Customer->update_consumo_inicial($id_cliente);
-            }
-            //New customer
+            //New fines
             if ($consumo_id == -1) {
                 echo json_encode(array('success' => true, 'message' => $this->lang->line('consumo_successful_adding') . ' ' .
                     $consumo_data['id'] . ' ' . $consumo_data['valor_a_pagar'], 'consumo_id' => $consumo_data['id']));
