@@ -146,6 +146,10 @@ class Sale_lib {
         if (is_null($consumo_id)) {
             $items = $this->CI->consumo->get_all(100, 0, array('id_cliente' => $customer_id, 'estado' => 'generado'));
             for ($idx = 0; $idx < count($items); $idx++) {
+                $items[$idx]['fecha_consumo'] = explode(" ", $items[$idx]['fecha_consumo'])[0];
+                if($items[$idx]['tipo_consumo'] == "acometida"){
+                    $items[$idx]['acometida'] = $items[$idx]['valor_a_pagar'];
+                }
                 //echo $items[$idx]['interes_generado'];
                 //var_dump($items[$idx]['interes_generado']);
                 if ($items[$idx]['interes_generado'] == null) {
@@ -162,6 +166,7 @@ class Sale_lib {
                 } else {
                     $items[$idx]['valor_a_pagar'] = $items[$idx]['valor_a_pagar'] + $items[$idx]['interes_generado'];
                 }
+
                 $items[$idx]['line'] = $idx;
             }
 
@@ -284,10 +289,12 @@ class Sale_lib {
         return -1;
     }
 
-    function edit_item($line, $discount) {
+    function edit_item($line, $acometida) {
         $items = $this->get_cart();
         if (isset($items[$line])) {
-            $items[$line]['discount'] = $discount;
+            if($items[$line]['tipo_consumo'] == 'acometida')
+                $items[$line]['acometida'] = $acometida;
+            //$items[$line]['discount'] = $discount;
             // $items[$line]['valor_a_pagar'] = $price;
             $this->set_cart($items);
         }
