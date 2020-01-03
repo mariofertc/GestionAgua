@@ -148,6 +148,9 @@ class Sale_lib {
             for ($idx = 0; $idx < count($items); $idx++) {
                 $items[$idx]['fecha_consumo'] = explode(" ", $items[$idx]['fecha_consumo'])[0];
                 if($items[$idx]['tipo_consumo'] == "acometida"){
+                    $valor_acometidas =$this->CI->Sale->get_acometidas($items[$idx]['id']);
+                    $items[$idx]['valor_a_pagar'] = $items[$idx]['valor_a_pagar'] - $valor_acometidas;
+
                     $items[$idx]['acometida'] = $items[$idx]['valor_a_pagar'];
                 }
                 //echo $items[$idx]['interes_generado'];
@@ -292,8 +295,13 @@ class Sale_lib {
     function edit_item($line, $acometida) {
         $items = $this->get_cart();
         if (isset($items[$line])) {
-            if($items[$line]['tipo_consumo'] == 'acometida')
-                $items[$line]['acometida'] = $acometida;
+            if($items[$line]['tipo_consumo'] == 'acometida'){
+                if($acometida > $items[$line]['valor_a_pagar'])
+                    $items[$line]['acometida'] = $items[$line]['valor_a_pagar'];
+                else
+                    $items[$line]['acometida'] = $acometida;
+                //$items[$line]['valor_a_pagar_acometida'] = $acometida;
+            }
             //$items[$line]['discount'] = $discount;
             // $items[$line]['valor_a_pagar'] = $price;
             $this->set_cart($items);
@@ -420,7 +428,10 @@ class Sale_lib {
         $subtotal = 0;
         foreach ($this->get_cart() as $item) {
 //		    $subtotal+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
-            $subtotal += ($item['valor_a_pagar']);
+            if($item['tipo_consumo'] == 'acometida')
+                $subtotal += $item['acometida'];
+            else
+                $subtotal += ($item['valor_a_pagar']);
         }
         return to_currency_no_money($subtotal);
     }
@@ -428,7 +439,11 @@ class Sale_lib {
     function get_total() {
         $total = 0;
         foreach ($this->get_cart() as $item) {
-            $total += $item['valor_a_pagar'];
+            
+            if($item['tipo_consumo'] == 'acometida')
+                $total += $item['acometida'];
+            else
+                $total += $item['valor_a_pagar'];
 //                    $total+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
         }
 

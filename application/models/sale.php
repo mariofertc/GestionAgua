@@ -79,13 +79,26 @@ class Sale extends CI_Model {
                 'cargo' => $item['cargo'],
                 'detalle_cargo' => $item['detalle_cargo'],
                 'interes' => $item['interes_generado'],
+                'tipo_consumo' => $item['tipo_consumo'],
             );
+
+            if($item['tipo_consumo'] == "acometida"){
+                $sales_items_data['valor_a_pagar'] = $item['acometida'];
+            }
 
             $this->db->insert('sales_items', $sales_items_data);
 
             //Update stock quantity
             $item_data = array('estado' => 'pagado');
-            $this->consumo->save($item_data, $item['id']);
+            
+            if($item['tipo_consumo'] == "acometida"){
+                //Get all acometidas y actualiza estado a pagado, solo si esta cubierto el total del valor de la acometida.
+                //$valor_acometidas = $this->get_acometidas($item['id']) + $item['acometida'];
+                $valor_acometidas = $item['acometida'];
+                if($valor_acometidas >= $item['valor_a_pagar'])
+                    $this->consumo->save($item_data, $item['id']);
+            }else
+                $this->consumo->save($item_data, $item['id']);
         }
         $this->db->trans_complete();
 
@@ -114,6 +127,21 @@ class Sale extends CI_Model {
         $this->db->from('sales_items');
         $this->db->where('sale_id', $sale_id);
         return $this->db->get();
+    }
+    /**
+     * Obtiene los valores abonados por concepto de acometidas.
+     * @param  [type] $consumo_id [description]
+     * @return [type]          [description]
+     */
+    function get_acometidas($consumo_id) {
+        $this->db->select_sum('valor_a_pagar','Valor');
+        $this->db->from('sales_items');
+        $this->db->where('consumo_id', $consumo_id);
+        $this->db->where('tipo_consumo', 'acometida');
+        $query = $this->db->get();
+        $result = $query->result();
+        //print_r($this->db->last_query());
+        return $result[0]->Valor;
     }
 
     function get_sale_payments_old($sale_id) {

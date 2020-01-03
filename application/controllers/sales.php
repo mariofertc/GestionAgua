@@ -101,7 +101,7 @@ class Sales extends Secure_area {
         return;*/
 
         //$this->form_validation->set_rules('price', 'lang:items_price', 'required|numeric');
-        $this->form_validation->set_rules('acometida', 'lang:items_price', 'required|numeric');
+        $this->form_validation->set_rules('acometida', 'lang:items_price', 'required|numeric|greater_than_equal_to[0]');
         //$this->form_validation->set_rules('quantity', 'lang:items_quantity', 'required|numeric');
 
         //$description = $this->input->post("description");
