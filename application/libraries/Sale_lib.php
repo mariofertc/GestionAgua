@@ -131,7 +131,7 @@ class Sale_lib {
     }
 
 //add_item($row->consumo_id,$row->consumo_medidor,$row->valor_a_pagar,$row->fecha_consumo,$row->valor_cuota,$row->cargo,$row->detalle_cargo)
-    function add_item($customer_id, $consumo_id = null) {
+    function add_item($customer_id, $consumo_id = null, $sale_id = null) {
         //make sure item exists
 //                var_dump($customer_id);
         if (!$this->CI->Customer->exists($customer_id) && is_null($consumo_id)) {
@@ -206,6 +206,7 @@ class Sale_lib {
         $insertkey = $maxkey + 1;
 
 //        $item = $this->CI->Item->get_info($consumo_id);
+        // $item = $this->CI->consumo->get_info($consumo_id);
         $item = $this->CI->consumo->get_info($consumo_id);
         //array/cart records are identified by $insertkey and item_id is just another field.
         $item = array(($insertkey) =>
@@ -223,6 +224,15 @@ class Sale_lib {
                 'tipo_consumo' => $item->tipo_consumo
             )
         );
+        //Check if is acometida.
+        if($item[$insertkey]['tipo_consumo'] == "acometida"){
+            $sale_item =$this->CI->Sale->get_sale_items($sale_id, $consumo_id);
+            foreach ($sale_item->result() as $sale) {
+                $item[$insertkey]['valor_a_pagar'] = $sale->valor_a_pagar;
+            }
+            // $row->consumo_id
+        }
+        // $items[$idx]['valor_pagado_acometida'] = $items[$idx]['valor_a_pagar'];
         //add to existing array
         $items += $item;
 
@@ -341,7 +351,7 @@ class Sale_lib {
         $this->delete_customer();
 
         foreach ($this->CI->Sale->get_sale_items($sale_id)->result() as $row) {
-            $this->add_item(null, $row->consumo_id); //, $row->consumo_medidor, $row->valor_a_pagar, $row->fecha_consumo, $row->valor_cuota, $row->cargo, $row->detalle_cargo);
+            $this->add_item(null, $row->consumo_id, $row->sale_id); //, $row->consumo_medidor, $row->valor_a_pagar, $row->fecha_consumo, $row->valor_cuota, $row->cargo, $row->detalle_cargo);
         }
         foreach ($this->CI->Sale->get_sale_payments($sale_id)->result() as $row) {
             //$this->add_payment($row->payment_type,$row->payment_amount);
@@ -428,7 +438,7 @@ class Sale_lib {
         $subtotal = 0;
         foreach ($this->get_cart() as $item) {
 //		    $subtotal+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
-            if($item['tipo_consumo'] == 'acometida')
+            if($item['tipo_consumo'] == 'acometida' && isset($item['acometida']))
                 $subtotal += $item['acometida'];
             else
                 $subtotal += ($item['valor_a_pagar']);
@@ -440,7 +450,7 @@ class Sale_lib {
         $total = 0;
         foreach ($this->get_cart() as $item) {
             
-            if($item['tipo_consumo'] == 'acometida')
+            if($item['tipo_consumo'] == 'acometida' && isset($item['acometida']))
                 $total += $item['acometida'];
             else
                 $total += $item['valor_a_pagar'];

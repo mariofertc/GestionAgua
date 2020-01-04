@@ -10,10 +10,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
-                    <h2>Gestión de Agua Junta de Riego 0.1</h2>
+                    <h2 class="text-center">Gestión de Agua</h2>
                     <div class="login-panel panel panel-default">
                         <div class="panel-heading">
-                            <p> {{line('login_login')}}</p>
+                            <p class="text-center"> <strong>{{line('login_login')|upper}}</strong></p>
                             <p> {{line('login_welcome_message')}}</p>
                         </div>
                         <div class="panel-body">
@@ -47,6 +47,11 @@
                                 {{ form_submit('loginButton', 'Go', "class='btn btn-lg btn-success btn-block'") }}
                             </fieldset>
                             {{ form_close()}}
+                        </div>
+                        <div class="panel-footing">
+                            <p class="text-center"> {{line('login_version')}}</p>
+                            <p class="text-center">Copyright © 2017
+    <a href="http://www.ambatosystem.com" target="_blank">ambatosystem.com</a></p>
                         </div>
                     </div>
                 </div>

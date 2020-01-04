@@ -123,9 +123,12 @@ class Sale extends CI_Model {
         return $this->db->trans_status();
     }
 
-    function get_sale_items($sale_id) {
+    function get_sale_items($sale_id, $consumo_id = null) {
         $this->db->from('sales_items');
         $this->db->where('sale_id', $sale_id);
+        if($consumo_id != null){
+            $this->db->where('consumo_id', $consumo_id);
+        }
         return $this->db->get();
     }
     /**
