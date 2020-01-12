@@ -9,7 +9,8 @@
         <div id="receipt_header">
             <div id="company_name">{{ company }}</div>
             <div id="company_phone">{{ phone }}</div>
-            <div id="sale_receipt">{{ receipt_title }} {{sale_id}}  - {{ transaction_time }}</div>
+            {# <div id="sale_receipt">{{ receipt_title }} {{sale_id}}  - {{ transaction_time|strftime("%d de %B del %Y") }}</div> #}
+            <div id="sale_receipt">{{ receipt_title }} {{sale_id}}  - {{ strftime("%d de %B del %Y", strtotime(transaction_time)) }}</div>
         </div>
         <div id="receipt_general_info">
             {% if customer is not empty %}
@@ -34,11 +35,12 @@
                     <td style="align:center;">{{ item['id']}}<br>
                     <td style="align:center;">{{item['tipo_consumo'] == 'consumo'?item['consumo_medidor']:item['tipo_consumo']|capitalize }} [{{item['tipo_consumo'] == 'consumo'?item['registro_medidor'] ~ " " ~ line('consumo_registro_medidor'):item['detalle_cargo']}}]
                     </td>
-                    <td>{{ item['fecha_consumo']|date("d/m/Y")}}</td>
+                    {# <td>{{ item['fecha_consumo']|date("d/M/Y", "America/Guayaquil",'es_ES')}}</td> #}
+                    <td>{{ strftime('%d de %B del %Y', strtotime(item['fecha_consumo']))}}</td>
                     <td style='text-align:center;'>{{ item['cargo']}}</td>
                     <td style='text-align:center;'>{{ to_currency(item['valor_cuota'])}}</td>
                     <td style='text-align:center;'>{{ to_currency(item['interes_generado'])}}</td>
-                    <td style='text-align:right;'>{{ item['acometida']?item['acometida']:to_currency(item['valor_a_pagar']) }}</td>
+                    <td style='text-align:right;'>{{ to_currency(item['acometida']?item['acometida']:item['valor_a_pagar'])}}</td>
                     {# <td style='text-align:right;'>{{ to_currency(item['tipo_consumo'] == 'acometida'?item['valor_pagado_acometida']:item['valor_a_pagar'])}}</td> #}
                 </tr>
             {% endfor %}

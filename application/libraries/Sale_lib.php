@@ -147,8 +147,9 @@ class Sale_lib {
             $items = $this->CI->consumo->get_all(100, 0, array('id_cliente' => $customer_id, 'estado' => 'generado'));
             for ($idx = 0; $idx < count($items); $idx++) {
                 $items[$idx]['fecha_consumo'] = explode(" ", $items[$idx]['fecha_consumo'])[0];
-                if($items[$idx]['tipo_consumo'] == "acometida"){
+                if($items[$idx]['tipo_consumo'] == "acometida" || $items[$idx]['tipo_consumo'] == "medidor"){
                     $valor_acometidas =$this->CI->Sale->get_acometidas($items[$idx]['id']);
+                    //Discriminar por line.
                     $items[$idx]['valor_a_pagar'] = $items[$idx]['valor_a_pagar'] - $valor_acometidas;
 
                     $items[$idx]['acometida'] = $items[$idx]['valor_a_pagar'];
@@ -225,7 +226,7 @@ class Sale_lib {
             )
         );
         //Check if is acometida.
-        if($item[$insertkey]['tipo_consumo'] == "acometida"){
+        if($item[$insertkey]['tipo_consumo'] == "acometida" || $item[$insertkey]['tipo_consumo'] == "medidor"){
             $sale_item =$this->CI->Sale->get_sale_items($sale_id, $consumo_id);
             foreach ($sale_item->result() as $sale) {
                 $item[$insertkey]['valor_a_pagar'] = $sale->valor_a_pagar;
@@ -305,7 +306,7 @@ class Sale_lib {
     function edit_item($line, $acometida) {
         $items = $this->get_cart();
         if (isset($items[$line])) {
-            if($items[$line]['tipo_consumo'] == 'acometida'){
+            if($items[$line]['tipo_consumo'] == 'acometida' || $items[$line]['tipo_consumo'] == 'medidor'){
                 if($acometida > $items[$line]['valor_a_pagar'])
                     $items[$line]['acometida'] = $items[$line]['valor_a_pagar'];
                 else
@@ -438,7 +439,7 @@ class Sale_lib {
         $subtotal = 0;
         foreach ($this->get_cart() as $item) {
 //		    $subtotal+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
-            if($item['tipo_consumo'] == 'acometida' && isset($item['acometida']))
+            if(($item['tipo_consumo'] == 'acometida' || $item['tipo_consumo'] == 'medidor') && isset($item['acometida']))
                 $subtotal += $item['acometida'];
             else
                 $subtotal += ($item['valor_a_pagar']);
@@ -450,7 +451,7 @@ class Sale_lib {
         $total = 0;
         foreach ($this->get_cart() as $item) {
             
-            if($item['tipo_consumo'] == 'acometida' && isset($item['acometida']))
+            if(($item['tipo_consumo'] == 'acometida' || $item['tipo_consumo'] == 'medidor') && isset($item['acometida']))
                 $total += $item['acometida'];
             else
                 $total += $item['valor_a_pagar'];

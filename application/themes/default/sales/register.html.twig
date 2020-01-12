@@ -76,7 +76,7 @@
                                                                 <td>{{ to_currency(item['interes_generado'])}}</td>
                                                                 <td>{{ to_currency(item['valor_a_pagar'])}}</td>
                                                                 
-                                                                {% if item['tipo_consumo'] == 'acometida' %}
+                                                                {% if item['tipo_consumo'] == 'acometida' or item['tipo_consumo'] == 'medidor' %}
                                                                 <tr>
                                                                     <td colspan="4"></td>
                                                                     <td>Paga/Debe</td>
@@ -85,7 +85,6 @@
                                                                     <td>{{ to_currency(item['valor_a_pagar']-item['acometida'])}}</td> <td>{{ form_submit("edit_item", line('sales_edit'),'class="btn btn-info btn-sm"')}}</td>
                                                                 </tr>
                                                                 {% endif %}
-
                                                             </tr>
 {#                                                                <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>#}
 {#                                                                <td>{{ to_currency(item['price']*item['quantity']-item['price']*item['quantity']*item['discount']/100)}}</td> <td>{{ form_submit("edit_item", line('sales_edit_item'),'class="btn btn-info btn-sm"')}}</td>#}

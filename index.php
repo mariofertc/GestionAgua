@@ -308,6 +308,9 @@ switch (ENVIRONMENT)
 
 	define('VIEWPATH', $view_folder.DIRECTORY_SEPARATOR);
 
+	//Put on spanish language
+	setlocale(LC_TIME, 'spanish');
+
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE

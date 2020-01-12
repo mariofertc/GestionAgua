@@ -76,13 +76,12 @@ class Sale extends CI_Model {
                 'cargo' => $item['cargo'],
                 'valor_cuota' => $item['valor_cuota'],
                 'valor_a_pagar' => $item['valor_a_pagar'],
-                'cargo' => $item['cargo'],
                 'detalle_cargo' => $item['detalle_cargo'],
                 'interes' => $item['interes_generado'],
                 'tipo_consumo' => $item['tipo_consumo'],
             );
 
-            if($item['tipo_consumo'] == "acometida"){
+            if($item['tipo_consumo'] == "acometida" || $item['tipo_consumo'] == "medidor"){
                 $sales_items_data['valor_a_pagar'] = $item['acometida'];
             }
 
@@ -91,7 +90,7 @@ class Sale extends CI_Model {
             //Update stock quantity
             $item_data = array('estado' => 'pagado');
             
-            if($item['tipo_consumo'] == "acometida"){
+            if($item['tipo_consumo'] == "acometida" || $item['tipo_consumo'] == "medidor"){
                 //Get all acometidas y actualiza estado a pagado, solo si esta cubierto el total del valor de la acometida.
                 //$valor_acometidas = $this->get_acometidas($item['id']) + $item['acometida'];
                 $valor_acometidas = $item['acometida'];
@@ -137,10 +136,12 @@ class Sale extends CI_Model {
      * @return [type]          [description]
      */
     function get_acometidas($consumo_id) {
-        $this->db->select_sum('valor_a_pagar','Valor');
-        $this->db->from('sales_items');
-        $this->db->where('consumo_id', $consumo_id);
-        $this->db->where('tipo_consumo', 'acometida');
+        $this->db->select_sum('valor_a_pagar','Valor')
+        ->from('sales_items')
+        ->where('consumo_id', $consumo_id)->group_start()
+        ->where('tipo_consumo', 'acometida')
+        ->or_where('tipo_consumo', 'medidor')
+        ->group_end();;
         $query = $this->db->get();
         $result = $query->result();
         //print_r($this->db->last_query());

@@ -203,7 +203,8 @@ class Sales extends Secure_area {
         $data['interest'] = $this->sale_lib->get_taxes();
         $data['total'] = $this->sale_lib->get_total();
         $data['receipt_title'] = $this->lang->line('sales_receipt');
-        $data['transaction_time'] = date('m/d/Y h:i:s a', strtotime($sale_info['sale_time']));
+        // $data['transaction_time'] = date('m/d/Y h:i:s a', strtotime($sale_info['sale_time']));
+        $data['transaction_time'] = $sale_info['sale_time'];
         $customer_id = $this->sale_lib->get_customer();
         $emp_info = $this->Employee->get_info($sale_info['employee_id']);
         $data['payment_type'] = $sale_info['payment_type'];
