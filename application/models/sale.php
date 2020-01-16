@@ -177,9 +177,10 @@ class Sale extends CI_Model {
         }
         $this->db->query("CREATE TABLE if not exists " . $this->db->dbprefix('sales_items_temp') . "
 		(SELECT date(sale_time) as sale_date, consumo.id as consumo_id, " . $this->db->dbprefix('sales_items') . ".sale_id, comment, payment_type, customer_id, employee_id, 
-		" . $this->db->dbprefix('consumo') . ".id, consumo.consumo_medidor as consumo_medidor, 0 as subtotal, registro_medidor, consumo.fecha_consumo, consumo.cargo, consumo.detalle_cargo,
-		consumo.interes_generado as interes, consumo.valor_cuota as valor_cuota, 0 as profit, (consumo.valor_a_pagar+ifnull(consumo.interes_generado,0)+ifnull(consumo.cargo,0)) as total, tipo_consumo.nombre as nombre_tipo_consumo
-		FROM " . $this->db->dbprefix('sales_items') . "
+		" . $this->db->dbprefix('consumo') . 
+        ".id, consumo.consumo_medidor as consumo_medidor, 0 as subtotal, registro_medidor, consumo.fecha_consumo, consumo.cargo, consumo.detalle_cargo, consumo.interes_generado as interes, consumo.valor_cuota as valor_cuota, 0 as profit, (sales_items.valor_a_pagar+ifnull(consumo.interes_generado,0)+ifnull(consumo.cargo,0)) as total, tipo_consumo.nombre as nombre_tipo_consumo FROM " . 
+        // ".id, consumo.consumo_medidor as consumo_medidor, 0 as subtotal, registro_medidor, consumo.fecha_consumo, consumo.cargo, consumo.detalle_cargo, consumo.interes_generado as interes, consumo.valor_cuota as valor_cuota, 0 as profit, (consumo.valor_a_pagar+ifnull(consumo.interes_generado,0)+ifnull(consumo.cargo,0)) as total, tipo_consumo.nombre as nombre_tipo_consumo FROM " . 
+        $this->db->dbprefix('sales_items') . "
 		INNER JOIN " . $this->db->dbprefix('sales') . "
 		ON  " . $this->db->dbprefix('sales_items') . '.sale_id=' . $this->db->dbprefix('sales') . '.sale_id' . "
 		INNER JOIN " . $this->db->dbprefix('consumo') . " ON  " . $this->db->dbprefix('sales_items') . '.consumo_id=' . $this->db->dbprefix('consumo') . '.id ' .

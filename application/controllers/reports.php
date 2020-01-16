@@ -894,6 +894,8 @@ class Reports extends Secure_area {
 //                $details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], $drow['quantity_purchased'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']), to_currency($drow['profit']), $drow['discount_percent'] . '%');
 //            }
         }
+        /*print_r($summary_data);
+        die();*/
         $data = array(
             "title" => $this->lang->line('reports_detailed_sales_report'),
             "subtitle" => date('m/d/Y', strtotime($start_date)) . '-' . date('m/d/Y', strtotime($end_date)),
