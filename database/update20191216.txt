@@ -14,3 +14,22 @@ insert into cuotas values(LAST_INSERT_ID(), 'acometida', 405, now(), 2,0);
 insert into cuotas values(LAST_INSERT_ID(), 'acometida', 405, now(), 3,0);
 insert into cuotas values(LAST_INSERT_ID(), 'acometida', 405, now(), 4,0);
 insert into cuotas values(LAST_INSERT_ID(), 'acometida', 405, now(), 5,0);
+
+--Update consumos
+update cuotas set rango = 25 where id = 4;
+update cuotas set rango = 30, valor = 12 where id = 5;
+update cuotas set valor = 40 where id = 6;
+insert into cuotas values(LAST_INSERT_ID(), '35', 14, now(), 1,0);
+insert into cuotas values(LAST_INSERT_ID(), '40', 16, now(), 1,0);
+insert into cuotas values(LAST_INSERT_ID(), '45', 18, now(), 1,0);
+insert into cuotas values(LAST_INSERT_ID(), '50', 20, now(), 1,0);
+insert into cuotas values(LAST_INSERT_ID(), '55', 22, now(), 1,0);
+insert into cuotas values(LAST_INSERT_ID(), '60', 24, now(), 1,0);
+insert into cuotas values(LAST_INSERT_ID(), '65', 26, now(), 1,0);
+insert into cuotas values(LAST_INSERT_ID(), '70', 28, now(), 1,0);
+insert into cuotas values(LAST_INSERT_ID(), '75', 30, now(), 1,0);
+insert into cuotas values(LAST_INSERT_ID(), '80', 32, now(), 1,0);
+insert into cuotas values(LAST_INSERT_ID(), '85', 34, now(), 1,0);
+insert into cuotas values(LAST_INSERT_ID(), '90', 36, now(), 1,0);
+insert into cuotas values(LAST_INSERT_ID(), '95', 38, now(), 1,0);
+
